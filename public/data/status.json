@@ -1,52 +1,60 @@
 {
-  "updated": "2026-04-01T23:31:27.293Z",
+  "updated": "2026-04-01T23:49:11.952Z",
   "startDate": "01-02",
   "claudeDaily": {
-    "Claude API": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrggyrrrgrrggyrrrgrgggrrryggrg",
-    "claude.ai": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrygyyrrryrrggyrrrgrrygrrrgrgrg",
-    "Claude Code": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggryggyrrryrrggyrrrgrgggrrryggrg",
-    "platform.claude.com": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrgggrrrgygggyrrrgrrggrrryggrg",
+    "Claude API": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrggrrggyrrrgrrggyrrrgrgggrrryggrg",
+    "claude.ai": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrggrygyyrrryrrggyrrrgrrygrrrgrgrg",
+    "Claude Code": "ggggggggggggggggggggggggggggggrgrrrygggygggyyyrggggyyyyrrgggryggyrrryrrggyrrrgrgggrrryggrg",
+    "platform.claude.com": "gggggygggggyygggggyyggggyyyyrggrgrrrygggggggyyyrggyygygrrrggrrgggrrrgygggyrrrgrrggrrryggrg",
     "Claude for Government": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrrgygggygrggggggyyrggggg"
   },
   "openaiDaily": {
-    "OpenAI APIs": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggyyyyygggrrgyyggyyrggygyg",
-    "ChatGPT": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggyyyyygggrrgyyggyyrggygyg",
-    "Codex": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggyyyyygggrrgyyggyyrggygyg",
-    "Sora": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggyyyyygggrrgyyggyyrggygyg",
+    "OpenAI APIs": "gggggggggggggggggggggggggggggggggyyggggyggyyyyogggyygggggyoggggoggyyyyygggrrgyyggyyrggygyg",
+    "ChatGPT": "gggggggggggggggggggggggggggggggggyygoygyyyyyogggyyggyygyogygyoggyyyyyyygggrrgyyggyyrggygyg",
+    "Codex": "ggggggggggggggggggggggggggggggggggggggggggggggyyyyggggggggggggggggyyyyygggrrgyyggyyrggygyg",
+    "Sora": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggogggggggggyyyyygggrrgyyggyyrggygyg",
     "FedRAMP": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"
   },
   "uptime": {
-    "Claude API": 99.15,
-    "claude.ai": 99.08,
-    "Claude Code": 99.19,
-    "platform.claude.com": 99.21,
+    "Claude API": 98.49,
+    "claude.ai": 98.42,
+    "Claude Code": 98.76,
+    "platform.claude.com": 98.62,
     "Claude for Government": 99.7,
-    "OpenAI APIs": 99.77,
-    "ChatGPT": 99.77,
-    "Codex": 99.77,
-    "Sora": 99.77,
+    "OpenAI APIs": 99.65,
+    "ChatGPT": 99.59,
+    "Codex": 99.75,
+    "Sora": 99.75,
     "FedRAMP": 100
   },
   "oaiIncidents": {
     "03-31": [
-      "Elevated failures for some users joining ChatGPT Enterprise and ChatGPT Edu workspaces via SSO."
+      "Elevated failures for some users joining ChatGPT Enterprise and ChatGPT Edu workspaces via SSO.",
+      "SSO failures for Enterprise/Edu"
     ],
     "03-29": [
-      "Account creation and login are unstable across all surfaces"
+      "Account creation and login are unstable across all surfaces",
+      "Login instability"
     ],
     "03-26": [
-      "Responses API and Sora Increased Error Rates"
+      "Responses API and Sora Increased Error Rates",
+      "Responses API and Sora errors"
     ],
     "03-25": [
-      "Unable to download or preview project files"
+      "Unable to download or preview project files",
+      "File download/preview issues"
     ],
     "03-24": [
       "Elevated error rates on Realtime API SIP endpoints",
       "Increased errors creating new sync apps and sync delays with existing apps",
-      "Some customer may encounter errors creating, updating projects, and uploading files"
+      "Some customer may encounter errors creating, updating projects, and uploading files",
+      "Realtime API SIP errors",
+      "Sync app errors",
+      "Project file errors"
     ],
     "03-20": [
-      "Pinned chats are not loading on web browsers for ChatGPT"
+      "Pinned chats are not loading on web browsers for ChatGPT",
+      "Pinned chats not loading"
     ],
     "03-18": [
       "Sora video generation failing"
@@ -55,29 +63,121 @@
       "Excel Plugin is inaccessible for some users",
       "High Error rates with ChatGPT 5.4 Pro",
       "Elevated errors for sign-in and account creation",
-      "Elevated Errors Affecting ChatGPT Free and Guest Plan Users"
+      "Elevated Errors Affecting ChatGPT Free and Guest Plan Users",
+      "ChatGPT 5.4 Pro errors",
+      "Excel Plugin down",
+      "Sign-in errors",
+      "Free/Guest plan errors"
     ],
     "03-13": [
       "Responses API errors when using background mode",
-      "Conversation Errors for Logged out Users"
+      "Conversation Errors for Logged out Users",
+      "Responses API errors",
+      "Conversation errors"
     ],
     "03-12": [
-      "Some users seeing \"No Accessible Workspaces\" when attempting to login via SSO"
+      "Some users seeing \"No Accessible Workspaces\" when attempting to login via SSO",
+      "SSO access issues",
+      "File download errors"
     ],
     "03-10": [
       "Increased errors with ChatGPT file downloads",
       "Increased errors on ChatGPT File Uploads",
-      "Degraded performance with the Support chat"
+      "Degraded performance with the Support chat",
+      "File upload errors",
+      "Codex unresponsive",
+      "Support chat degraded"
     ],
     "03-11": [
       "Elevated login errors",
       "Elevated conversation errors for ChatGPT",
-      "Elevated error rates for Deep Research in Enterprise Workspaces"
+      "Elevated error rates for Deep Research in Enterprise Workspaces",
+      "Login errors",
+      "Conversation errors",
+      "Deep Research errors",
+      "File upload errors"
     ],
     "03-09": [
       "Codex unresponsive",
       "Deep Research requests are erroring for LATAM users",
-      "Elevated conversation errors for Enterprise and Edu users"
+      "Elevated conversation errors for Enterprise and Edu users",
+      "Deep Research LATAM errors",
+      "Enterprise conversation errors"
+    ],
+    "03-07": [
+      "Codex usage rate issues",
+      "Login issues"
+    ],
+    "03-06": [
+      "Compliance API errors"
+    ],
+    "03-05": [
+      "API Error Rates (11 components)",
+      "ChatGPT message issues",
+      "Realtime API EU errors"
+    ],
+    "03-03": [
+      "File upload errors",
+      "Codex error rate"
+    ],
+    "03-02": [
+      "File processing failing",
+      "Sora API errors",
+      "Auth failures"
+    ],
+    "02-26": [
+      "ChatGPT Apps issues"
+    ],
+    "02-25": [
+      "Artifact generation down"
+    ],
+    "02-23": [
+      "Business/Enterprise conversation errors"
+    ],
+    "02-20": [
+      "Increased ChatGPT latency"
+    ],
+    "02-19": [
+      "Audit Logs issues"
+    ],
+    "02-18": [
+      "Sora 2 degraded performance"
+    ],
+    "02-16": [
+      "Shopping Research down",
+      "Codex Cloud errors"
+    ],
+    "02-14": [
+      "Support email delays",
+      "Image generation errors"
+    ],
+    "02-12": [
+      "Conversation issues",
+      "Embeddings error rate"
+    ],
+    "02-11": [
+      "Login errors"
+    ],
+    "02-10": [
+      "ChatGPT Go errors",
+      "GPT 5.2 error rates"
+    ],
+    "02-09": [
+      "Codex GitHub dependency issues"
+    ],
+    "02-07": [
+      "Conversation loading issues"
+    ],
+    "02-05": [
+      "Increased ChatGPT errors"
+    ],
+    "02-04": [
+      "ChatGPT Availability Impacted",
+      "Custom GPT updates failing",
+      "Conversation loading issues"
+    ],
+    "02-03": [
+      "Finetuning job errors"
     ]
   },
   "claudeMinutes": {
@@ -104,6 +204,19 @@
     "03-28": 336,
     "03-29": 231,
     "03-31": 912,
-    "04-01": 565
+    "04-01": 565,
+    "01-14": 1300,
+    "01-22": 2776,
+    "01-29": 5331,
+    "02-01": 6444,
+    "02-04": 5091,
+    "02-14": 4583,
+    "02-18": 695,
+    "02-23": 2997,
+    "02-25": 11665,
+    "02-26": 23748,
+    "02-27": 16039,
+    "02-28": 10369,
+    "03-02": 9959
   }
 }

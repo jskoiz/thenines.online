@@ -215,6 +215,72 @@ async function main() {
   for (const name of CLAUDE_SERVICES) uptime[name] = computeUptime(claudeDaily[name]);
   for (const name of OPENAI_SERVICES) uptime[name] = computeUptime(openaiDaily[name]);
 
+  // --- Merge with previous data ---
+  // The Statuspage APIs only return recent incidents (50 for Claude, 25 for
+  // OpenAI). For days outside that window, we preserve whatever was stored
+  // in the previous snapshot so the 90-day view fills in over time.
+  mkdirSync('public/data', { recursive: true });
+  const outPath = 'public/data/status.json';
+
+  if (existsSync(outPath)) {
+    const prev = JSON.parse(readFileSync(outPath, 'utf8'));
+
+    // Find the oldest date the API actually has incident data for
+    const oldestClaude = claudeIncidents.length
+      ? dateKey(new Date(claudeIncidents[claudeIncidents.length - 1].created_at))
+      : null;
+    const oldestOpenai = openaiIncidents.length
+      ? dateKey(new Date(openaiIncidents[openaiIncidents.length - 1].created_at))
+      : null;
+
+    // Merge daily status strings: keep old chars for days before API coverage
+    for (const svc of CLAUDE_SERVICES) {
+      if (prev.claudeDaily?.[svc] && claudeDaily[svc]) {
+        const merged = [...claudeDaily[svc]];
+        for (let i = 0; i < dates.length; i++) {
+          const dk = dateKey(dates[i]);
+          // If this day is before the oldest API incident and we had prior data, keep it
+          if (oldestClaude && dk < oldestClaude && merged[i] === 'g') {
+            const prevChar = prev.claudeDaily[svc]?.[i];
+            if (prevChar && prevChar !== 'g') merged[i] = prevChar;
+          }
+        }
+        claudeDaily[svc] = merged.join('');
+      }
+    }
+
+    for (const svc of OPENAI_SERVICES) {
+      if (prev.openaiDaily?.[svc] && openaiDaily[svc]) {
+        const merged = [...openaiDaily[svc]];
+        for (let i = 0; i < dates.length; i++) {
+          const dk = dateKey(dates[i]);
+          if (oldestOpenai && dk < oldestOpenai && merged[i] === 'g') {
+            const prevChar = prev.openaiDaily[svc]?.[i];
+            if (prevChar && prevChar !== 'g') merged[i] = prevChar;
+          }
+        }
+        openaiDaily[svc] = merged.join('');
+      }
+    }
+
+    // Merge incident lists and downtime minutes (keep old entries, add new)
+    for (const [dk, titles] of Object.entries(prev.oaiIncidents || {})) {
+      if (!oaiIncidents[dk]) oaiIncidents[dk] = [];
+      for (const t of titles) {
+        if (!oaiIncidents[dk].includes(t)) oaiIncidents[dk].push(t);
+      }
+    }
+    for (const [dk, mins] of Object.entries(prev.claudeMinutes || {})) {
+      if (!claudeMinutes[dk]) claudeMinutes[dk] = mins;
+    }
+
+    // Recompute uptime after merge
+    for (const name of CLAUDE_SERVICES) uptime[name] = computeUptime(claudeDaily[name]);
+    for (const name of OPENAI_SERVICES) uptime[name] = computeUptime(openaiDaily[name]);
+
+    console.log(`  Merged with previous snapshot (API covers: Claude from ${oldestClaude || 'n/a'}, OpenAI from ${oldestOpenai || 'n/a'})`);
+  }
+
   const data = {
     updated: new Date().toISOString(),
     startDate: dateKey(dates[0]),
@@ -225,14 +291,9 @@ async function main() {
     claudeMinutes,
   };
 
-  // --- Write output ---
-  mkdirSync('public/data', { recursive: true });
-  const outPath = 'public/data/status.json';
-
   // Check if data actually changed (skip commit noise)
   if (existsSync(outPath)) {
     const prev = JSON.parse(readFileSync(outPath, 'utf8'));
-    // Compare everything except the `updated` timestamp
     const { updated: _a, ...prevData } = prev;
     const { updated: _b, ...newData } = data;
     if (JSON.stringify(prevData) === JSON.stringify(newData)) {

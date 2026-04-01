@@ -528,10 +528,10 @@
     var cbSide=bestComeback.droughtLen>=3?(bestComeback.side==='c'?'Claude':'OpenAI'):'';
     var cbClass=bestComeback.side==='c'?'c-hl':'o-hl';
 
-    // Build HTML — 3 rows
+    // Build HTML — 2 rows in a 5-col grid
     var blocks='';
 
-    // === ROW 1: Leader | Win Rate + Streak | Last 7 | Comeback ===
+    // === ROW 1: Leader | Win Rate/Streak | Last 7 | Comeback | Claude Downtime ===
     blocks+='<div class="data-block"><div class="db-label">90-Day Leader</div>';
     blocks+='<div class="db-value"><span class="'+leaderClass+'">'+leader+'</span></div>';
     blocks+='<div class="db-detail">'+leaderWins+'W – '+trailerWins+'L – '+tiedDays+'T</div></div>';
@@ -555,8 +555,12 @@
     }
     blocks+='</div>';
 
-    // === ROW 2: Category Breakdown | Incidents/Clean | Claude Downtime | OpenAI Incidents ===
-    blocks+='<div class="data-block"><div class="db-label">Category Breakdown</div>';
+    blocks+='<div class="data-block"><div class="db-label">Claude Downtime</div>';
+    blocks+='<div class="db-value c-hl">'+cTotalHrs+'h</div>';
+    blocks+='<div class="db-detail">'+Object.keys(CLAUDE_MINUTES).length+' days affected</div></div>';
+
+    // === ROW 2: Category Breakdown (span 3) | Incidents/Clean | OpenAI Incidents ===
+    blocks+='<div class="data-block span-3"><div class="db-label">Category Breakdown</div>';
     blocks+='<div style="margin-top:.1rem">'+catHtml+'</div></div>';
 
     blocks+='<div class="data-block"><div class="db-label">Incidents / Clean</div>';
@@ -566,10 +570,6 @@
     blocks+='<div class="db-split-item"><div class="db-split-val">'+cleanDays+'</div><div class="db-split-label">Clean</div></div>';
     blocks+='</div>';
     blocks+='<div class="db-detail" style="margin-top:.15rem"><span class="'+gapClass+'">'+gapWinner+'</span> leads '+bigGapCat.title+' by '+gapDiff+'d</div></div>';
-
-    blocks+='<div class="data-block"><div class="db-label">Claude Downtime</div>';
-    blocks+='<div class="db-value c-hl">'+cTotalHrs+'h</div>';
-    blocks+='<div class="db-detail">'+Object.keys(CLAUDE_MINUTES).length+' days affected</div></div>';
 
     blocks+='<div class="data-block"><div class="db-label">OpenAI Incidents</div>';
     blocks+='<div class="db-value o-hl">'+oTotalIncidents+'</div>';

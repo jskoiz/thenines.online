@@ -195,14 +195,16 @@
     .theme-toggle{font-size:.6rem;padding:5px 14px;min-height:32px}
     .ctrl-sep{height:16px}
 
-    /* Scoreboard — tight horizontal rows */
-    .sb-team{padding:.4rem .6rem;gap:.4rem}
-    .sb-team .sb-logo{width:20px;height:20px}
-    .sb-team .sb-logo svg{width:13px;height:13px}
-    .sb-team .sb-name{font-size:.65rem;min-width:40px}
-    .sb-team .sb-val{font-size:.95rem}
-    .sb-team .sb-lbl{font-size:.45rem;margin-left:.2rem}
-    .sb-delta{font-size:.5rem;padding:.2rem}
+    /* Scoreboard — single row: [A Claude 99.06%] [O OpenAI 99.96%] [delta] */
+    .scoreboard{flex-direction:row;flex-wrap:wrap;align-items:stretch}
+    .sb-team{flex:1;padding:.4rem .5rem;gap:.35rem}
+    .sb-team+.sb-team{border-top:none;border-left:1px solid var(--border)}
+    .sb-team .sb-logo{width:18px;height:18px}
+    .sb-team .sb-logo svg{width:12px;height:12px}
+    .sb-team .sb-name{font-size:.6rem;min-width:0}
+    .sb-team .sb-val{font-size:.85rem}
+    .sb-team .sb-lbl{font-size:.4rem;margin-left:.15rem}
+    .sb-delta{font-size:.45rem;padding:.15rem .5rem;border-left:none;border-top:1px solid var(--border);width:100%}
 
     /* Overview bars — taller for tapping */
     .overview{padding:.55rem .7rem .45rem}

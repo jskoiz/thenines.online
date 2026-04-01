@@ -60,8 +60,7 @@
 
   /* Overview panel */
   .overview{background:var(--surface);border:1px solid var(--border);padding:.5rem .7rem .4rem;display:flex;flex-direction:column;justify-content:space-between}
-  .ov-header{display:flex;justify-content:flex-end;margin-bottom:.15rem}
-  .ov-tag{font-size:.4rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+  .ov-tag{font-size:.4rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-left:auto}
   .ov-row{margin-bottom:.1rem}
   .ov-row:last-of-type{margin-bottom:0}
   .ov-label{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;
@@ -367,10 +366,10 @@
   const C_WEIGHTS=[3,3,2];
   const O_WEIGHTS=[3,3,2];
   const CLAUDE_DAILY={
-    'Claude API':'ggggggyyyyyryggggggyyrgggyyyyggrgbrrygggyyggyyyrgyyyoyyyyrrgggyrrrggyrrrgrooggrrrgrrrg',
-    'claude.ai':'ggggggyyyyyryggggggyyrgggyyyyggrgbrrygggyyggyyyrgyyyoyyyyrrgggyrrrggyrrrgrooggrrrgrrrg',
-    'Claude Code':'gggggggggggggggggggggggggggggggrgbrrygggygggyyyrggggyyyyrrgggyrrrggyrrrgrooggrrrgrrry',
-    'platform.claude.com':'ggggggygggggyygggggyyggggyyyyrggrgbrrygggggggyyyrggyygygrrrggyrrrgggrrrgroggrrrgrrry',
+    'Claude API':'ggggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrgggyrrrggyrrrgrooggrrrgrrrg',
+    'claude.ai':'ggggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrgggyrrrggyrrrgrooggrrrgrrrg',
+    'Claude Code':'gggggggggggggggggggggggggggggggrgrrrygggygggyyyrggggyyyyrrgggyrrrggyrrrgrooggrrrgrrry',
+    'platform.claude.com':'ggggggygggggyygggggyyggggyyyyrggrgrrrygggggggyyyrggyygygrrrggyrrrgggrrrgroggrrrgrrry',
     'Claude for Government':'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggyggggggggygggg'
   };
   const OPENAI_DAILY={
@@ -495,8 +494,7 @@
       }).join('');
     }
     overview.innerHTML=
-      '<div class="ov-header"><span class="ov-tag">all services</span></div>'+
-      '<div class="ov-row"><div class="ov-label">'+A_SM+' Claude</div><div class="ov-bars">'+ovBars(cAgg,cPerDay,'c')+'</div></div>'+
+      '<div class="ov-row"><div class="ov-label">'+A_SM+' Claude<span class="ov-tag">all services</span></div><div class="ov-bars">'+ovBars(cAgg,cPerDay,'c')+'</div></div>'+
       '<div class="ov-row"><div class="ov-bars">'+ovBars(oAgg,oPerDay,'o')+'</div><div class="ov-label">'+O_SM+' OpenAI</div></div>'+
       '<div class="ov-meta"><div class="ov-time">90 days ago</div>'+
         '<div class="ov-legend">'+
@@ -504,7 +502,6 @@
           '<div class="lg"><span class="sw" style="background:var(--yellow)"></span>Degraded</div>'+
           '<div class="lg"><span class="sw" style="background:var(--orange)"></span>Partial</div>'+
           '<div class="lg"><span class="sw" style="background:var(--red)"></span>Major</div>'+
-          '<div class="lg"><span class="sw" style="background:var(--blue)"></span>Maint</div>'+
         '</div>'+
         '<div class="ov-time">Today</div></div>';
 

@@ -180,8 +180,9 @@
   @media(max-width:720px){
     /* Layout */
     .container{padding:1rem .75rem}
-    .hero-row{grid-template-columns:2fr 1fr;gap:.5rem}
+    .hero-row{grid-template-columns:1fr auto;gap:.5rem}
     .overview{grid-column:1/-1}
+    .scoreboard{border-right:none}
     .cards-grid{grid-template-columns:1fr;gap:.5rem}
     .uptime-card.full{grid-column:auto}
 
@@ -192,22 +193,18 @@
     .hero .ts{font-size:.6rem;margin-top:.2rem}
     .info-btn{font-size:.6rem;padding:3px 10px}
 
-    /* Controls — alongside scoreboard */
-    .controls{border:1px solid var(--border);background:var(--surface);align-self:stretch;justify-content:center}
-    .ctrl-group{flex-direction:column;gap:0}
-    .ctrl-btn{font-size:.55rem;padding:5px 12px;min-height:28px;border:none;border-bottom:1px solid var(--border)}
-    .ctrl-btn:last-child{border-bottom:none}
-    .ctrl-btn+.ctrl-btn{border-left:none}
-
-    /* Scoreboard — single row: [A Claude 99.06%] [O OpenAI 99.96%] [delta] */
-    .scoreboard{flex-direction:row;flex-wrap:wrap;align-items:stretch}
-    .sb-team{flex:1;padding:.4rem .5rem;gap:.35rem}
+    /* Scoreboard + Controls — single inline row */
+    .scoreboard{flex-direction:row;align-items:center}
+    .sb-team{flex:1;padding:.35rem .4rem;gap:.3rem}
     .sb-team+.sb-team{border-top:none;border-left:1px solid var(--border)}
-    .sb-team .sb-logo{width:18px;height:18px}
-    .sb-team .sb-logo svg{width:12px;height:12px}
-    .sb-team .sb-name{font-size:.6rem;min-width:0}
-    .sb-team .sb-val{font-size:.85rem}
-    .sb-delta{font-size:.45rem;padding:.15rem .5rem;border-left:none;border-top:1px solid var(--border);width:100%}
+    .sb-team .sb-logo{width:16px;height:16px}
+    .sb-team .sb-logo svg{width:11px;height:11px}
+    .sb-team .sb-name{font-size:.55rem;min-width:0}
+    .sb-team .sb-val{font-size:.75rem}
+    .sb-delta{display:none}
+    .controls{border-left:1px solid var(--border);background:var(--surface);padding:0 .4rem;margin:0;gap:.15rem;flex-wrap:nowrap}
+    .ctrl-btn{font-size:.5rem;padding:3px 8px;min-height:0;border:1px solid var(--border)}
+    .ctrl-btn+.ctrl-btn{border-left:none}
 
     /* Overview bars — taller for tapping */
     .overview{padding:.55rem .7rem .45rem}
@@ -261,7 +258,9 @@
   @media(max-width:400px){
     .container{padding:.75rem .5rem}
     .hero h1{font-size:1.2rem}
-    .sb-team .sb-val{font-size:.85rem}
+    .sb-team .sb-val{font-size:.65rem}
+    .sb-team .sb-name{font-size:.5rem}
+    .sb-team{padding:.3rem .3rem;gap:.2rem}
     .card-status .left{font-size:.7rem}
     .sc .sl{font-size:.35rem}
     .sc .sv{font-size:.7rem}

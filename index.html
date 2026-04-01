@@ -60,6 +60,8 @@
 
   /* Overview panel */
   .overview{background:var(--surface);border:1px solid var(--border);padding:.5rem .7rem .4rem;display:flex;flex-direction:column;justify-content:space-between}
+  .ov-header{display:flex;justify-content:flex-end;margin-bottom:.15rem}
+  .ov-tag{font-size:.4rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
   .ov-row{margin-bottom:.1rem}
   .ov-row:last-of-type{margin-bottom:0}
   .ov-label{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;
@@ -493,6 +495,7 @@
       }).join('');
     }
     overview.innerHTML=
+      '<div class="ov-header"><span class="ov-tag">all services</span></div>'+
       '<div class="ov-row"><div class="ov-label">'+A_SM+' Claude</div><div class="ov-bars">'+ovBars(cAgg,cPerDay,'c')+'</div></div>'+
       '<div class="ov-row"><div class="ov-bars">'+ovBars(oAgg,oPerDay,'o')+'</div><div class="ov-label">'+O_SM+' OpenAI</div></div>'+
       '<div class="ov-meta"><div class="ov-time">90 days ago</div>'+

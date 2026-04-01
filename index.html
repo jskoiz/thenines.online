@@ -37,7 +37,7 @@
   .logo-o-sm{width:12px;height:12px;fill:var(--openai);vertical-align:-1px}
 
   /* ===== HERO ROW ===== */
-  .hero-row{display:grid;grid-template-columns:auto 1fr;gap:.75rem;margin:.75rem 0 .75rem;align-items:stretch}
+  .hero-row{display:grid;grid-template-columns:auto auto 1fr;gap:.75rem;margin:.75rem 0 .75rem;align-items:stretch}
 
   /* Scoreboard: horizontal, compact */
   .scoreboard{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
@@ -140,7 +140,7 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   .loading span{font-size:.6rem;color:var(--muted)}
   /* Controls bar */
-  .controls{display:flex;align-items:center;justify-content:center;gap:.5rem;margin:.4rem 0 .1rem;flex-wrap:wrap}
+  .controls{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap}
   .ctrl-group{display:flex;align-items:center;gap:0}
   .ctrl-btn{font-size:.5rem;color:var(--muted);cursor:pointer;border:1px solid var(--border);padding:2px 8px;
     background:transparent;font-family:inherit;transition:color .15s,background .15s}
@@ -180,7 +180,8 @@
   @media(max-width:720px){
     /* Layout */
     .container{padding:1rem .75rem}
-    .hero-row{grid-template-columns:1fr;gap:.5rem}
+    .hero-row{grid-template-columns:2fr 1fr;gap:.5rem}
+    .overview{grid-column:1/-1}
     .cards-grid{grid-template-columns:1fr;gap:.5rem}
     .uptime-card.full{grid-column:auto}
 
@@ -191,9 +192,12 @@
     .hero .ts{font-size:.6rem;margin-top:.2rem}
     .info-btn{font-size:.6rem;padding:3px 10px}
 
-    /* Controls — larger touch targets */
-    .controls{margin:.5rem 0 .2rem;gap:.4rem}
-    .ctrl-btn{font-size:.6rem;padding:5px 14px;min-height:32px}
+    /* Controls — alongside scoreboard */
+    .controls{border:1px solid var(--border);background:var(--surface);align-self:stretch;justify-content:center}
+    .ctrl-group{flex-direction:column;gap:0}
+    .ctrl-btn{font-size:.55rem;padding:5px 12px;min-height:28px;border:none;border-bottom:1px solid var(--border)}
+    .ctrl-btn:last-child{border-bottom:none}
+    .ctrl-btn+.ctrl-btn{border-left:none}
 
     /* Scoreboard — single row: [A Claude 99.06%] [O OpenAI 99.96%] [delta] */
     .scoreboard{flex-direction:row;flex-wrap:wrap;align-items:stretch}
@@ -273,13 +277,6 @@
     <h1>THE <b>NINES</b></h1>
     <p class="sub"><span class="live"></span>Who's chasing 99.999%?</p>
     <p class="ts"><span id="ts"></span><span class="info-btn" id="info-open">methodology</span></p>
-    <div class="controls">
-      <div class="ctrl-group">
-        <button class="ctrl-btn" data-days="30">30d</button>
-        <button class="ctrl-btn active" data-days="60">60d</button>
-        <button class="ctrl-btn" data-days="90">90d</button>
-      </div>
-    </div>
   </header>
 
   <div class="hero-row">
@@ -296,6 +293,13 @@
       </a>
       <div class="sb-delta" id="delta"></div>
     </section>
+    <div class="controls">
+      <div class="ctrl-group">
+        <button class="ctrl-btn" data-days="30">30d</button>
+        <button class="ctrl-btn active" data-days="60">60d</button>
+        <button class="ctrl-btn" data-days="90">90d</button>
+      </div>
+    </div>
     <div class="overview" id="overview"></div>
   </div>
 

@@ -105,6 +105,13 @@
     return DAY_NAMES[date.getDay()]+', '+MONTHS[monthIndex]+' '+day+', 2026';
   }
 
+  function fmtShortDate(dateString){
+    const parts=dateString.split('-');
+    const monthIndex=parseInt(parts[0],10)-1;
+    const day=parseInt(parts[1],10);
+    return MONTHS[monthIndex]+' '+day+', 2026';
+  }
+
   function getStatusPage(side){
     return STATUS_URLS[side]||STATUS_URLS.o;
   }
@@ -639,7 +646,7 @@
     bindDayInteractions();
     bindChromeInteractions();
     render();
-    els.timestamp.textContent='fetched '+new Date().toISOString().replace('T',' ').slice(0,19)+' UTC';
+    els.timestamp.textContent='snapshot through '+fmtShortDate(DATES[DATES.length-1])+' • viewed '+new Date().toISOString().replace('T',' ').slice(0,19)+' UTC';
     els.loader.classList.add('hidden');
     applyDays(DEFAULT_DAYS);
     pingStatusApis();

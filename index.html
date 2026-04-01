@@ -80,7 +80,7 @@
       <button type="button" class="close-btn" id="drawer-close">close</button>
       <h3>Methodology</h3>
       <h4>Data Sources</h4>
-      <p>Claude status data is pulled from <code>status.claude.com</code> which embeds per-component daily uptime data in a JavaScript variable (<code>uptimeData</code>). OpenAI data comes from their Statuspage API at <code>status.openai.com/api/v2/</code> plus their Atom feed for incident history.</p>
+      <p>This build uses a curated 90-day snapshot derived from public status information published at <code>status.claude.com</code> and <code>status.openai.com</code>. The normalized daily histories are encoded directly in the source so the scoring model stays transparent and portable.</p>
       <h4>Components Tracked</h4>
       <ul>
         <li><strong>Claude:</strong> Claude API, claude.ai, Claude Code</li>
@@ -107,11 +107,12 @@
       <ul>
         <li>Claude incident titles are not exposed via API; only outage duration is shown</li>
         <li>OpenAI incident data before Feb 3 2026 is limited (Atom feed range)</li>
-        <li>90-day uptime percentages are from status page scraped data, not real-time calculated</li>
+        <li>This version is a static snapshot, not a live-updating data pipeline</li>
+        <li>90-day uptime percentages are derived from the curated source snapshot, not recalculated live in-browser</li>
         <li>Status granularity is per-day, not per-hour</li>
       </ul>
       <h4>About</h4>
-      <p>The Nines is a fun, independent comparison tool. It is not affiliated with Anthropic or OpenAI. Data is fetched live from public status pages on each page load.</p>
+      <p>The Nines is a fun, independent comparison tool. It is not affiliated with Anthropic or OpenAI. This build emphasizes a transparent scoring model and a deliberately small static implementation over live ingestion complexity.</p>
     </div>
   </div>
 </div>

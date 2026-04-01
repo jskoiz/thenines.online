@@ -737,7 +737,7 @@
     bindDayInteractions();
     bindChromeInteractions();
     render();
-    els.timestamp.textContent='snapshot through '+fmtShortDate(DATES[DATES.length-1])+' • viewed '+new Date().toISOString().replace('T',' ').slice(0,19)+' UTC';
+    els.timestamp.textContent='snapshot through '+fmtShortDate(DATES[DATES.length-1]);
     els.loader.classList.add('hidden');
     applyDays(DEFAULT_DAYS);
     pingStatusApis();

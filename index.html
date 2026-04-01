@@ -12,7 +12,11 @@
 <meta property="og:description" content="A compact, opinionated 90-day uptime comparison of Claude and OpenAI.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://thenines.online/">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://thenines.online/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://thenines.online/og.png">
 <link rel="canonical" href="https://thenines.online/">
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="./styles.css">
@@ -26,7 +30,7 @@
   </noscript>
   <header class="hero">
     <h1>THE <b>NINES</b></h1>
-    <p class="sub"><span class="live"></span>Who's chasing 99.999%?</p>
+    <p class="sub"><span class="live"></span>The reliability race, tracked daily.</p>
     <p class="ts"><span id="ts"></span><button type="button" class="info-btn" id="info-open">methodology</button></p>
   </header>
 
@@ -79,40 +83,33 @@
     <div class="drawer">
       <button type="button" class="close-btn" id="drawer-close">close</button>
       <h3>Methodology</h3>
-      <h4>Data Sources</h4>
-      <p>This build uses a curated 90-day snapshot derived from public status information published at <code>status.claude.com</code> and <code>status.openai.com</code>. The normalized daily histories are encoded directly in the source so the scoring model stays transparent and portable.</p>
-      <h4>Components Tracked</h4>
+      <h4>Data</h4>
+      <p>90-day snapshot from <code>status.claude.com</code> and <code>status.openai.com</code>. Daily histories are encoded in-source for full transparency.</p>
+      <h4>Components</h4>
       <ul>
         <li><strong>Claude:</strong> Claude API, claude.ai, Claude Code</li>
         <li><strong>OpenAI:</strong> OpenAI APIs, ChatGPT, Codex</li>
       </ul>
       <h4>Status Colors</h4>
       <ul>
-        <li><strong>Green:</strong> Fully operational, no incidents</li>
-        <li><strong>Yellow:</strong> Degraded performance, incidents reported but no measured downtime</li>
-        <li><strong>Orange:</strong> Partial outage under 12 hours</li>
-        <li><strong>Red:</strong> Major outage, 12+ hours of partial outage</li>
-        <li><strong>Blue:</strong> Scheduled maintenance</li>
+        <li><strong>Green:</strong> Operational</li>
+        <li><strong>Yellow:</strong> Degraded, no measured downtime</li>
+        <li><strong>Orange:</strong> Partial outage (&lt;12h)</li>
+        <li><strong>Red:</strong> Major outage (12h+)</li>
+        <li><strong>Blue:</strong> Maintenance</li>
       </ul>
-      <h4>Weighted Daily Scoring</h4>
-      <p>Each day is a head-to-head faceoff. Services are weighted by criticality:</p>
-      <ul>
-        <li><strong>API + Chat = 3x weight</strong> (core products)</li>
-        <li><strong>Code = 2x weight</strong> (developer tools)</li>
-      </ul>
-      <p>Per-service daily scores: Operational = 100%, Degraded = 60%, Partial Outage = 30%, Major Outage = 0%, Maintenance = 80%. The weighted sum determines who wins each day.</p>
+      <h4>Scoring</h4>
+      <p>Each day is a weighted head-to-head. API and Chat carry 3x weight, Code carries 2x. Per-service scores: Operational 100%, Degraded 60%, Partial 30%, Major 0%, Maintenance 80%. Highest weighted sum wins the day.</p>
       <h4>Ties</h4>
-      <p>When both sides produce the same weighted score, the day is a tie and goes to neither side. In practice, most ties occur when every service on both sides is fully operational — both score 8/8 (API 3 + Chat 3 + Code 2) and no one wins.</p>
+      <p>Equal weighted scores = tie, no winner. Most ties are days where every service on both sides is fully operational (both score 8/8).</p>
       <h4>Limitations</h4>
       <ul>
-        <li>Claude incident titles are not exposed via API; only outage duration is shown</li>
-        <li>OpenAI incident data before Feb 3 2026 is limited (Atom feed range)</li>
-        <li>This version is a static snapshot, not a live-updating data pipeline</li>
-        <li>90-day uptime percentages are derived from the curated source snapshot, not recalculated live in-browser</li>
-        <li>Status granularity is per-day, not per-hour</li>
+        <li>Static snapshot, not live — status granularity is per-day</li>
+        <li>Claude incident titles unavailable; only duration is shown</li>
+        <li>OpenAI incident data before Feb 3, 2026 is limited</li>
       </ul>
       <h4>About</h4>
-      <p>The Nines is a fun, independent comparison tool. It is not affiliated with Anthropic or OpenAI. This build emphasizes a transparent scoring model and a deliberately small static implementation over live ingestion complexity.</p>
+      <p>Independent project, not affiliated with Anthropic or OpenAI.</p>
     </div>
   </div>
 </div>

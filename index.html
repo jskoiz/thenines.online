@@ -195,12 +195,16 @@
     .theme-toggle{font-size:.6rem;padding:5px 14px;min-height:32px}
     .ctrl-sep{height:16px}
 
-    /* Scoreboard — bigger values */
-    .sb-team{padding:.6rem .7rem;gap:.5rem}
-    .sb-team .sb-name{font-size:.75rem}
-    .sb-team .sb-val{font-size:1.15rem}
-    .sb-team .sb-lbl{font-size:.55rem}
-    .sb-delta{font-size:.6rem;padding:.35rem}
+    /* Scoreboard — side-by-side compact */
+    .scoreboard{flex-direction:row;flex-wrap:wrap}
+    .sb-team{flex:1;padding:.45rem .5rem;gap:.35rem;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-width:0}
+    .sb-team+.sb-team{border-top:none;border-left:1px solid var(--border)}
+    .sb-team .sb-logo{width:20px;height:20px}
+    .sb-team .sb-logo svg{width:14px;height:14px}
+    .sb-team .sb-name{font-size:.6rem;min-width:0}
+    .sb-team .sb-val{font-size:1.05rem;margin-left:0}
+    .sb-team .sb-lbl{font-size:.45rem;margin-left:0}
+    .sb-delta{font-size:.55rem;padding:.25rem;flex-basis:100%;border-top:1px solid var(--border);border-left:none}
 
     /* Overview bars — taller for tapping */
     .overview{padding:.55rem .7rem .45rem}
@@ -233,8 +237,9 @@
     .sc .sv{font-size:1.1rem}
     .sc .ss{font-size:.5rem}
 
-    /* Footer */
-    footer{padding:1rem .5rem .8rem;font-size:.6rem;line-height:1.8}
+    /* Footer — stacked rows on mobile */
+    footer{padding:1rem .75rem 1rem;font-size:.55rem;line-height:1.6}
+    footer .ft-row{display:block;margin-bottom:.2rem}
 
     /* Tooltip — wider on mobile */
     .tip{max-width:260px;padding:.5rem .65rem}
@@ -314,11 +319,11 @@
   </section>
 
   <footer>
-    Data from <a href="https://status.claude.com" target="_blank" rel="noopener">status.claude.com</a>
-    &amp; <a href="https://status.openai.com" target="_blank" rel="noopener">status.openai.com</a>
-    &nbsp;|&nbsp; <a href="https://github.com/jskoiz/thenines.online" target="_blank" rel="noopener">GitHub</a>
+    <span class="ft-row">Data from <a href="https://status.claude.com" target="_blank" rel="noopener">status.claude.com</a>
+    &amp; <a href="https://status.openai.com" target="_blank" rel="noopener">status.openai.com</a></span>
+    <span class="ft-row"><a href="https://github.com/jskoiz/thenines.online" target="_blank" rel="noopener">GitHub</a>
     &nbsp;|&nbsp; MIT License
-    &nbsp;|&nbsp; Made by <a href="https://x.com/jskoiz" target="_blank" rel="noopener">@jskoiz</a>
+    &nbsp;|&nbsp; Made by <a href="https://x.com/jskoiz" target="_blank" rel="noopener">@jskoiz</a></span>
   </footer>
 
   <div class="drawer-overlay" id="drawer-overlay">

@@ -195,16 +195,14 @@
     .theme-toggle{font-size:.6rem;padding:5px 14px;min-height:32px}
     .ctrl-sep{height:16px}
 
-    /* Scoreboard — side-by-side compact */
-    .scoreboard{flex-direction:row;flex-wrap:wrap}
-    .sb-team{flex:1;padding:.45rem .5rem;gap:.35rem;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-width:0}
-    .sb-team+.sb-team{border-top:none;border-left:1px solid var(--border)}
+    /* Scoreboard — tight horizontal rows */
+    .sb-team{padding:.4rem .6rem;gap:.4rem}
     .sb-team .sb-logo{width:20px;height:20px}
-    .sb-team .sb-logo svg{width:14px;height:14px}
-    .sb-team .sb-name{font-size:.6rem;min-width:0}
-    .sb-team .sb-val{font-size:1.05rem;margin-left:0}
-    .sb-team .sb-lbl{font-size:.45rem;margin-left:0}
-    .sb-delta{font-size:.55rem;padding:.25rem;flex-basis:100%;border-top:1px solid var(--border);border-left:none}
+    .sb-team .sb-logo svg{width:13px;height:13px}
+    .sb-team .sb-name{font-size:.65rem;min-width:40px}
+    .sb-team .sb-val{font-size:.95rem}
+    .sb-team .sb-lbl{font-size:.45rem;margin-left:.2rem}
+    .sb-delta{font-size:.5rem;padding:.2rem}
 
     /* Overview bars — taller for tapping */
     .overview{padding:.55rem .7rem .45rem}
@@ -225,17 +223,14 @@
     .card-foot{padding:.4rem .7rem;font-size:.6rem}
     .card-foot .sdot{width:5px;height:5px}
 
-    /* Standings — 2-row layout for 5 items */
+    /* Standings — single row, all 5 columns */
     .standings{margin-top:.5rem}
-    .standings h2{font-size:.7rem;padding:.5rem .7rem}
-    .sg{grid-template-columns:repeat(3,1fr)}
-    .sc{padding:.6rem .3rem}
-    .sc:nth-child(3){border-right:none}
-    .sc:nth-child(4),.sc:nth-child(5){border-top:1px solid var(--border)}
-    .sc:nth-child(5){border-right:none}
-    .sc .sl{font-size:.5rem}
-    .sc .sv{font-size:1.1rem}
-    .sc .ss{font-size:.5rem}
+    .standings h2{font-size:.6rem;padding:.4rem .6rem;letter-spacing:.06em}
+    .sg{grid-template-columns:repeat(5,1fr)}
+    .sc{padding:.45rem .15rem}
+    .sc .sl{font-size:.4rem;letter-spacing:.06em}
+    .sc .sv{font-size:.8rem}
+    .sc .ss{font-size:.4rem}
 
     /* Footer — stacked rows on mobile */
     footer{padding:1rem .75rem 1rem;font-size:.55rem;line-height:1.6}
@@ -261,15 +256,11 @@
   @media(max-width:400px){
     .container{padding:.75rem .5rem}
     .hero h1{font-size:1.2rem}
-    .sb-team .sb-val{font-size:1rem}
+    .sb-team .sb-val{font-size:.85rem}
     .card-status .left{font-size:.7rem}
-    .sc .sv{font-size:.95rem}
-    .sg{grid-template-columns:repeat(2,1fr)}
-    .sc:nth-child(3){border-right:1px solid var(--border)}
-    .sc:nth-child(2){border-right:none}
-    .sc:nth-child(4){border-right:none}
-    .sc:nth-child(3),.sc:nth-child(4),.sc:nth-child(5){border-top:1px solid var(--border)}
-    .sc:nth-child(5){grid-column:1/-1;border-right:none}
+    .sc .sl{font-size:.35rem}
+    .sc .sv{font-size:.7rem}
+    .sc .ss{font-size:.35rem}
   }
 </style>
 </head>

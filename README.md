@@ -1,27 +1,25 @@
 # The Nines
 
-The Nines is a small static site that compares Claude and OpenAI uptime across a curated 90-day snapshot.
+The Nines is a live uptime comparison of Claude and OpenAI, built with Vite and vanilla JavaScript.
 
-It uses plain HTML, CSS, and JavaScript with no build step.
+A GitHub Action fetches status data every hour from public Statuspage APIs and commits the result. Vercel picks up the push and redeploys.
 
 ## How It Works
 
-The app ships with a normalized 90-day snapshot encoded directly in source. Per-day status strings for each tracked service are turned into:
+The site pulls a 90-day rolling window of per-service status from `status.claude.com` and `status.openai.com`. Daily statuses are normalized into compact status strings and turned into:
 
 - aggregate health bars
 - per-category comparison cards
 - weighted daily winners
 - streaks, ties, and comeback moments
-- a momentum chart and summary narrative
 
-This version uses a static in-repo dataset instead of a backend or scraper. API and chat products are weighted more heavily than coding products.
+API and chat products are weighted more heavily than coding products.
 
 ## Methodology
 
-- Claude source material: `status.claude.com`
-- OpenAI source material: `status.openai.com`
-- Window: 90 days
-- Current implementation: a hand-curated snapshot normalized into in-source daily status strings
+- Claude source: `status.claude.com`
+- OpenAI source: `status.openai.com`
+- Window: 90 days (rolling)
 - Status classes: operational, degraded, partial outage, major outage, maintenance
 - Daily scoring:
   - operational = 100%
@@ -32,25 +30,43 @@ This version uses a static in-repo dataset instead of a backend or scraper. API 
 
 ## Repo Structure
 
-- `index.html`: page structure, metadata, and the methodology drawer
-- `styles.css`: layout, theme, responsive styles, charts, cards, and motion
-- `app.js`: data model, scoring logic, rendering, interactions, and narrative generation
-
-## Running It Locally
-
-```bash
-cd thenines.online
-python3 -m http.server 4173
+```
+index.html              page structure and metadata
+src/
+  main.js               app logic, scoring, rendering
+  styles.css            layout, theme, responsive styles
+  data.js               seed/fallback data
+public/
+  data/status.json      live status (committed by CI)
+  og.png, favicon.svg   static assets
+scripts/
+  fetch-status.js       fetches APIs, normalizes, writes status.json
+  smoke-test.js         validates output against live APIs
+.github/workflows/
+  fetch-status.yml      hourly cron action
 ```
 
-Then open [http://localhost:4173](http://localhost:4173).
+## Running Locally
+
+```bash
+npm install
+npm run fetch   # pull latest status data
+npm run dev     # start Vite dev server
+```
+
+## Testing
+
+```bash
+npm run fetch && npm test
+```
+
+The smoke test validates structure, uptime math, incident attribution, real-time status alignment, and component coverage.
 
 ## Limitations
 
-- The current site is a static snapshot, not a live ingestion pipeline.
-- This is an independent interpretation of public status data, not an official service-quality benchmark.
 - Daily rollups compress incidents into a simpler comparison model.
-- Some source systems expose richer data than others, so the comparison necessarily involves normalization.
+- Some source systems expose richer data than others, so the comparison involves normalization.
+- This is an independent interpretation of public status data, not an official benchmark.
 
 ## License
 

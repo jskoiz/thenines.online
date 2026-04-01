@@ -80,7 +80,7 @@
   /* CARDS */
   .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
   .uptime-card{background:var(--surface);border:1px solid var(--border);overflow:hidden}
-  .uptime-card:hover{border-color:#3f3f46}
+  .uptime-card:hover{border-color:var(--muted)}
   .uptime-card.full{grid-column:1/-1}
   .card-status{display:flex;align-items:center;justify-content:space-between;padding:.45rem .7rem;border-bottom:1px solid var(--border)}
   .card-status .left{display:flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:600}
@@ -153,11 +153,19 @@
   .theme-toggle:hover{color:var(--text)}
   .theme-toggle svg{vertical-align:-2px}
   /* Light theme */
-  html.light{--bg:#f4f4f5;--surface:#fff;--surface2:#ebebed;--border:#d4d4d8;--text:#18181b;--muted:#71717a;--muted-lt:#3f3f46;
-    --green:#16a34a;--yellow:#ca8a04;--orange:#ea580c;--red:#dc2626;--blue:#2563eb;
-    --claude:#c2613f;--claude-lt:#a8472a;--claude-dim:rgba(194,97,63,.08);
-    --openai:#4f46e5;--openai-lt:#3730a3;--openai-dim:rgba(79,70,229,.08)}
+  html.light{--bg:#f7f6f3;--surface:#fffffe;--surface2:#f0efec;--border:#e2e0db;--text:#1c1917;--muted:#8c877d;--muted-lt:#57534e;
+    --green:#56ad72;--yellow:#cda03a;--orange:#d48350;--red:#cd5b5b;--blue:#6d96c7;
+    --claude:#c96842;--claude-lt:#b05a35;--claude-dim:rgba(201,104,66,.06);
+    --openai:#6058c9;--openai-lt:#4d44b0;--openai-dim:rgba(96,88,201,.06)}
   html.light .stars{display:none}
+  html.light .uptime-card,html.light .scoreboard,html.light .overview,html.light .standings{
+    box-shadow:0 1px 3px rgba(28,25,23,.06),0 1px 2px rgba(28,25,23,.04);border-color:var(--border)}
+  html.light .uptime-card:hover{border-color:#cbc8c1}
+  html.light .tip{box-shadow:0 4px 12px rgba(28,25,23,.1),0 1px 3px rgba(28,25,23,.06)}
+  html.light .ctrl-btn,html.light .theme-toggle,html.light .info-btn{border-color:#d6d3cc}
+  html.light .ctrl-btn:hover,html.light .theme-toggle:hover,html.light .ctrl-btn.active{background:#eae8e4}
+  html.light .drawer{box-shadow:-4px 0 16px rgba(28,25,23,.08)}
+  html.light .drawer-overlay{background:rgba(28,25,23,.25)}
 
   .info-btn{font-size:.55rem;color:var(--muted);cursor:pointer;border:1px solid var(--border);padding:1px 6px;
     display:inline-block;margin-left:.5rem;transition:color .15s}

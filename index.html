@@ -176,12 +176,95 @@
   .drawer li{margin-bottom:.25rem;line-height:1.5}
 
   @media(max-width:720px){
-    .hero-row{grid-template-columns:1fr}
-    .cards-grid{grid-template-columns:1fr}
+    /* Layout */
+    .container{padding:1rem .75rem}
+    .hero-row{grid-template-columns:1fr;gap:.5rem}
+    .cards-grid{grid-template-columns:1fr;gap:.5rem}
     .uptime-card.full{grid-column:auto}
+
+    /* Hero — breathe */
+    .hero{padding:1rem 0 .3rem}
+    .hero h1{font-size:1.4rem;letter-spacing:.06em}
+    .hero .sub{font-size:.7rem;margin-top:.35rem}
+    .hero .ts{font-size:.6rem;margin-top:.2rem}
+    .info-btn{font-size:.6rem;padding:3px 10px}
+
+    /* Controls — larger touch targets */
+    .controls{margin:.5rem 0 .2rem;gap:.4rem}
+    .ctrl-btn{font-size:.6rem;padding:5px 14px;min-height:32px}
+    .theme-toggle{font-size:.6rem;padding:5px 14px;min-height:32px}
+    .ctrl-sep{height:16px}
+
+    /* Scoreboard — bigger values */
+    .sb-team{padding:.6rem .7rem;gap:.5rem}
+    .sb-team .sb-name{font-size:.75rem}
+    .sb-team .sb-val{font-size:1.15rem}
+    .sb-team .sb-lbl{font-size:.55rem}
+    .sb-delta{font-size:.6rem;padding:.35rem}
+
+    /* Overview bars — taller for tapping */
+    .overview{padding:.55rem .7rem .45rem}
+    .ov-bars{height:14px}
+    .ov-label{font-size:.6rem}
+    .ov-meta{margin-top:.3rem}
+    .ov-time{font-size:.5rem}
+    .ov-legend .lg{font-size:.5rem}
+    .ov-legend .lg .sw{width:8px;height:8px}
+
+    /* Cards — better proportions */
+    .card-status{padding:.5rem .7rem}
+    .card-status .left{font-size:.75rem}
+    .card-status .right{font-size:.6rem}
+    .brand-tag{font-size:.6rem}
+    .bars{height:18px}
+    .bar-timeline{font-size:.5rem;margin-top:.25rem}
+    .card-foot{padding:.4rem .7rem;font-size:.6rem}
+    .card-foot .sdot{width:5px;height:5px}
+
+    /* Standings — 2-row layout for 5 items */
+    .standings{margin-top:.5rem}
+    .standings h2{font-size:.7rem;padding:.5rem .7rem}
     .sg{grid-template-columns:repeat(3,1fr)}
+    .sc{padding:.6rem .3rem}
     .sc:nth-child(3){border-right:none}
-    .bars{height:14px}.ov-bars{height:10px}
+    .sc:nth-child(4),.sc:nth-child(5){border-top:1px solid var(--border)}
+    .sc:nth-child(5){border-right:none}
+    .sc .sl{font-size:.5rem}
+    .sc .sv{font-size:1.1rem}
+    .sc .ss{font-size:.5rem}
+
+    /* Footer */
+    footer{padding:1rem .5rem .8rem;font-size:.6rem;line-height:1.8}
+
+    /* Tooltip — wider on mobile */
+    .tip{max-width:260px;padding:.5rem .65rem}
+    .tip .tip-date{font-size:.65rem}
+    .tip .tip-status{font-size:.6rem}
+    .tip .tip-incidents .tip-lbl{font-size:.5rem}
+    .tip .tip-incident{font-size:.55rem}
+    .tip .tip-svc{font-size:.55rem}
+
+    /* Drawer */
+    .drawer{padding:1.2rem}
+    .drawer h3{font-size:.9rem}
+    .drawer h4{font-size:.7rem}
+    .drawer p{font-size:.65rem}
+    .drawer ul{font-size:.65rem}
+    .drawer code{font-size:.6rem}
+    .drawer .close-btn{font-size:.75rem;padding:4px 12px}
+  }
+  @media(max-width:400px){
+    .container{padding:.75rem .5rem}
+    .hero h1{font-size:1.2rem}
+    .sb-team .sb-val{font-size:1rem}
+    .card-status .left{font-size:.7rem}
+    .sc .sv{font-size:.95rem}
+    .sg{grid-template-columns:repeat(2,1fr)}
+    .sc:nth-child(3){border-right:1px solid var(--border)}
+    .sc:nth-child(2){border-right:none}
+    .sc:nth-child(4){border-right:none}
+    .sc:nth-child(3),.sc:nth-child(4),.sc:nth-child(5){border-top:1px solid var(--border)}
+    .sc:nth-child(5){grid-column:1/-1;border-right:none}
   }
 </style>
 </head>

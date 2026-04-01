@@ -60,10 +60,11 @@
 
   /* Overview panel */
   .overview{background:var(--surface);border:1px solid var(--border);padding:.5rem .7rem .4rem;display:flex;flex-direction:column;justify-content:space-between}
-  .ov-row{margin-bottom:.25rem}
+  .ov-row{margin-bottom:.1rem}
   .ov-row:last-of-type{margin-bottom:0}
-  .ov-label{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.15rem;
-    display:flex;align-items:center;gap:.2rem}
+  .ov-label{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;
+    display:flex;align-items:center;gap:.2rem;margin-bottom:.15rem}
+  .ov-row .ov-label:last-child{margin-bottom:0;margin-top:.15rem}
   .ov-bars{display:grid;grid-template-columns:repeat(90,1fr);gap:1px;height:16px}
   .ov-bars .day{cursor:pointer;position:relative}
   .ov-bars .day.g{background:var(--green)}.ov-bars .day.y{background:var(--yellow)}

@@ -1,0 +1,554 @@
+<!-- The Nines — thenines.online -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Nines: a 90-day live uptime comparison of Claude and OpenAI status pages. Who's chasing 99.999%?">
+<title>The Nines</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0b0b0e;--surface:#131316;--surface2:#1a1a1f;
+    --border:#28282f;--text:#e4e4e7;--muted:#62626b;--muted-lt:#8a8a94;
+    --claude:#d97757;--claude-lt:#e8a08a;--claude-dim:rgba(217,119,87,.1);
+    --openai:#6666ff;--openai-lt:#a3befa;--openai-dim:rgba(102,102,255,.1);
+    --green:#22c55e;--yellow:#eab308;--orange:#f97316;--red:#ef4444;--blue:#3b82f6;
+  }
+  html{font-size:16px;scroll-behavior:smooth}
+  body{font-family:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;
+    background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;
+    font-size:.85rem;line-height:1.5;letter-spacing:-.01em}
+  .stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .stars span{position:absolute;background:#fff;border-radius:50%;animation:tw var(--d,3s) ease-in-out infinite alternate}
+  @keyframes tw{0%{opacity:.02}100%{opacity:var(--o,.2)}}
+  .container{max-width:1080px;margin:0 auto;padding:1.5rem 1rem;position:relative;z-index:1}
+
+  .hero{text-align:center;padding:1.5rem 0 .4rem}
+  .hero h1{font-size:clamp(1.3rem,3.5vw,1.8rem);font-weight:400;letter-spacing:.08em;color:var(--muted)}
+  .hero h1 b{font-weight:700;color:var(--text);letter-spacing:-.01em}
+  .hero .sub{font-size:.6rem;color:var(--muted);margin-top:.3rem;letter-spacing:.04em}
+  .hero .live{display:inline-block;width:5px;height:5px;background:var(--green);border-radius:50%;margin-right:4px;
+    animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.3)}50%{box-shadow:0 0 0 4px rgba(34,197,94,0)}}
+  .hero .ts{font-size:.5rem;color:var(--muted);margin-top:.15rem;opacity:.55}
+
+  .logo-a-sm{width:12px;height:12px;fill:var(--claude);vertical-align:-1px}
+  .logo-o-sm{width:12px;height:12px;fill:var(--openai);vertical-align:-1px}
+
+  /* ===== HERO ROW ===== */
+  .hero-row{display:grid;grid-template-columns:auto 1fr;gap:.75rem;margin:.75rem 0 .75rem;align-items:stretch}
+
+  /* Scoreboard: horizontal, compact */
+  .scoreboard{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+  .sb-team{text-decoration:none;color:inherit;display:flex;align-items:center;gap:.5rem;padding:.5rem .65rem;
+    transition:background .15s;position:relative}
+  .sb-team:hover{background:var(--surface2)}
+  .sb-team+.sb-team{border-top:1px solid var(--border)}
+  .sb-team .sb-logo{width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    border:1px solid var(--border)}
+  .sb-team .sb-logo svg{width:16px;height:16px}
+  .sb-team.c .sb-logo{background:var(--claude-dim)}.sb-team.c .sb-logo svg{fill:var(--claude)}
+  .sb-team.o .sb-logo{background:var(--openai-dim)}.sb-team.o .sb-logo svg{fill:var(--openai)}
+  .sb-team .sb-name{font-size:.65rem;font-weight:700;min-width:48px}
+  .sb-team.c .sb-name{color:var(--claude)}.sb-team.o .sb-name{color:var(--openai)}
+  .sb-team .sb-val{font-size:1rem;font-weight:700;letter-spacing:-.02em;margin-left:auto}
+  .sb-team.c .sb-val{color:var(--claude-lt)}.sb-team.o .sb-val{color:var(--openai-lt)}
+  .sb-team .sb-lbl{font-size:.45rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:.3rem}
+  .sb-delta{text-align:center;padding:.3rem;border-top:1px solid var(--border);
+    font-size:.5rem;color:var(--muted-lt)}
+
+  /* Overview panel */
+  .overview{background:var(--surface);border:1px solid var(--border);padding:.5rem .7rem .4rem;display:flex;flex-direction:column;justify-content:space-between}
+  .ov-row{margin-bottom:.25rem}
+  .ov-row:last-of-type{margin-bottom:0}
+  .ov-label{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.15rem;
+    display:flex;align-items:center;gap:.2rem}
+  .ov-bars{display:flex;gap:1px;height:16px}
+  .ov-bars .day{flex:1 1 0;min-width:0;cursor:pointer;position:relative}
+  .ov-bars .day.g{background:var(--green)}.ov-bars .day.y{background:var(--yellow)}
+  .ov-bars .day.o{background:var(--orange)}.ov-bars .day.r{background:var(--red)}.ov-bars .day.b{background:var(--blue)}
+  .ov-bars .day:hover{opacity:.65}
+  .ov-meta{display:flex;justify-content:space-between;align-items:center;margin-top:.25rem}
+  .ov-time{font-size:.4rem;color:var(--muted)}
+  .ov-legend{display:flex;gap:.5rem;flex-wrap:wrap}
+  .ov-legend .lg{display:flex;align-items:center;gap:2px;font-size:.45rem;color:var(--muted)}
+  .ov-legend .lg .sw{width:6px;height:6px}
+
+  /* CARDS */
+  .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+  .uptime-card{background:var(--surface);border:1px solid var(--border);overflow:hidden}
+  .uptime-card:hover{border-color:#3f3f46}
+  .uptime-card.full{grid-column:1/-1}
+  .card-status{display:flex;align-items:center;justify-content:space-between;padding:.45rem .7rem;border-bottom:1px solid var(--border)}
+  .card-status .left{display:flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:600}
+  .card-status .left .dot{width:6px;height:6px;border-radius:50%}
+  .card-status .right{font-size:.55rem;color:var(--muted)}
+  .card-bars{padding:.5rem .7rem .45rem;border-bottom:1px solid var(--border)}
+  /* Brand label above/below the two bar rows */
+  .brand-tag{font-size:.55rem;font-weight:600;display:flex;align-items:center;gap:.2rem;margin-bottom:.2rem}
+  .brand-tag.c{color:var(--claude)}.brand-tag.o{color:var(--openai);margin-top:.35rem;margin-bottom:.2rem}
+  .bar-row{margin-bottom:.1rem}
+  .bars{display:flex;gap:1px;height:18px}
+  .bars .day{flex:1 1 0;min-width:0;border-radius:1px;transition:opacity .12s;cursor:pointer;position:relative}
+  .bars .day:hover{opacity:.65}
+  .bars .day.g{background:var(--green)}.bars .day.y{background:var(--yellow)}
+  .bars .day.o{background:var(--orange)}.bars .day.r{background:var(--red)}.bars .day.b{background:var(--blue)}
+  .bar-timeline{display:flex;justify-content:space-between;margin-top:.2rem;font-size:.4rem;color:var(--muted)}
+  .card-foot{display:flex;justify-content:space-between;padding:.3rem .7rem;font-size:.5rem}
+  .card-foot a{color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:3px;opacity:.8}
+  .card-foot a:hover{color:var(--text);opacity:1}
+  .card-foot .sdot{width:4px;height:4px;border-radius:50%}
+  .card-foot .sdot.ok{background:var(--green)}.card-foot .sdot.deg{background:var(--yellow)}
+  .card-foot .sdot.part{background:var(--orange)}.card-foot .sdot.maj{background:var(--red)}
+
+  /* TOOLTIP */
+  .tip{position:fixed;z-index:100;pointer-events:none;background:var(--surface2);border:1px solid var(--border);
+    padding:.45rem .6rem;min-width:150px;max-width:280px;opacity:0;transition:opacity .12s}
+  .tip.show{opacity:1}
+  .tip .tip-date{font-size:.6rem;font-weight:600;color:var(--muted-lt);margin-bottom:.25rem}
+  .tip .tip-status{font-size:.55rem;margin-bottom:.2rem;display:flex;align-items:center;gap:4px}
+  .tip .tip-status .td{width:5px;height:5px;border-radius:50%}
+  .tip .tip-incidents{border-top:1px solid var(--border);padding-top:.25rem;margin-top:.1rem}
+  .tip .tip-incidents .tip-lbl{font-size:.45rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.15rem}
+  .tip .tip-incident{font-size:.5rem;color:var(--muted-lt);padding:.05rem 0;display:flex;align-items:flex-start;gap:4px}
+  .tip .tip-svc{font-size:.5rem;color:var(--muted-lt);padding:.05rem 0;display:flex;align-items:center;gap:5px}
+  .tip .tip-svc .ts-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+
+  /* STANDINGS */
+  .standings{margin-top:.75rem;border:1px solid var(--border);background:var(--surface);overflow:hidden}
+  .standings h2{font-size:.65rem;font-weight:600;padding:.45rem .7rem;border-bottom:1px solid var(--border);
+    text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+  .sg{display:grid;grid-template-columns:repeat(5,1fr)}
+  .sc{padding:.5rem .4rem;text-align:center;border-right:1px solid var(--border)}
+  .sc:last-child{border-right:none}
+  .sc .sl{font-size:.45rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.15rem}
+  .sc .sv{font-size:1.05rem;font-weight:700}
+  .sc .ss{font-size:.45rem;color:var(--muted);margin-top:.1rem}
+  .sc.cw .sv{color:var(--claude)}.sc.ow .sv{color:var(--openai)}.sc.tw .sv{color:var(--muted)}
+
+  footer{text-align:center;padding:1rem 0 .65rem;color:var(--muted);font-size:.5rem}
+  footer a{color:var(--muted-lt);text-decoration:none;border-bottom:1px solid var(--border)}
+  footer a:hover{border-color:var(--text);color:var(--text)}
+  .loading{position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:.5rem;transition:opacity .4s,visibility .4s}
+  .loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
+  .spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--claude);
+    border-right-color:var(--openai);border-radius:50%;animation:spin .6s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading span{font-size:.6rem;color:var(--muted)}
+  /* Controls bar */
+  .controls{display:flex;align-items:center;justify-content:center;gap:.5rem;margin:.4rem 0 .1rem;flex-wrap:wrap}
+  .ctrl-group{display:flex;align-items:center;gap:0}
+  .ctrl-btn{font-size:.5rem;color:var(--muted);cursor:pointer;border:1px solid var(--border);padding:2px 8px;
+    background:transparent;font-family:inherit;transition:color .15s,background .15s}
+  .ctrl-btn:hover{color:var(--text);background:var(--surface2)}
+  .ctrl-btn.active{color:var(--text);background:var(--surface2)}
+  .ctrl-btn+.ctrl-btn{border-left:none}
+  .ctrl-sep{width:1px;height:12px;background:var(--border);margin:0 .15rem}
+  .theme-toggle{font-size:.5rem;color:var(--muted);cursor:pointer;border:1px solid var(--border);padding:2px 8px;
+    background:transparent;font-family:inherit;transition:color .15s,background .15s}
+  .theme-toggle:hover{color:var(--text);background:var(--surface2)}
+  /* Light theme */
+  html.light{--bg:#f4f4f5;--surface:#fff;--surface2:#ebebed;--border:#d4d4d8;--text:#18181b;--muted:#71717a;--muted-lt:#3f3f46;
+    --green:#16a34a;--yellow:#ca8a04;--orange:#ea580c;--red:#dc2626;--blue:#2563eb;
+    --claude:#c2613f;--claude-lt:#a8472a;--claude-dim:rgba(194,97,63,.08);
+    --openai:#4f46e5;--openai-lt:#3730a3;--openai-dim:rgba(79,70,229,.08)}
+  html.light .stars{display:none}
+
+  .info-btn{font-size:.55rem;color:var(--muted);cursor:pointer;border:1px solid var(--border);padding:1px 6px;
+    display:inline-block;margin-left:.5rem;transition:color .15s}
+  .info-btn:hover{color:var(--text)}
+  .drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+  .drawer-overlay.open{opacity:1;visibility:visible}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,85vw);background:var(--bg);border-left:1px solid var(--border);
+    z-index:201;transform:translateX(100%);transition:transform .3s ease;padding:1.5rem;overflow-y:auto}
+  .drawer-overlay.open .drawer{transform:translateX(0)}
+  .drawer h3{font-size:.85rem;font-weight:700;margin-bottom:.75rem;color:var(--text)}
+  .drawer h4{font-size:.65rem;font-weight:600;margin:1rem 0 .4rem;color:var(--text);text-transform:uppercase;letter-spacing:.06em}
+  .drawer p{font-size:.6rem;color:var(--muted-lt);line-height:1.6;margin-bottom:.5rem}
+  .drawer .close-btn{position:absolute;top:1rem;right:1rem;font-size:.7rem;color:var(--muted);cursor:pointer;
+    border:1px solid var(--border);padding:2px 8px}
+  .drawer .close-btn:hover{color:var(--text)}
+  .drawer code{font-size:.55rem;background:var(--surface2);padding:1px 4px;color:var(--claude-lt)}
+  .drawer ul{font-size:.6rem;color:var(--muted-lt);padding-left:1rem;margin-bottom:.5rem}
+  .drawer li{margin-bottom:.25rem;line-height:1.5}
+
+  @media(max-width:720px){
+    .hero-row{grid-template-columns:1fr}
+    .cards-grid{grid-template-columns:1fr}
+    .uptime-card.full{grid-column:auto}
+    .sg{grid-template-columns:repeat(3,1fr)}
+    .sc:nth-child(3){border-right:none}
+    .bars{height:14px}.ov-bars{height:10px}
+  }
+</style>
+</head>
+<body>
+<div class="loading" id="loader"><div class="spinner"></div><span>loading...</span></div>
+<div class="stars" id="stars"></div>
+<div class="container">
+  <header class="hero">
+    <h1>THE <b>NINES</b></h1>
+    <p class="sub"><span class="live"></span>Who's chasing 99.999%?  |  Claude vs OpenAI  |  90-day live comparison</p>
+    <p class="ts"><span id="ts"></span><span class="info-btn" id="info-open">methodology</span></p>
+    <div class="controls">
+      <div class="ctrl-group">
+        <button class="ctrl-btn" data-days="30">30d</button>
+        <button class="ctrl-btn" data-days="60">60d</button>
+        <button class="ctrl-btn active" data-days="90">90d</button>
+      </div>
+      <div class="ctrl-sep"></div>
+      <button class="theme-toggle" id="theme-toggle">light mode</button>
+    </div>
+  </header>
+
+  <div class="hero-row">
+    <section class="scoreboard">
+      <a class="sb-team c" href="https://status.claude.com" target="_blank" rel="noopener">
+        <div class="sb-logo"><svg viewBox="0 0 46 32"><path d="M32.73 0h-6.73l-7.543 32h6.73L32.73 0ZM13.27 0 0 32h6.88l2.725-5.87h13.97l2.726 5.87h6.88L19.91 0h-6.64Zm-.524 20.67 4.383-9.44 4.382 9.44H12.746Z"/></svg></div>
+        <div class="sb-name">Claude</div>
+        <div class="sb-val" id="c-avg">&mdash;</div>
+        <div class="sb-lbl">90d</div>
+      </a>
+      <a class="sb-team o" href="https://status.openai.com" target="_blank" rel="noopener">
+        <div class="sb-logo"><svg viewBox="0 0 24 24"><path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073ZM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494ZM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646ZM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872v.024Zm16.597 3.855-5.833-3.387L15.119 7.2a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.407-.667Zm2.01-3.023-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66v.018ZM8.318 12.861l-2.02-1.164a.08.08 0 0 1-.038-.057V6.072a4.5 4.5 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681l-.003 6.72Zm1.096-2.365L12 8.96l2.586 1.502v2.998L12 14.968l-2.586-1.504v-2.968Z"/></svg></div>
+        <div class="sb-name">OpenAI</div>
+        <div class="sb-val" id="o-avg">&mdash;</div>
+        <div class="sb-lbl">90d</div>
+      </a>
+      <div class="sb-delta" id="delta"></div>
+    </section>
+    <div class="overview" id="overview"></div>
+  </div>
+
+  <div class="cards-grid" id="cards"></div>
+
+  <section class="standings" id="standings">
+    <h2>Standings (weighted daily faceoff)</h2>
+    <div class="sg" id="sg"></div>
+  </section>
+
+  <footer>
+    <a href="https://thenines.online">thenines.online</a> &nbsp;|&nbsp;
+    Data from <a href="https://status.claude.com" target="_blank" rel="noopener">status.claude.com</a>
+    &amp; <a href="https://status.openai.com" target="_blank" rel="noopener">status.openai.com</a>
+    &nbsp;|&nbsp; 90d &nbsp;|&nbsp; 1 bar = 1 day &nbsp;|&nbsp; hover for details &nbsp;|&nbsp; click to visit source
+  </footer>
+
+  <div class="drawer-overlay" id="drawer-overlay">
+    <div class="drawer">
+      <div class="close-btn" id="drawer-close">close</div>
+      <h3>Methodology</h3>
+      <h4>Data Sources</h4>
+      <p>Claude status data is pulled from <code>status.claude.com</code> which embeds per-component daily uptime data in a JavaScript variable (<code>uptimeData</code>). OpenAI data comes from their Statuspage API at <code>status.openai.com/api/v2/</code> plus their Atom feed for incident history.</p>
+      <h4>Components Tracked</h4>
+      <ul>
+        <li><strong>Claude:</strong> Claude API, claude.ai, Claude Code</li>
+        <li><strong>OpenAI:</strong> OpenAI APIs, ChatGPT, Codex</li>
+      </ul>
+      <h4>Status Colors</h4>
+      <ul>
+        <li><strong>Green:</strong> Fully operational, no incidents</li>
+        <li><strong>Yellow:</strong> Degraded performance, incidents reported but no measured downtime</li>
+        <li><strong>Orange:</strong> Partial outage under 12 hours</li>
+        <li><strong>Red:</strong> Major outage, 12+ hours of partial outage</li>
+        <li><strong>Blue:</strong> Scheduled maintenance</li>
+      </ul>
+      <h4>Weighted Daily Scoring</h4>
+      <p>Each day is a head-to-head faceoff. Services are weighted by criticality:</p>
+      <ul>
+        <li><strong>API + Chat = 3x weight</strong> (core products)</li>
+        <li><strong>Code = 2x weight</strong> (developer tools)</li>
+      </ul>
+      <p>Per-service daily scores: Operational = 100%, Degraded = 60%, Partial Outage = 30%, Major Outage = 0%, Maintenance = 80%. The weighted sum determines who wins each day. Ties go to neither side.</p>
+      <h4>Limitations</h4>
+      <ul>
+        <li>Claude incident titles are not exposed via API; only outage duration is shown</li>
+        <li>OpenAI incident data before Feb 3 2026 is limited (Atom feed range)</li>
+        <li>90-day uptime percentages are from status page scraped data, not real-time calculated</li>
+        <li>Status granularity is per-day, not per-hour</li>
+      </ul>
+      <h4>About</h4>
+      <p>The Nines is a fun, independent comparison tool. It is not affiliated with Anthropic or OpenAI. Data is fetched live from public status pages on each page load.</p>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const se=document.getElementById('stars');
+  for(let i=0;i<30;i++){const s=document.createElement('span');const z=Math.random()*1.2+.4;
+    Object.assign(s.style,{width:z+'px',height:z+'px',left:Math.random()*100+'%',top:Math.random()*100+'%',
+    '--d':(3+Math.random()*5)+'s','--o':(.08+Math.random()*.18)});se.appendChild(s)}
+
+  const C_NAMES=['Claude API','claude.ai','Claude Code'];
+  const O_NAMES=['OpenAI APIs','ChatGPT','Codex'];
+  // Weights: API=3, Chat=3, Code=2
+  const C_WEIGHTS=[3,3,2];
+  const O_WEIGHTS=[3,3,2];
+  const CLAUDE_DAILY={
+    'Claude API':'ggggggyyyyyryggggggyyrgggyyyyggrgbrrygggyyggyyyrgyyyoyyyyrrgggyrrrggyrrrgrooggrrrgrrrg',
+    'claude.ai':'ggggggyyyyyryggggggyyrgggyyyyggrgbrrygggyyggyyyrgyyyoyyyyrrgggyrrrggyrrrgrooggrrrgrrrg',
+    'Claude Code':'gggggggggggggggggggggggggggggggrgbrrygggygggyyyrggggyyyyrrgggyrrrggyrrrgrooggrrrgrrry',
+    'platform.claude.com':'ggggggygggggyygggggyyggggyyyyrggrgbrrygggggggyyyrggyygygrrrggyrrrgggrrrgroggrrrgrrry',
+    'Claude for Government':'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggyggggggggygggg'
+  };
+  const OPENAI_DAILY={
+    'OpenAI APIs':'ggggggggggggggggggggggggggggggggggyyggggyggyyyyogggyygggggyoggggoggyyggggyyggggggygyg',
+    'ChatGPT':'ggggggggggggggggggggggggggggggggggyygoygyyyyyogggyyggyygyogygyoggyygggyyygyggggygyg',
+    'Codex':'gggggggggggggggggggggggggggggggggggggggggggggggyyyygggggggggggggggggggggggggggggggg',
+    'Sora':'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggogggggggggggggggggoggggggg',
+    'FedRAMP':'ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg'
+  };
+  const UPTIME={
+    'claude.ai':98.89,'Claude API':99.03,'Claude Code':99.27,'platform.claude.com':99.30,'Claude for Government':99.88,
+    'OpenAI APIs':99.98,'ChatGPT':99.91,'Codex':100.00,'Sora':99.95,'FedRAMP':100.00
+  };
+  const OAI_INCIDENTS={
+    '03-31':['SSO failures for Enterprise/Edu'],'03-29':['Login instability'],
+    '03-26':['Responses API and Sora errors'],'03-25':['File download/preview issues'],
+    '03-24':['Realtime API SIP errors','Sync app errors','Project file errors'],
+    '03-20':['Pinned chats not loading'],'03-18':['Sora video generation failing'],
+    '03-17':['ChatGPT 5.4 Pro errors','Excel Plugin down','Sign-in errors','Free/Guest plan errors'],
+    '03-13':['Responses API errors','Conversation errors'],'03-12':['SSO access issues','File download errors'],
+    '03-11':['Login errors','Conversation errors','Deep Research errors','File upload errors'],
+    '03-10':['File upload errors','Codex unresponsive','Support chat degraded'],
+    '03-09':['Codex unresponsive','Deep Research LATAM errors','Enterprise conversation errors'],
+    '03-07':['Codex usage rate issues','Login issues'],'03-06':['Compliance API errors'],
+    '03-05':['API Error Rates (11 components)','ChatGPT message issues','Realtime API EU errors'],
+    '03-03':['File upload errors','Codex error rate'],'03-02':['File processing failing','Sora API errors','Auth failures'],
+    '02-26':['ChatGPT Apps issues'],'02-25':['Artifact generation down'],
+    '02-23':['Business/Enterprise conversation errors'],'02-20':['Increased ChatGPT latency'],
+    '02-19':['Audit Logs issues'],'02-18':['Sora 2 degraded performance'],
+    '02-16':['Shopping Research down','Codex Cloud errors'],'02-14':['Support email delays','Image generation errors'],
+    '02-12':['Conversation issues','Embeddings error rate'],'02-11':['Login errors'],
+    '02-10':['ChatGPT Go errors','GPT 5.2 error rates'],'02-09':['Codex GitHub dependency issues'],
+    '02-07':['Conversation loading issues'],'02-05':['Increased ChatGPT errors'],
+    '02-04':['ChatGPT Availability Impacted','Custom GPT updates failing','Conversation loading issues'],
+    '02-03':['Finetuning job errors']
+  };
+  const CLAUDE_MINUTES={
+    '01-14':1300,'01-22':2776,'01-29':5331,'02-01':6444,'02-04':5091,'02-14':4583,'02-18':695,
+    '02-23':2997,'02-25':11665,'02-26':23748,'02-27':16039,'02-28':10369,
+    '03-02':9959,'03-03':2914,'03-12':5160,'03-13':10218,'03-17':14940,'03-18':5851,
+    '03-19':4310,'03-21':5714,'03-23':960,'03-25':31930,'03-26':5095,'03-27':16920,
+    '03-29':13885,'03-31':2198
+  };
+  function fmtMins(m){const h=Math.min(m,1440)/60;return h<1?(Math.round(h*60)+'m'):(h.toFixed(1)+'h')}
+
+  const A_SM='<svg class="logo-a-sm" viewBox="0 0 46 32"><path d="M32.73 0h-6.73l-7.543 32h6.73L32.73 0ZM13.27 0 0 32h6.88l2.725-5.87h13.97l2.726 5.87h6.88L19.91 0h-6.64Zm-.524 20.67 4.383-9.44 4.382 9.44H12.746Z"/></svg>';
+  const O_SM='<svg class="logo-o-sm" viewBox="0 0 24 24"><path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073ZM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494ZM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646ZM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872v.024Zm16.597 3.855-5.833-3.387L15.119 7.2a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.407-.667Zm2.01-3.023-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66v.018ZM8.318 12.861l-2.02-1.164a.08.08 0 0 1-.038-.057V6.072a4.5 4.5 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681l-.003 6.72Zm1.096-2.365L12 8.96l2.586 1.502v2.998L12 14.968l-2.586-1.504v-2.968Z"/></svg>';
+
+  const RACES=[
+    {title:'API',c:'Claude API',o:'OpenAI APIs'},
+    {title:'CHAT',c:'claude.ai',o:'ChatGPT'},
+    {title:'CODE',c:'Claude Code',o:'Codex'},
+  ];
+  const SL={g:'Operational',y:'Degraded',o:'Partial Outage',r:'Major Outage',b:'Maintenance'};
+  const prio={r:4,o:3,y:2,b:1,g:0};
+  const colorDot={g:'var(--green)',y:'var(--yellow)',o:'var(--orange)',r:'var(--red)',b:'var(--blue)'};
+  const statusScore={g:1,y:.6,o:.3,r:0,b:.8};
+
+  function genDates(){
+    const d=[];const end=new Date(2026,2,31);
+    for(let i=89;i>=0;i--){const x=new Date(end);x.setDate(x.getDate()-i);
+      d.push((x.getMonth()+1).toString().padStart(2,'0')+'-'+x.getDate().toString().padStart(2,'0'))}
+    return d;
+  }
+  const DATES=genDates();
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmtDate(d){const p=d.split('-');const m=parseInt(p[0])-1;const day=parseInt(p[1]);
+    const dt=new Date(2026,m,day);const dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dt.getDay()];
+    return dn+', '+months[m]+' '+day+', 2026'}
+
+  function renderBars(data,side){
+    const str=data||'g'.repeat(90);
+    return str.split('').map((ch,i)=>{
+      const cls=ch||'g';const label=SL[ch]||'Operational';const date=DATES[i];
+      let incidents='';
+      if(side==='c'){const mins=CLAUDE_MINUTES[date];if(mins)incidents='Partial outage (~'+fmtMins(mins)+')';}
+      else{const inc=OAI_INCIDENTS[date];if(inc&&inc.length)incidents=inc.join('||');}
+      return '<div class="day '+cls+'" data-date="'+date+'" data-status="'+label+'" data-color="'+ch+'" data-incidents="'+incidents.replace(/"/g,'&quot;')+'" data-href="'+(side==='c'?'https://status.claude.com':'https://status.openai.com')+'"></div>';
+    }).join('');
+  }
+  function dotCls(data){const ch=(data||'g').slice(-1);return{g:'ok',y:'deg',o:'part',r:'maj',b:'ok'}[ch]||'ok'}
+  function statusTxt(data){const ch=(data||'g').slice(-1);return SL[ch]||'Operational'}
+
+  // Liveness check against status APIs; data is hardcoded above
+  async function fetchLive(){
+    await Promise.allSettled([
+      fetch('https://status.claude.com/api/v2/components.json').then(r=>r.json()),
+      fetch('https://status.openai.com/api/v2/components.json').then(r=>r.json())
+    ]);
+  }
+
+  function render(){
+    const cards=document.getElementById('cards');
+    const overview=document.getElementById('overview');
+
+    // Build per-day data for overview + weighted scoring
+    const allC=C_NAMES.map(n=>CLAUDE_DAILY[n]);
+    const allO=O_NAMES.map(n=>OPENAI_DAILY[n]);
+    let cAgg='',oAgg='';
+    const cPerDay=[],oPerDay=[];
+    let cDaysWon=0,oDaysWon=0,tiedDays=0,cTotalScore=0,oTotalScore=0;
+
+    for(let i=0;i<90;i++){
+      let cMax='g',oMax='g';
+      const cSvcs=[],oSvcs=[];
+      let cDayScore=0,oDayScore=0;
+      C_NAMES.forEach((n,j)=>{const ch=allC[j][i]||'g';cSvcs.push({n,s:ch});if((prio[ch]||0)>(prio[cMax]||0))cMax=ch;
+        cDayScore+=C_WEIGHTS[j]*(statusScore[ch]||0)});
+      O_NAMES.forEach((n,j)=>{const ch=allO[j][i]||'g';oSvcs.push({n,s:ch});if((prio[ch]||0)>(prio[oMax]||0))oMax=ch;
+        oDayScore+=O_WEIGHTS[j]*(statusScore[ch]||0)});
+      cAgg+=cMax;oAgg+=oMax;cPerDay.push(cSvcs);oPerDay.push(oSvcs);
+      cTotalScore+=cDayScore;oTotalScore+=oDayScore;
+      if(cDayScore>oDayScore)cDaysWon++;else if(oDayScore>cDayScore)oDaysWon++;else tiedDays++;
+    }
+
+    // Overview
+    function ovBars(agg,perDay,side){
+      return agg.split('').map((ch,i)=>{
+        const svcs=perDay[i].map(s=>s.n+':'+s.s).join('||');
+        return '<div class="day '+(ch||'g')+'" data-ov="1" data-side="'+side+'" data-date="'+DATES[i]+'" data-svcs="'+svcs+'" data-color="'+ch+'"></div>';
+      }).join('');
+    }
+    overview.innerHTML=
+      '<div class="ov-row"><div class="ov-label">'+A_SM+' Claude (all services)</div><div class="ov-bars">'+ovBars(cAgg,cPerDay,'c')+'</div></div>'+
+      '<div class="ov-row"><div class="ov-bars">'+ovBars(oAgg,oPerDay,'o')+'</div><div class="ov-label">'+O_SM+' OpenAI (all services)</div></div>'+
+      '<div class="ov-meta"><div class="ov-time">90 days ago</div>'+
+        '<div class="ov-legend">'+
+          '<div class="lg"><span class="sw" style="background:var(--green)"></span>OK</div>'+
+          '<div class="lg"><span class="sw" style="background:var(--yellow)"></span>Degraded</div>'+
+          '<div class="lg"><span class="sw" style="background:var(--orange)"></span>Partial</div>'+
+          '<div class="lg"><span class="sw" style="background:var(--red)"></span>Major</div>'+
+          '<div class="lg"><span class="sw" style="background:var(--blue)"></span>Maint</div>'+
+        '</div>'+
+        '<div class="ov-time">Today</div></div>';
+
+    // Cards
+    RACES.forEach((race,idx)=>{
+      const cUp=UPTIME[race.c],oUp=UPTIME[race.o];
+      const cD=CLAUDE_DAILY[race.c],oD=OPENAI_DAILY[race.o];
+      const diff=Math.abs(cUp-oUp);
+      let w='t';if(cUp>oUp)w='c';else if(oUp>cUp)w='o';
+      const wl=w==='c'?A_SM+' Claude leads':w==='o'?O_SM+' OpenAI leads':'Tie';
+      const dc=w==='c'?'var(--claude)':w==='o'?'var(--openai)':'var(--muted)';
+
+      const card=document.createElement('div');
+      card.className='uptime-card'+(idx===0?' full':'');
+      card.innerHTML=
+        '<div class="card-status"><div class="left"><span class="dot" style="background:'+dc+'"></span><span>'+race.title+'</span></div><div class="right">'+wl+(diff>0?' (+'+diff.toFixed(2)+'%)':'')+'</div></div>'+
+        '<div class="card-bars">'+
+          '<div class="brand-tag c">'+A_SM+' '+race.c+'<span style="margin-left:auto;font-size:.55rem;color:var(--muted);font-weight:400">'+cUp.toFixed(2)+'%</span></div>'+
+          '<div class="bar-row"><div class="bars">'+renderBars(cD,'c')+'</div></div>'+
+          '<div class="bar-row"><div class="bars">'+renderBars(oD,'o')+'</div></div>'+
+          '<div class="brand-tag o">'+O_SM+' '+race.o+'<span style="margin-left:auto;font-size:.55rem;color:var(--muted);font-weight:400">'+oUp.toFixed(2)+'%</span></div>'+
+          '<div class="bar-timeline"><span>90 days ago</span><span>Today</span></div>'+
+        '</div>'+
+        '<div class="card-foot"><a href="https://status.claude.com" target="_blank" rel="noopener"><span class="sdot '+dotCls(cD)+'"></span>'+race.c+': '+statusTxt(cD)+'</a><a href="https://status.openai.com" target="_blank" rel="noopener">'+race.o+': '+statusTxt(oD)+'<span class="sdot '+dotCls(oD)+'"></span></a></div>';
+      cards.appendChild(card);
+    });
+
+    // Click handlers
+    document.querySelectorAll('.bars .day[data-href],.ov-bars .day').forEach(d=>{
+      const href=d.dataset.href||(d.dataset.side==='c'?'https://status.claude.com':'https://status.openai.com');
+      d.addEventListener('click',()=>window.open(href,'_blank','noopener'));
+    });
+
+    // Tooltip
+    const tip=document.createElement('div');tip.className='tip';document.body.appendChild(tip);
+    document.addEventListener('mouseover',function(e){
+      const el=e.target.closest('.bars .day, .ov-bars .day');
+      if(!el)return;
+      const date=el.dataset.date;const color=el.dataset.color;
+      let html='<div class="tip-date">'+fmtDate(date)+'</div>';
+      if(el.dataset.ov){
+        const svcs=el.dataset.svcs.split('||').map(s=>{const p=s.split(':');return{n:p[0],s:p[1]}});
+        html+='<div class="tip-status"><span class="td" style="background:'+colorDot[color]+'"></span>Worst: '+(SL[color]||'Operational')+'</div>';
+        html+='<div class="tip-incidents"><div class="tip-lbl">Services</div>';
+        svcs.forEach(svc=>{html+='<div class="tip-svc"><span class="ts-dot" style="background:'+colorDot[svc.s]+'"></span>'+svc.n+': '+(SL[svc.s]||'OK')+'</div>'});
+        html+='</div>';
+      } else {
+        html+='<div class="tip-status"><span class="td" style="background:'+colorDot[color]+'"></span>'+(el.dataset.status||'Operational')+'</div>';
+        const inc=el.dataset.incidents;
+        if(inc){const items=inc.split('||');
+          html+='<div class="tip-incidents"><div class="tip-lbl">Related</div>';
+          items.forEach(it=>{html+='<div class="tip-incident"><span style="width:4px;height:4px;border-radius:50%;background:'+colorDot[color]+';flex-shrink:0;margin-top:3px"></span>'+it+'</div>'});
+          html+='</div>';}
+        else if(color==='g')html+='<div style="font-size:.45rem;color:var(--muted);margin-top:.1rem">No incidents recorded.</div>';
+      }
+      tip.innerHTML=html;
+      const r=el.getBoundingClientRect();
+      let left=r.left+r.width/2-tip.offsetWidth/2;let top=r.top-tip.offsetHeight-8;
+      if(top<4)top=r.bottom+8;if(left<4)left=4;if(left+tip.offsetWidth>window.innerWidth-4)left=window.innerWidth-tip.offsetWidth-4;
+      tip.style.left=left+'px';tip.style.top=top+'px';tip.classList.add('show');
+    });
+    document.addEventListener('mouseout',function(e){if(e.target.closest('.bars .day, .ov-bars .day'))tip.classList.remove('show')});
+
+    // Scoreboard
+    const cAvg=RACES.reduce((s,r)=>s+UPTIME[r.c],0)/RACES.length;
+    const oAvg=RACES.reduce((s,r)=>s+UPTIME[r.o],0)/RACES.length;
+    document.getElementById('c-avg').textContent=cAvg.toFixed(2)+'%';
+    document.getElementById('o-avg').textContent=oAvg.toFixed(2)+'%';
+    const gap=Math.abs(cAvg-oAvg).toFixed(2);
+    const leader=oAvg>cAvg?'OpenAI':'Claude';
+    document.getElementById('delta').innerHTML=leader+' leads by '+gap+'%';
+
+    // Standings
+    const sg=document.getElementById('sg');
+    sg.innerHTML=
+      '<div class="sc '+(cDaysWon>oDaysWon?'cw':'ow')+'"><div class="sl">DAILY WINS</div><div class="sv">'+(cDaysWon>oDaysWon?'Claude':'OpenAI')+'</div><div class="ss">'+Math.max(cDaysWon,oDaysWon)+' of 90 days</div></div>'+
+      '<div class="sc cw"><div class="sl">CLAUDE DAYS</div><div class="sv">'+cDaysWon+'</div><div class="ss">won</div></div>'+
+      '<div class="sc ow"><div class="sl">OPENAI DAYS</div><div class="sv">'+oDaysWon+'</div><div class="ss">won</div></div>'+
+      '<div class="sc tw"><div class="sl">TIED DAYS</div><div class="sv">'+tiedDays+'</div><div class="ss">of 90</div></div>'+
+      '<div class="sc '+(cTotalScore>oTotalScore?'cw':'ow')+'"><div class="sl">WTGD SCORE</div><div class="sv">'+Math.round(cTotalScore)+'-'+Math.round(oTotalScore)+'</div><div class="ss">API/Chat=3x, Code=2x</div></div>';
+  }
+
+  async function init(){
+    await fetchLive();render();
+    document.getElementById('ts').textContent='fetched '+new Date().toISOString().replace('T',' ').slice(0,19)+' UTC';
+    document.getElementById('loader').classList.add('hidden');
+    document.getElementById('info-open').addEventListener('click',function(){
+      document.getElementById('drawer-overlay').classList.add('open');
+    });
+    document.getElementById('drawer-close').addEventListener('click',function(){
+      document.getElementById('drawer-overlay').classList.remove('open');
+    });
+    document.getElementById('drawer-overlay').addEventListener('click',function(e){
+      if(e.target===this)this.classList.remove('open');
+    });
+
+    // Day range toggle: slice bars to show last N days
+    document.querySelectorAll('.ctrl-btn[data-days]').forEach(btn=>{
+      btn.addEventListener('click',function(){
+        document.querySelectorAll('.ctrl-btn[data-days]').forEach(b=>b.classList.remove('active'));
+        this.classList.add('active');
+        const days=parseInt(this.dataset.days);
+        const skip=90-days;
+        // Hide first N bars in every .bars and .ov-bars
+        document.querySelectorAll('.bars, .ov-bars').forEach(row=>{
+          const children=row.children;
+          for(let i=0;i<children.length;i++){
+            children[i].style.display=i<skip?'none':'';
+          }
+        });
+        // Update timeline labels
+        document.querySelectorAll('.bar-timeline span:first-child, .ov-time:first-child').forEach(el=>{
+          if(el.parentElement.classList.contains('ov-meta')){return}
+          el.textContent=days+' days ago';
+        });
+      });
+    });
+
+    // Theme toggle
+    document.getElementById('theme-toggle').addEventListener('click',function(){
+      const isLight=document.documentElement.classList.toggle('light');
+      this.textContent=isLight?'dark mode':'light mode';
+    });
+  }
+  init();
+})();
+</script>
+</body>
+</html>

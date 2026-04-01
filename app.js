@@ -91,6 +91,7 @@
   let tooltip;
   let dataRows=[];
   let chartIdSeed=0;
+  let tlDayData=null;
 
   function fmtMins(minutes){
     const hours=Math.min(minutes,1440)/60;
@@ -203,6 +204,20 @@
     return tooltip;
   }
 
+  function showCustomTip(el,html){
+    var tip=createTooltip();
+    tip.innerHTML=html;
+    var rect=el.getBoundingClientRect();
+    var left=rect.left+rect.width/2-tip.offsetWidth/2;
+    var top=rect.top-tip.offsetHeight-8;
+    if(top<4)top=rect.bottom+8;
+    if(left<4)left=4;
+    if(left+tip.offsetWidth>window.innerWidth-4)left=window.innerWidth-tip.offsetWidth-4;
+    tip.style.left=left+'px';
+    tip.style.top=top+'px';
+    tip.classList.add('show');
+  }
+
   function showTip(el){
     const tip=createTooltip();
     const date=el.dataset.date;
@@ -251,6 +266,70 @@
   }
 
   function bindDayInteractions(){
+    function getTimelineCell(target){return target.closest('.tl-cell');}
+    function getCatRow(target){return target.closest('.cat-row');}
+
+    function showTimelineTip(el){
+      var date=el.dataset.tlDate;
+      var winner=el.dataset.tlWinner;
+      var score=el.dataset.tlScore;
+      var idx=parseInt(el.dataset.tlIdx,10);
+      var winColor=winner==='Claude'?'var(--claude)':winner==='OpenAI'?'var(--openai)':'var(--muted)';
+      var html='<div class="tip-date">'+fmtDate(date)+'</div>';
+      html+='<div class="tip-status"><span class="td" style="background:'+winColor+'"></span>'+winner+(winner==='Tie'?'':' wins')+'</div>';
+
+      if(tlDayData){
+        var cSvcs=tlDayData.cPerDay[idx];
+        var oSvcs=tlDayData.oPerDay[idx];
+        var cScore=0;var oScore=0;
+        var issues=[];
+        cSvcs.forEach(function(s,si){
+          var sc=STATUS_SCORE[s.status]||0;
+          cScore+=C_WEIGHTS[si]*sc;
+          if(s.status!=='g')issues.push({name:s.name,status:s.status,side:'c'});
+        });
+        oSvcs.forEach(function(s,si){
+          var sc=STATUS_SCORE[s.status]||0;
+          oScore+=O_WEIGHTS[si]*sc;
+          if(s.status!=='g')issues.push({name:s.name,status:s.status,side:'o'});
+        });
+        html+='<div style="display:flex;gap:.5rem;font-size:.48rem;margin-top:.2rem;color:var(--muted-lt)">';
+        html+='<span><span style="color:var(--claude);font-weight:600">Claude</span> '+cScore.toFixed(1)+'/8</span>';
+        html+='<span><span style="color:var(--openai);font-weight:600">OpenAI</span> '+oScore.toFixed(1)+'/8</span>';
+        html+='</div>';
+        if(issues.length>0){
+          html+='<div style="border-top:1px solid var(--border);padding-top:.2rem;margin-top:.2rem">';
+          issues.forEach(function(iss){
+            var col=iss.side==='c'?'var(--claude)':'var(--openai)';
+            html+='<div style="font-size:.45rem;color:var(--muted-lt);display:flex;align-items:center;gap:4px;padding:1px 0"><span style="width:4px;height:4px;border-radius:50%;background:'+STATUS_COLORS[iss.status]+';flex-shrink:0"></span>'+iss.name+': '+(STATUS_LABELS[iss.status]||'OK')+'</div>';
+          });
+          html+='</div>';
+        } else {
+          html+='<div style="font-size:.42rem;color:var(--muted);margin-top:.15rem">All services operational</div>';
+        }
+      }
+      html+='<div style="font-size:.42rem;color:var(--muted);margin-top:.15rem">Running: '+score+'</div>';
+      showCustomTip(el,html);
+    }
+
+    function showCatTip(el){
+      var title=el.dataset.catTitle;
+      var cw=el.dataset.catCw;
+      var ow=el.dataset.catOw;
+      var tie=el.dataset.catTie;
+      var cpct=el.dataset.catCpct;
+      var opct=el.dataset.catOpct;
+      var tpct=el.dataset.catTpct;
+      var leader=el.dataset.catLeader;
+      var html='<div class="tip-date">'+title+'</div>';
+      html+='<div style="display:flex;gap:.6rem;margin-top:.2rem">';
+      html+='<div style="font-size:.5rem"><span style="color:var(--claude);font-weight:700">Claude</span><div style="font-size:.7rem;font-weight:700;color:var(--claude-lt)">'+cw+' <span style="font-size:.45rem;color:var(--muted);font-weight:400">('+cpct+'%)</span></div></div>';
+      html+='<div style="font-size:.5rem"><span style="color:var(--openai);font-weight:700">OpenAI</span><div style="font-size:.7rem;font-weight:700;color:var(--openai-lt)">'+ow+' <span style="font-size:.45rem;color:var(--muted);font-weight:400">('+opct+'%)</span></div></div>';
+      html+='<div style="font-size:.5rem"><span style="color:var(--muted);font-weight:600">Tied</span><div style="font-size:.7rem;font-weight:700;color:var(--muted-lt)">'+tie+' <span style="font-size:.45rem;color:var(--muted);font-weight:400">('+tpct+'%)</span></div></div>';
+      html+='</div>';
+      showCustomTip(el,html);
+    }
+
     document.addEventListener('click',function(event){
       const dayCell=getDayCell(event.target);
       if(dayCell){
@@ -262,6 +341,10 @@
         window.open(dayCell.dataset.href||getStatusPage(dayCell.dataset.side),'_blank','noopener');
         return;
       }
+      var tlCell=getTimelineCell(event.target);
+      if(tlCell&&!SUPPORTS_HOVER){showTimelineTip(tlCell);return;}
+      var catRow=getCatRow(event.target);
+      if(catRow&&!SUPPORTS_HOVER){showCatTip(catRow);return;}
       if(!SUPPORTS_HOVER&&!event.target.closest('.tip'))hideTip();
     });
 
@@ -269,11 +352,15 @@
 
     document.addEventListener('mouseover',function(event){
       const dayCell=getDayCell(event.target);
-      if(dayCell)showTip(dayCell);
+      if(dayCell){showTip(dayCell);return;}
+      var tlCell=getTimelineCell(event.target);
+      if(tlCell){showTimelineTip(tlCell);return;}
+      var catRow=getCatRow(event.target);
+      if(catRow){showCatTip(catRow);return;}
     });
 
     document.addEventListener('mouseout',function(event){
-      if(getDayCell(event.target))hideTip();
+      if(getDayCell(event.target)||getTimelineCell(event.target)||getCatRow(event.target))hideTip();
     });
   }
 
@@ -364,153 +451,157 @@
     });
   }
 
-  function buildNarrative(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak){
+  function buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,catWins){
     const oLeads=oDaysWon>cDaysWon;
     const leader=oLeads?'OpenAI':'Claude';
     const leaderClass=oLeads?'o-hl':'c-hl';
-    const trailer=oLeads?'Claude':'OpenAI';
-    const trailerClass=oLeads?'c-hl':'o-hl';
     const leaderWins=Math.max(cDaysWon,oDaysWon);
     const trailerWins=Math.min(cDaysWon,oDaysWon);
-    const topStreak=oLeads?oStreak:cStreak;
-    const gapWinner=bigGapCat.oW>bigGapCat.cW?'OpenAI':'Claude';
-    const gapWinnerClass=bigGapCat.oW>bigGapCat.cW?'o-hl':'c-hl';
-    const gapWins=Math.max(bigGapCat.oW,bigGapCat.cW);
-    const trailerBestWins=oLeads?trailerBestCat.cW:trailerBestCat.oW;
 
+    // Last 7 days
     const last7=dayWinners.slice(-7);
-    const weekParts=[];
-    const o7=last7.filter(function(value){return value==='o';}).length;
-    const c7=last7.filter(function(value){return value==='c';}).length;
-    const t7=last7.filter(function(value){return value==='t';}).length;
-    if(o7>0)weekParts.push('<span class="o-hl">OpenAI</span> '+o7);
-    if(c7>0)weekParts.push('<span class="c-hl">Claude</span> '+c7);
-    if(t7>0)weekParts.push(t7+' tied');
+    const o7=last7.filter(function(v){return v==='o';}).length;
+    const c7=last7.filter(function(v){return v==='c';}).length;
+    const t7=last7.filter(function(v){return v==='t';}).length;
+    var last7Leader=c7>o7?'Claude':o7>c7?'OpenAI':'Tied';
+    var last7Class=c7>o7?'c-hl':o7>c7?'o-hl':'';
 
-    const sentences=[
-      '<span class="'+leaderClass+'">'+leader+'</span> leads the 90-day race with <span class="num" data-to="'+leaderWins+'">0</span> daily wins to <span class="'+trailerClass+'">'+trailer+'</span>\'s <span class="num" data-to="'+trailerWins+'">0</span>, with <span class="num" data-to="'+tiedDays+'">0</span> ties.'
-    ];
-    if(Math.abs(bigGapCat.oW-bigGapCat.cW)>3){
-      sentences.push('The gap is sharpest in '+bigGapCat.title+', where <span class="'+gapWinnerClass+'">'+gapWinner+'</span> took <span class="num" data-to="'+gapWins+'">0</span> days.');
-    }
-    if(trailerBestWins>3&&trailerBestCat.title!==bigGapCat.title){
-      sentences.push('<span class="'+trailerClass+'">'+trailer+'</span> fights back in '+trailerBestCat.title+' with <span class="num" data-to="'+trailerBestWins+'">0</span> wins.');
-    }
-
-    let streakSentence=leader+'\'s longest run: <span class="num" data-to="'+topStreak+'">0</span> consecutive days.';
-    if(bestComeback.droughtLen>=3){
-      const comebackSide=bestComeback.side==='c'?'Claude':'OpenAI';
-      const comebackClass=bestComeback.side==='c'?'c-hl':'o-hl';
-      streakSentence+=' <span class="'+comebackClass+'">'+comebackSide+'</span> snapped a '+bestComeback.droughtLen+'-day drought on '+fmtDate(bestComeback.date).replace(/^..., /,'')+'.';
-    }
-    sentences.push(streakSentence);
-    sentences.push('Last 7 days: '+weekParts.join(', ')+'.');
-
-    let wordIndex=0;
-    function wrapWords(html){
-      let output='';
-      let buffer='';
-      let insideTag=false;
-      for(let i=0;i<html.length;i++){
-        const character=html[i];
-        if(character==='<'){
-          insideTag=true;
-          buffer+=character;
-        } else if(character==='>'&&insideTag){
-          insideTag=false;
-          buffer+=character;
-        } else if(character===' '&&!insideTag){
-          if(buffer){
-            output+='<span class="word" style="transition-delay:'+(wordIndex*40)+'ms">'+buffer+'</span> ';
-            wordIndex++;
-          }
-          buffer='';
-        } else {
-          buffer+=character;
-        }
-      }
-      if(buffer){
-        output+='<span class="word" style="transition-delay:'+(wordIndex*40)+'ms">'+buffer+'</span>';
-        wordIndex++;
-      }
-      return output;
-    }
-
-    return sentences.map(function(sentence){
-      return '<span class="sentence">'+wrapWords(sentence)+'</span>';
-    }).join(' ');
-  }
-
-  function buildMomentum(runDiff){
-    const chartWidth=800;
-    const chartHeight=60;
-    const range=Math.max(Math.abs(Math.min(0,...runDiff)),Math.abs(Math.max(0,...runDiff)))||1;
-    const padding=2;
-    const zeroY=padding+(chartHeight-padding*2)*(1-(range)/(range*2));
-    const points=runDiff.map(function(value,index){
-      const x=(index/(TOTAL_DAYS-1))*chartWidth;
-      const y=padding+(chartHeight-padding*2)*(1-((value+range)/(range*2)));
-      return x.toFixed(1)+','+y.toFixed(1);
-    }).join(' ');
-    const fill='0,'+zeroY.toFixed(1)+' '+points+' '+chartWidth+','+zeroY.toFixed(1);
-    const clipAbove='clip-above-'+chartIdSeed;
-    const clipBelow='clip-below-'+chartIdSeed;
-    const diff=runDiff[runDiff.length-1];
-    const diffLabel=diff>0?'Claude +'+diff:diff<0?'OpenAI +'+Math.abs(diff):'Even';
-    chartIdSeed++;
-
-    return {
-      diff,
-      diffLabel,
-      svg:
-        '<svg class="momentum-svg" viewBox="0 0 '+chartWidth+' '+chartHeight+'" preserveAspectRatio="none">'+
-        '<defs>'+
-        '<clipPath id="'+clipAbove+'"><rect x="0" y="0" width="'+chartWidth+'" height="'+zeroY.toFixed(1)+'"/></clipPath>'+
-        '<clipPath id="'+clipBelow+'"><rect x="0" y="'+zeroY.toFixed(1)+'" width="'+chartWidth+'" height="'+(chartHeight-zeroY).toFixed(1)+'"/></clipPath>'+
-        '</defs>'+
-        '<polygon points="'+fill+'" clip-path="url(#'+clipAbove+')" fill="var(--claude)" opacity=".25"/>'+
-        '<polygon points="'+fill+'" clip-path="url(#'+clipBelow+')" fill="var(--openai)" opacity=".25"/>'+
-        '<line x1="0" y1="'+zeroY.toFixed(1)+'" x2="'+chartWidth+'" y2="'+zeroY.toFixed(1)+'" stroke="var(--muted)" stroke-dasharray="4,3" stroke-width="1" opacity=".4"/>'+
-        '<polyline points="'+points+'" fill="none" stroke="var(--muted-lt)" stroke-width="1.5" stroke-linejoin="round"/>'+
-        '</svg>'
-    };
-  }
-
-  function animateNarrative(){
-    const narrative=document.getElementById('narrative');
-    if(!narrative)return;
-    const observer=new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(!entry.isIntersecting)return;
-        narrative.classList.add('visible');
-        narrative.querySelectorAll('.num').forEach(function(counter){
-          const target=parseInt(counter.dataset.to,10);
-          const startedAt=performance.now();
-          function tick(now){
-            const progress=Math.min((now-startedAt)/800,1);
-            const eased=1-Math.pow(1-progress,3);
-            counter.textContent=Math.round(eased*target);
-            if(progress<1)requestAnimationFrame(tick);
-          }
-          requestAnimationFrame(tick);
-        });
-        observer.disconnect();
+    // Incident days count (non-green days)
+    var cIncidentDays=0;
+    var oIncidentDays=0;
+    for(var i=0;i<TOTAL_DAYS;i++){
+      var cWorst='g';
+      C_NAMES.forEach(function(n,idx){
+        var s=CLAUDE_DAILY[n][i]||'g';
+        if((STATUS_PRIORITY[s]||0)>(STATUS_PRIORITY[cWorst]||0))cWorst=s;
       });
-    },{threshold:0.1});
-    observer.observe(els.standings);
+      if(cWorst!=='g')cIncidentDays++;
+      var oWorst='g';
+      O_NAMES.forEach(function(n,idx){
+        var s=OPENAI_DAILY[n][i]||'g';
+        if((STATUS_PRIORITY[s]||0)>(STATUS_PRIORITY[oWorst]||0))oWorst=s;
+      });
+      if(oWorst!=='g')oIncidentDays++;
+    }
+
+    // Total Claude downtime minutes
+    var cTotalMins=0;
+    Object.keys(CLAUDE_MINUTES).forEach(function(k){cTotalMins+=CLAUDE_MINUTES[k];});
+    var cTotalHrs=(cTotalMins/60).toFixed(0);
+
+    // OAI total incident count
+    var oTotalIncidents=0;
+    Object.keys(OAI_INCIDENTS).forEach(function(k){oTotalIncidents+=OAI_INCIDENTS[k].length;});
+
+    // Win rate
+    var cWinRate=((cDaysWon/TOTAL_DAYS)*100).toFixed(0);
+    var oWinRate=((oDaysWon/TOTAL_DAYS)*100).toFixed(0);
+
+    // Clean days (both fully operational)
+    var cleanDays=0;
+    for(var j=0;j<TOTAL_DAYS;j++){
+      var allClean=true;
+      C_NAMES.forEach(function(n){if((CLAUDE_DAILY[n][j]||'g')!=='g')allClean=false;});
+      O_NAMES.forEach(function(n){if((OPENAI_DAILY[n][j]||'g')!=='g')allClean=false;});
+      if(allClean)cleanDays++;
+    }
+
+    // Category win breakdown for the bar
+    var catHtml='';
+    catWins.forEach(function(cat){
+      var cPct=(cat.cW/TOTAL_DAYS*100).toFixed(0);
+      var oPct=(cat.oW/TOTAL_DAYS*100).toFixed(0);
+      var tPct=(cat.tie/TOTAL_DAYS*100).toFixed(0);
+      var catLeader=cat.cW>cat.oW?'Claude':cat.oW>cat.cW?'OpenAI':'Tied';
+      catHtml+='<div class="cat-row" data-cat-title="'+cat.title+'" data-cat-cw="'+cat.cW+'" data-cat-ow="'+cat.oW+'" data-cat-tie="'+cat.tie+'" data-cat-cpct="'+cPct+'" data-cat-opct="'+oPct+'" data-cat-tpct="'+tPct+'" data-cat-leader="'+catLeader+'">';
+      catHtml+='<div style="display:flex;justify-content:space-between;font-size:.45rem;color:var(--muted-lt);margin-bottom:.15rem"><span>'+cat.title+'</span><span><span class="c-hl">'+cat.cW+'</span> – <span class="o-hl">'+cat.oW+'</span> – '+cat.tie+'</span></div>';
+      catHtml+='<div class="db-bar"><div class="seg" style="flex:'+cat.cW+';background:var(--claude)"></div><div class="seg" style="flex:'+cat.tie+';background:var(--muted)"></div><div class="seg" style="flex:'+cat.oW+';background:var(--openai)"></div></div>';
+      catHtml+='</div>';
+    });
+
+    // Biggest gap
+    var gapWinner=bigGapCat.oW>bigGapCat.cW?'OpenAI':'Claude';
+    var gapClass=bigGapCat.oW>bigGapCat.cW?'o-hl':'c-hl';
+    var gapDiff=Math.abs(bigGapCat.oW-bigGapCat.cW);
+
+    // Comeback
+    var cbSide=bestComeback.droughtLen>=3?(bestComeback.side==='c'?'Claude':'OpenAI'):'';
+    var cbClass=bestComeback.side==='c'?'c-hl':'o-hl';
+
+    // Build HTML — 3 rows
+    var blocks='';
+
+    // === ROW 1: Leader | Win Rate + Streak | Last 7 | Comeback ===
+    blocks+='<div class="data-block"><div class="db-label">90-Day Leader</div>';
+    blocks+='<div class="db-value"><span class="'+leaderClass+'">'+leader+'</span></div>';
+    blocks+='<div class="db-detail">'+leaderWins+'W – '+trailerWins+'L – '+tiedDays+'T</div></div>';
+
+    blocks+='<div class="data-block"><div class="db-label">Win Rate / Streak</div>';
+    blocks+='<div class="db-split">';
+    blocks+='<div class="db-split-item"><div class="db-split-val c-hl">'+cWinRate+'%</div><div class="db-split-label">'+cStreak+'d streak</div></div>';
+    blocks+='<div class="db-split-item"><div class="db-split-val o-hl">'+oWinRate+'%</div><div class="db-split-label">'+oStreak+'d streak</div></div>';
+    blocks+='</div></div>';
+
+    blocks+='<div class="data-block"><div class="db-label">Last 7 Days</div>';
+    blocks+='<div class="db-value">'+(last7Class?'<span class="'+last7Class+'">'+last7Leader+'</span>':last7Leader)+'</div>';
+    blocks+='<div class="db-detail"><span class="c-hl">'+c7+'</span> – <span class="o-hl">'+o7+'</span> – '+t7+'</div></div>';
+
+    blocks+='<div class="data-block"><div class="db-label">Biggest Comeback</div>';
+    if(cbSide){
+      blocks+='<div class="db-value"><span class="'+cbClass+'">'+bestComeback.droughtLen+'d</span></div>';
+      blocks+='<div class="db-detail"><span class="'+cbClass+'">'+cbSide+'</span> broke drought</div>';
+    } else {
+      blocks+='<div class="db-value">—</div><div class="db-detail">No major droughts</div>';
+    }
+    blocks+='</div>';
+
+    // === ROW 2: Category Breakdown | Incidents/Clean | Claude Downtime | OpenAI Incidents ===
+    blocks+='<div class="data-block"><div class="db-label">Category Breakdown</div>';
+    blocks+='<div style="margin-top:.1rem">'+catHtml+'</div></div>';
+
+    blocks+='<div class="data-block"><div class="db-label">Incidents / Clean</div>';
+    blocks+='<div class="db-split">';
+    blocks+='<div class="db-split-item"><div class="db-split-val c-hl">'+cIncidentDays+'</div><div class="db-split-label">Claude</div></div>';
+    blocks+='<div class="db-split-item"><div class="db-split-val o-hl">'+oIncidentDays+'</div><div class="db-split-label">OpenAI</div></div>';
+    blocks+='<div class="db-split-item"><div class="db-split-val">'+cleanDays+'</div><div class="db-split-label">Clean</div></div>';
+    blocks+='</div>';
+    blocks+='<div class="db-detail" style="margin-top:.15rem"><span class="'+gapClass+'">'+gapWinner+'</span> leads '+bigGapCat.title+' by '+gapDiff+'d</div></div>';
+
+    blocks+='<div class="data-block"><div class="db-label">Claude Downtime</div>';
+    blocks+='<div class="db-value c-hl">'+cTotalHrs+'h</div>';
+    blocks+='<div class="db-detail">'+Object.keys(CLAUDE_MINUTES).length+' days affected</div></div>';
+
+    blocks+='<div class="data-block"><div class="db-label">OpenAI Incidents</div>';
+    blocks+='<div class="db-value o-hl">'+oTotalIncidents+'</div>';
+    blocks+='<div class="db-detail">'+Object.keys(OAI_INCIDENTS).length+' days affected</div></div>';
+
+    return '<div class="data-grid">'+blocks+'</div>';
   }
 
-  function renderStandings(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,runDiff){
-    const momentum=buildMomentum(runDiff);
-    const narrative=buildNarrative(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak);
+  function buildTimeline(dayWinners,runDiff,cPerDay,oPerDay){
+    tlDayData={cPerDay:cPerDay,oPerDay:oPerDay,dayWinners:dayWinners};
+    var cells='';
+    for(var i=0;i<dayWinners.length;i++){
+      var w=dayWinners[i];
+      var cls=w==='c'?'tl-c':w==='o'?'tl-o':'tl-t';
+      var winLabel=w==='c'?'Claude':w==='o'?'OpenAI':'Tie';
+      var rd=runDiff[i];
+      var scoreLabel=rd>0?'Claude +'+rd:rd<0?'OpenAI +'+Math.abs(rd):'Even';
+      cells+='<div class="tl-cell '+cls+'" data-tl-idx="'+i+'" data-tl-date="'+DATES[i]+'" data-tl-winner="'+winLabel+'" data-tl-score="'+scoreLabel+'"></div>';
+    }
+    return '<div class="timeline-strip">'+cells+'</div>';
+  }
+
+  function renderStandings(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,runDiff,catWins,cPerDay,oPerDay){
+    const dataBlocks=buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,catWins);
+    const timeline=buildTimeline(dayWinners,runDiff,cPerDay,oPerDay);
     els.standingsGrid.innerHTML=
-      '<div class="narrative" id="narrative">'+narrative+'</div>'+
-      '<div class="momentum-wrap">'+
-      '<div class="momentum-header"><span class="momentum-label">Momentum</span><span class="momentum-diff '+(momentum.diff>0?'c-hl':momentum.diff<0?'o-hl':'')+'">'+momentum.diffLabel+'</span></div>'+
-      '<div class="momentum-chart">'+momentum.svg+'</div>'+
-      '<div class="momentum-meta"><span class="ws-time">90 days ago</span><span class="ws-legend"><span class="ws-lg"><span class="ws-sw" style="background:var(--claude)"></span>Claude leads</span><span class="ws-lg"><span class="ws-sw" style="background:var(--openai)"></span>OpenAI leads</span></span><span class="ws-time">Today</span></div>'+
+      dataBlocks+
+      '<div class="timeline-wrap">'+
+      '<div class="timeline-header"><span class="tl-label">Daily Winner Timeline</span><span class="tl-legend"><span class="tl-lg"><span class="tl-sw" style="background:var(--claude)"></span>Claude</span><span class="tl-lg"><span class="tl-sw" style="background:var(--openai)"></span>OpenAI</span><span class="tl-lg"><span class="tl-sw" style="background:var(--muted)"></span>Tie</span></span></div>'+
+      timeline+
+      '<div class="timeline-meta"><span class="tl-time">90 days ago</span><span class="tl-time">Today</span></div>'+
       '</div>';
-    animateNarrative();
   }
 
   function render(){
@@ -634,7 +725,7 @@
 
     buildOverview(cAgg,cPerDay,oAgg,oPerDay);
     buildCards();
-    renderStandings(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,runDiff);
+    renderStandings(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,runDiff,catWins,cPerDay,oPerDay);
     dataRows=Array.from(document.querySelectorAll('.bars, .ov-bars'));
   }
 

@@ -37,7 +37,7 @@
   .logo-o-sm{width:12px;height:12px;fill:var(--openai);vertical-align:-1px}
 
   /* ===== HERO ROW ===== */
-  .hero-row{display:grid;grid-template-columns:auto auto 1fr;gap:.75rem;margin:.75rem 0 .75rem;align-items:stretch}
+  .hero-row{display:grid;grid-template-columns:auto auto 1fr;gap:.75rem;margin:.75rem 0 .75rem;align-items:start}
 
   /* Scoreboard: horizontal, compact */
   .scoreboard{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
@@ -199,15 +199,15 @@
     .info-btn{font-size:.6rem;padding:3px 10px}
 
     /* Scoreboard + Controls — single inline row */
-    .hero-row{grid-template-columns:1fr auto;gap:0}
+    .hero-row{grid-template-columns:1fr auto;gap:0;align-items:stretch}
     .overview{grid-column:1/-1;margin-top:.5rem}
     .scoreboard{flex-direction:row;align-items:center;border-right:none}
-    .sb-team{flex:1;padding:.45rem .5rem;gap:.35rem}
+    .sb-team{flex:1;padding:.45rem .5rem;gap:.35rem;justify-content:center}
     .sb-team+.sb-team{border-top:none;border-left:1px solid var(--border)}
     .sb-team .sb-logo{width:20px;height:20px}
     .sb-team .sb-logo svg{width:14px;height:14px}
     .sb-team .sb-name{font-size:.65rem;min-width:0}
-    .sb-team .sb-val{font-size:.85rem}
+    .sb-team .sb-val{font-size:.85rem;margin-left:0}
     .sb-delta{display:none}
     .controls{border:1px solid var(--border);border-left:none;background:var(--surface);padding:0;margin:0;gap:0;flex-wrap:nowrap;align-self:stretch}
     .ctrl-group{gap:0;align-self:stretch;height:100%}

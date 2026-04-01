@@ -30,7 +30,7 @@
   .logo-o-sm{width:12px;height:12px;fill:var(--openai);vertical-align:-1px}
 
   /* ===== HERO ROW ===== */
-  .hero-row{display:grid;grid-template-columns:auto 1fr;gap:.75rem;margin:.75rem 0 .75rem;align-items:start}
+  .hero-row{display:grid;grid-template-columns:auto 1fr;gap:.75rem;margin:.75rem 0 .75rem;align-items:stretch}
 
   /* Scoreboard: horizontal, compact */
   .scoreboard{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
@@ -53,10 +53,10 @@
   /* Overview panel */
   .overview{background:var(--surface);border:1px solid var(--border);padding:.5rem .7rem .4rem;display:flex;flex-direction:column;justify-content:space-between}
   .ov-tag{font-size:.4rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-left:auto}
-  .ov-row{margin-bottom:.1rem}
+  .ov-row{margin-bottom:.1rem;display:flex;flex-direction:column;flex:1}
   .ov-row:last-of-type{margin-bottom:0}
   .ov-label{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;
-    display:flex;align-items:center;gap:.2rem;margin-bottom:.1rem}
+    display:flex;align-items:center;gap:.2rem;margin-bottom:.25rem}
   .ov-row .ov-label:last-child{margin-bottom:0;margin-top:.1rem}
   :where(.ov-bars,.bars){display:grid;grid-template-columns:repeat(90,1fr);gap:1px}
   :where(.ov-bars,.bars) .day{position:relative;cursor:pointer}
@@ -66,7 +66,7 @@
   :where(.ov-bars,.bars) .day.o{background:var(--orange)}
   :where(.ov-bars,.bars) .day.r{background:var(--red)}
   :where(.ov-bars,.bars) .day.b{background:var(--blue)}
-  .ov-bars{height:16px}
+  .ov-bars{height:16px;flex:1}
   .ov-meta{display:flex;justify-content:space-between;align-items:center;margin-top:.25rem}
   .ov-time{font-size:.4rem;color:var(--muted)}
   .ov-legend{display:flex;gap:.5rem;flex-wrap:wrap}
@@ -149,9 +149,9 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   .loading span{font-size:.6rem;color:var(--muted)}
   /* Controls bar — inside scoreboard on desktop */
-  .controls{display:flex;align-items:center;justify-content:center;gap:0;border-top:1px solid var(--border);padding:.3rem .65rem}
-  .ctrl-group{display:flex;align-items:center;gap:0}
-  .ctrl-btn{font-size:.5rem;color:var(--muted);cursor:pointer;border:1px solid var(--border);padding:2px 8px;
+  .controls{display:flex;align-items:center;gap:0;border-top:1px solid var(--border);padding:0;width:100%;box-sizing:border-box}
+  .ctrl-group{display:flex;align-items:center;gap:0;flex:1}
+  .ctrl-btn{flex:1;text-align:center;font-size:.5rem;color:var(--muted);cursor:pointer;border:1px solid var(--border);padding:2px 8px;
     background:transparent;font-family:inherit;transition:color .15s,background .15s}
   .ctrl-btn:hover{color:var(--text);background:var(--surface2)}
   .ctrl-btn.active{color:var(--text);background:var(--surface2)}

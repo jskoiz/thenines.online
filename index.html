@@ -64,8 +64,8 @@
   .ov-row:last-of-type{margin-bottom:0}
   .ov-label{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.15rem;
     display:flex;align-items:center;gap:.2rem}
-  .ov-bars{display:flex;gap:1px;height:16px}
-  .ov-bars .day{flex:1 1 0;min-width:0;cursor:pointer;position:relative}
+  .ov-bars{display:grid;grid-template-columns:repeat(90,1fr);gap:1px;height:16px}
+  .ov-bars .day{cursor:pointer;position:relative}
   .ov-bars .day.g{background:var(--green)}.ov-bars .day.y{background:var(--yellow)}
   .ov-bars .day.o{background:var(--orange)}.ov-bars .day.r{background:var(--red)}.ov-bars .day.b{background:var(--blue)}
   .ov-bars .day:hover{opacity:.65}
@@ -89,8 +89,8 @@
   .brand-tag{font-size:.55rem;font-weight:600;display:flex;align-items:center;gap:.2rem;margin-bottom:.2rem}
   .brand-tag.c{color:var(--claude)}.brand-tag.o{color:var(--openai);margin-top:.35rem;margin-bottom:.2rem}
   .bar-row{margin-bottom:.1rem}
-  .bars{display:flex;gap:1px;height:18px}
-  .bars .day{flex:1 1 0;min-width:0;border-radius:1px;transition:opacity .12s;cursor:pointer;position:relative}
+  .bars{display:grid;grid-template-columns:repeat(90,1fr);gap:1px;height:18px}
+  .bars .day{border-radius:1px;transition:opacity .12s;cursor:pointer;position:relative}
   .bars .day:hover{opacity:.65}
   .bars .day.g{background:var(--green)}.bars .day.y{background:var(--yellow)}
   .bars .day.o{background:var(--orange)}.bars .day.r{background:var(--red)}.bars .day.b{background:var(--blue)}
@@ -362,7 +362,8 @@
     return dn+', '+months[m]+' '+day+', 2026'}
 
   function renderBars(data,side){
-    const str=data||'g'.repeat(90);
+    const raw=data||'';
+    const str=(raw+'g'.repeat(90)).slice(0,90);
     return str.split('').map((ch,i)=>{
       const cls=ch||'g';const label=SL[ch]||'Operational';const date=DATES[i];
       let incidents='';
@@ -519,23 +520,21 @@
       if(e.target===this)this.classList.remove('open');
     });
 
-    // Day range toggle: slice bars to show last N days
+    // Day range toggle: show last N days by updating grid + visibility
     document.querySelectorAll('.ctrl-btn[data-days]').forEach(btn=>{
       btn.addEventListener('click',function(){
         document.querySelectorAll('.ctrl-btn[data-days]').forEach(b=>b.classList.remove('active'));
         this.classList.add('active');
         const days=parseInt(this.dataset.days);
         const skip=90-days;
-        // Hide first N bars in every .bars and .ov-bars
         document.querySelectorAll('.bars, .ov-bars').forEach(row=>{
+          row.style.gridTemplateColumns='repeat('+days+',1fr)';
           const children=row.children;
           for(let i=0;i<children.length;i++){
             children[i].style.display=i<skip?'none':'';
           }
         });
-        // Update timeline labels
-        document.querySelectorAll('.bar-timeline span:first-child, .ov-time:first-child').forEach(el=>{
-          if(el.parentElement.classList.contains('ov-meta')){return}
+        document.querySelectorAll('.bar-timeline span:first-child').forEach(el=>{
           el.textContent=days+' days ago';
         });
       });

@@ -121,7 +121,7 @@
   .standings{margin-top:.75rem;border:1px solid var(--border);background:var(--surface);overflow:hidden}
   .standings h2{font-size:.65rem;font-weight:600;padding:.45rem .7rem;border-bottom:1px solid var(--border);
     text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
-  .sg{display:grid;grid-template-columns:repeat(5,1fr)}
+  .sg{display:grid;grid-template-columns:repeat(4,1fr)}
   .sc{padding:.5rem .4rem;text-align:center;border-right:1px solid var(--border)}
   .sc:last-child{border-right:none}
   .sc .sl{font-size:.45rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.15rem}
@@ -180,9 +180,6 @@
   @media(max-width:720px){
     /* Layout */
     .container{padding:1rem .75rem}
-    .hero-row{grid-template-columns:1fr auto;gap:.5rem}
-    .overview{grid-column:1/-1}
-    .scoreboard{border-right:none}
     .cards-grid{grid-template-columns:1fr;gap:.5rem}
     .uptime-card.full{grid-column:auto}
 
@@ -194,17 +191,20 @@
     .info-btn{font-size:.6rem;padding:3px 10px}
 
     /* Scoreboard + Controls — single inline row */
-    .scoreboard{flex-direction:row;align-items:center}
-    .sb-team{flex:1;padding:.35rem .4rem;gap:.3rem}
+    .hero-row{grid-template-columns:1fr auto;gap:0}
+    .overview{grid-column:1/-1;margin-top:.5rem}
+    .scoreboard{flex-direction:row;align-items:center;border-right:none}
+    .sb-team{flex:1;padding:.45rem .5rem;gap:.35rem}
     .sb-team+.sb-team{border-top:none;border-left:1px solid var(--border)}
-    .sb-team .sb-logo{width:16px;height:16px}
-    .sb-team .sb-logo svg{width:11px;height:11px}
-    .sb-team .sb-name{font-size:.55rem;min-width:0}
-    .sb-team .sb-val{font-size:.75rem}
+    .sb-team .sb-logo{width:20px;height:20px}
+    .sb-team .sb-logo svg{width:14px;height:14px}
+    .sb-team .sb-name{font-size:.65rem;min-width:0}
+    .sb-team .sb-val{font-size:.85rem}
     .sb-delta{display:none}
-    .controls{border-left:1px solid var(--border);background:var(--surface);padding:0 .4rem;margin:0;gap:.15rem;flex-wrap:nowrap}
-    .ctrl-btn{font-size:.5rem;padding:3px 8px;min-height:0;border:1px solid var(--border)}
-    .ctrl-btn+.ctrl-btn{border-left:none}
+    .controls{border:1px solid var(--border);border-left:none;background:var(--surface);padding:0;margin:0;gap:0;flex-wrap:nowrap;align-self:stretch}
+    .ctrl-group{gap:0;align-self:stretch;height:100%}
+    .ctrl-btn{font-size:.55rem;padding:0 .5rem;min-height:0;border:none;border-left:1px solid var(--border);height:100%}
+    .ctrl-btn+.ctrl-btn{border-left:1px solid var(--border)}
 
     /* Overview bars — taller for tapping */
     .overview{padding:.55rem .7rem .45rem}
@@ -228,7 +228,7 @@
     /* Standings — single row, all 5 columns */
     .standings{margin-top:.5rem}
     .standings h2{font-size:.6rem;padding:.4rem .6rem;letter-spacing:.06em}
-    .sg{grid-template-columns:repeat(5,1fr)}
+    .sg{grid-template-columns:repeat(4,1fr)}
     .sc{padding:.45rem .15rem}
     .sc .sl{font-size:.4rem;letter-spacing:.06em}
     .sc .sv{font-size:.8rem}
@@ -305,7 +305,7 @@
   <div class="cards-grid" id="cards"></div>
 
   <section class="standings" id="standings">
-    <h2>Standings (weighted daily faceoff)</h2>
+    <h2>Daily Head-to-Head</h2>
     <div class="sg" id="sg"></div>
   </section>
 
@@ -601,8 +601,7 @@
       '<div class="sc '+(cDaysWon>oDaysWon?'cw':'ow')+'"><div class="sl">DAILY WINS</div><div class="sv">'+(cDaysWon>oDaysWon?'Claude':'OpenAI')+'</div><div class="ss">'+Math.max(cDaysWon,oDaysWon)+' of 90 days</div></div>'+
       '<div class="sc cw"><div class="sl">CLAUDE DAYS</div><div class="sv">'+cDaysWon+'</div><div class="ss">won</div></div>'+
       '<div class="sc ow"><div class="sl">OPENAI DAYS</div><div class="sv">'+oDaysWon+'</div><div class="ss">won</div></div>'+
-      '<div class="sc tw"><div class="sl">TIED DAYS</div><div class="sv">'+tiedDays+'</div><div class="ss">of 90</div></div>'+
-      '<div class="sc '+(cTotalScore>oTotalScore?'cw':'ow')+'"><div class="sl">WTGD SCORE</div><div class="sv">'+Math.round(cTotalScore)+'-'+Math.round(oTotalScore)+'</div><div class="ss">API/Chat=3x, Code=2x</div></div>';
+      '<div class="sc tw"><div class="sl">TIED DAYS</div><div class="sv">'+tiedDays+'</div><div class="ss">of 90</div></div>';
   }
 
   async function init(){

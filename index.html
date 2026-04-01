@@ -37,7 +37,7 @@
   .logo-o-sm{width:12px;height:12px;fill:var(--openai);vertical-align:-1px}
 
   /* ===== HERO ROW ===== */
-  .hero-row{display:grid;grid-template-columns:auto auto 1fr;gap:.75rem;margin:.75rem 0 .75rem;align-items:stretch}
+  .hero-row{display:grid;grid-template-columns:auto 1fr;gap:.75rem;margin:.75rem 0 .75rem;align-items:start}
 
   /* Scoreboard: horizontal, compact */
   .scoreboard{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
@@ -121,13 +121,29 @@
   .standings{margin-top:.75rem;border:1px solid var(--border);background:var(--surface);overflow:hidden}
   .standings h2{font-size:.65rem;font-weight:600;padding:.45rem .7rem;border-bottom:1px solid var(--border);
     text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
-  .sg{display:grid;grid-template-columns:repeat(4,1fr)}
-  .sc{padding:.5rem .4rem;text-align:center;border-right:1px solid var(--border)}
-  .sc:last-child{border-right:none}
-  .sc .sl{font-size:.45rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.15rem}
-  .sc .sv{font-size:1.05rem;font-weight:700}
-  .sc .ss{font-size:.45rem;color:var(--muted);margin-top:.1rem}
-  .sc.cw .sv{color:var(--claude)}.sc.ow .sv{color:var(--openai)}.sc.tw .sv{color:var(--muted)}
+  .sg{padding:.7rem}
+
+  /* Narrative */
+  .narrative{font-size:clamp(.85rem,2.2vw,1.15rem);line-height:1.7;color:var(--muted-lt)}
+  .narrative .c-hl{color:var(--claude);font-weight:700}
+  .narrative .o-hl{color:var(--openai);font-weight:700}
+  .narrative .num{color:var(--text);font-weight:700;font-size:110%}
+  .narrative .sentence{margin-right:.15em}
+  .narrative .word{display:inline-block;opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease}
+  .narrative.visible .word{opacity:1;transform:translateY(0)}
+
+  /* Momentum chart */
+  .momentum-wrap{margin-top:.75rem}
+  .momentum-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.3rem}
+  .momentum-label{font-size:.45rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+  .momentum-diff{font-size:.55rem;font-weight:700}
+  .momentum-chart{height:60px;width:100%}
+  .momentum-svg{width:100%;height:100%;display:block}
+  .momentum-meta{display:flex;justify-content:space-between;align-items:center;margin-top:.25rem}
+  .ws-time{font-size:.4rem;color:var(--muted)}
+  .ws-legend{display:flex;gap:.5rem}
+  .ws-lg{display:flex;align-items:center;gap:2px;font-size:.42rem;color:var(--muted)}
+  .ws-sw{width:6px;height:6px;display:inline-block;border-radius:1px}
 
   footer{text-align:center;padding:1rem 0 .65rem;color:var(--muted);font-size:.5rem}
   footer a{color:var(--muted-lt);text-decoration:none;border-bottom:1px solid var(--border)}
@@ -139,8 +155,8 @@
     border-right-color:var(--openai);border-radius:50%;animation:spin .6s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
   .loading span{font-size:.6rem;color:var(--muted)}
-  /* Controls bar */
-  .controls{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap}
+  /* Controls bar — inside scoreboard on desktop */
+  .controls{display:flex;align-items:center;justify-content:center;gap:0;border-top:1px solid var(--border);padding:.3rem .65rem}
   .ctrl-group{display:flex;align-items:center;gap:0}
   .ctrl-btn{font-size:.5rem;color:var(--muted);cursor:pointer;border:1px solid var(--border);padding:2px 8px;
     background:transparent;font-family:inherit;transition:color .15s,background .15s}
@@ -199,17 +215,17 @@
     .info-btn{font-size:.6rem;padding:3px 10px}
 
     /* Scoreboard + Controls — single inline row */
-    .hero-row{grid-template-columns:1fr auto;gap:0}
+    .hero-row{grid-template-columns:1fr;gap:0;align-items:stretch}
     .overview{grid-column:1/-1;margin-top:.5rem}
-    .scoreboard{flex-direction:row;align-items:center;border-right:none}
-    .sb-team{flex:1;padding:.45rem .5rem;gap:.35rem}
+    .scoreboard{flex-direction:row;align-items:center;flex-wrap:nowrap}
+    .sb-team{flex:1;padding:.45rem .5rem;gap:.35rem;justify-content:center}
     .sb-team+.sb-team{border-top:none;border-left:1px solid var(--border)}
     .sb-team .sb-logo{width:20px;height:20px}
     .sb-team .sb-logo svg{width:14px;height:14px}
     .sb-team .sb-name{font-size:.65rem;min-width:0}
-    .sb-team .sb-val{font-size:.85rem}
+    .sb-team .sb-val{font-size:.85rem;margin-left:0}
     .sb-delta{display:none}
-    .controls{border:1px solid var(--border);border-left:none;background:var(--surface);padding:0;margin:0;gap:0;flex-wrap:nowrap;align-self:stretch}
+    .controls{border-top:none;border-left:1px solid var(--border);padding:0;margin:0;gap:0;flex-wrap:nowrap;align-self:stretch}
     .ctrl-group{gap:0;align-self:stretch;height:100%}
     .ctrl-btn{font-size:.55rem;padding:0 .5rem;min-height:0;border:none;border-left:1px solid var(--border);height:100%}
     .ctrl-btn+.ctrl-btn{border-left:1px solid var(--border)}
@@ -233,14 +249,14 @@
     .card-foot{padding:.4rem .7rem;font-size:.6rem}
     .card-foot .sdot{width:5px;height:5px}
 
-    /* Standings — single row, all 5 columns */
+    /* Standings — narrative */
     .standings{margin-top:.5rem}
     .standings h2{font-size:.6rem;padding:.4rem .6rem;letter-spacing:.06em}
-    .sg{grid-template-columns:repeat(4,1fr)}
-    .sc{padding:.45rem .15rem}
-    .sc .sl{font-size:.4rem;letter-spacing:.06em}
-    .sc .sv{font-size:.8rem}
-    .sc .ss{font-size:.4rem}
+    .sg{padding:.55rem .6rem}
+    .narrative{font-size:.8rem;line-height:1.65}
+    .momentum-chart{height:48px}
+    .ws-time{font-size:.45rem}
+    .ws-lg{font-size:.45rem}
 
     /* Footer — stacked rows on mobile */
     footer{padding:1rem .75rem 1rem;font-size:.55rem;line-height:1.6}
@@ -270,9 +286,8 @@
     .sb-team .sb-name{font-size:.5rem}
     .sb-team{padding:.3rem .3rem;gap:.2rem}
     .card-status .left{font-size:.7rem}
-    .sc .sl{font-size:.35rem}
-    .sc .sv{font-size:.7rem}
-    .sc .ss{font-size:.35rem}
+    .narrative{font-size:.7rem}
+    .momentum-chart{height:40px}
   }
 </style>
 </head>
@@ -299,14 +314,14 @@
         <div class="sb-val" id="o-avg">&mdash;</div>
       </a>
       <div class="sb-delta" id="delta"></div>
-    </section>
-    <div class="controls">
-      <div class="ctrl-group">
-        <button class="ctrl-btn" data-days="30">30d</button>
-        <button class="ctrl-btn active" data-days="60">60d</button>
-        <button class="ctrl-btn" data-days="90">90d</button>
+      <div class="controls">
+        <div class="ctrl-group">
+          <button class="ctrl-btn" data-days="30">30d</button>
+          <button class="ctrl-btn active" data-days="60">60d</button>
+          <button class="ctrl-btn" data-days="90">90d</button>
+        </div>
       </div>
-    </div>
+    </section>
     <div class="overview" id="overview"></div>
   </div>
 
@@ -351,7 +366,9 @@
         <li><strong>API + Chat = 3x weight</strong> (core products)</li>
         <li><strong>Code = 2x weight</strong> (developer tools)</li>
       </ul>
-      <p>Per-service daily scores: Operational = 100%, Degraded = 60%, Partial Outage = 30%, Major Outage = 0%, Maintenance = 80%. The weighted sum determines who wins each day. Ties go to neither side.</p>
+      <p>Per-service daily scores: Operational = 100%, Degraded = 60%, Partial Outage = 30%, Major Outage = 0%, Maintenance = 80%. The weighted sum determines who wins each day.</p>
+      <h4>Ties</h4>
+      <p>When both sides produce the same weighted score, the day is a tie and goes to neither side. In practice, most ties occur when every service on both sides is fully operational — both score 8/8 (API 3 + Chat 3 + Code 2) and no one wins.</p>
       <h4>Limitations</h4>
       <ul>
         <li>Claude incident titles are not exposed via API; only outage duration is shown</li>
@@ -495,6 +512,7 @@
     let cAgg='',oAgg='';
     const cPerDay=[],oPerDay=[];
     let cDaysWon=0,oDaysWon=0,tiedDays=0,cTotalScore=0,oTotalScore=0;
+    const dayWinners=[];// 'c','o','t' per day
 
     for(let i=0;i<90;i++){
       let cMax='g',oMax='g';
@@ -506,7 +524,57 @@
         oDayScore+=O_WEIGHTS[j]*(statusScore[ch]||0)});
       cAgg+=cMax;oAgg+=oMax;cPerDay.push(cSvcs);oPerDay.push(oSvcs);
       cTotalScore+=cDayScore;oTotalScore+=oDayScore;
-      if(cDayScore>oDayScore)cDaysWon++;else if(oDayScore>cDayScore)oDaysWon++;else tiedDays++;
+      if(cDayScore>oDayScore){cDaysWon++;dayWinners.push('c')}
+      else if(oDayScore>cDayScore){oDaysWon++;dayWinners.push('o')}
+      else{tiedDays++;dayWinners.push('t')}
+    }
+
+    // Streak + recent form
+    let cStreak=0,oStreak=0,cCur=0,oCur=0;
+    for(const w of dayWinners){
+      if(w==='c'){cCur++;oCur=0;if(cCur>cStreak)cStreak=cCur}
+      else if(w==='o'){oCur++;cCur=0;if(oCur>oStreak)oStreak=oCur}
+      else{cCur=0;oCur=0}
+    }
+    const last7=dayWinners.slice(-7);
+    const c7=last7.filter(w=>w==='c').length,o7=last7.filter(w=>w==='o').length,t7=last7.filter(w=>w==='t').length;
+
+    // Per-category win counts
+    const catWins=RACES.map(function(race,ri){
+      let cW=0,oW=0;
+      const cD=CLAUDE_DAILY[race.c],oD=OPENAI_DAILY[race.o];
+      for(let i=0;i<90;i++){
+        const cs=statusScore[cD[i]||'g']||0,os=statusScore[oD[i]||'g']||0;
+        if(cs>os)cW++;else if(os>cs)oW++;
+      }
+      return{title:race.title,cW:cW,oW:oW,tie:90-cW-oW};
+    });
+
+    // Find biggest gap category + trailer's best category
+    let bigGapCat=catWins[0],trailerBestCat=catWins[0];
+    catWins.forEach(function(c){
+      if(Math.abs(c.oW-c.cW)>Math.abs(bigGapCat.oW-bigGapCat.cW))bigGapCat=c;
+      const oLeadsOverall=oDaysWon>cDaysWon;
+      const trailerW=oLeadsOverall?c.cW:c.oW;
+      const bestTrailerW=oLeadsOverall?trailerBestCat.cW:trailerBestCat.oW;
+      if(trailerW>bestTrailerW)trailerBestCat=c;
+    });
+
+    // Comeback detection: find longest drought broken
+    let bestComeback={side:'',droughtLen:0,date:''};
+    let cLosing=0,oLosing=0;
+    for(let i=0;i<90;i++){
+      const w=dayWinners[i];
+      if(w==='c'){if(oLosing>bestComeback.droughtLen){bestComeback={side:'c',droughtLen:oLosing,date:DATES[i]}}oLosing=0;cLosing++}
+      else if(w==='o'){if(cLosing>bestComeback.droughtLen){bestComeback={side:'o',droughtLen:cLosing,date:DATES[i]}}cLosing=0;oLosing++}
+      else{cLosing++;oLosing++}
+    }
+
+    // Running differential for momentum chart
+    const runDiff=[];let rd=0;
+    for(let i=0;i<90;i++){
+      if(dayWinners[i]==='c')rd++;else if(dayWinners[i]==='o')rd--;
+      runDiff.push(rd);
     }
 
     // Overview
@@ -603,13 +671,147 @@
 
     calcAvg(60);
 
-    // Standings
+    // Standings — narrative + momentum chart
     const sg=document.getElementById('sg');
+    const oLeads=oDaysWon>cDaysWon;
+    const leader=oLeads?'OpenAI':'Claude';
+    const leaderCls=oLeads?'o-hl':'c-hl';
+    const trailer=oLeads?'Claude':'OpenAI';
+    const trailerCls=oLeads?'c-hl':'o-hl';
+    const leaderWins=Math.max(cDaysWon,oDaysWon);
+    const trailerWins=Math.min(cDaysWon,oDaysWon);
+    const topStreak=oLeads?oStreak:cStreak;
+
+    // Category color sentence — find widest gap
+    const gapCatWinner=bigGapCat.oW>bigGapCat.cW?'OpenAI':'Claude';
+    const gapCatWinCls=bigGapCat.oW>bigGapCat.cW?'o-hl':'c-hl';
+    const gapCatWins=Math.max(bigGapCat.oW,bigGapCat.cW);
+
+    // Trailer's best category
+    const tBestWins=oLeads?trailerBestCat.cW:trailerBestCat.oW;
+
+    // Build "this week" sentence
+    let weekParts=[];
+    if(o7>0)weekParts.push('<span class="o-hl">OpenAI</span> '+o7);
+    if(c7>0)weekParts.push('<span class="c-hl">Claude</span> '+c7);
+    if(t7>0)weekParts.push(t7+' tied');
+    const weekStr='Last 7 days: '+weekParts.join(', ')+'.';
+
+    // Build narrative sentences dynamically
+    const sentences=[];
+    sentences.push('<span class="'+leaderCls+'">'+leader+'</span> leads the 90-day race with <span class="num" data-to="'+leaderWins+'">0</span> daily wins to <span class="'+trailerCls+'">'+trailer+'</span>\'s <span class="num" data-to="'+trailerWins+'">0</span>, with <span class="num" data-to="'+tiedDays+'">0</span> ties.');
+
+    // Category insight — only if gap is meaningful (>5 days difference)
+    if(Math.abs(bigGapCat.oW-bigGapCat.cW)>3){
+      sentences.push('The gap is sharpest in '+bigGapCat.title+', where <span class="'+gapCatWinCls+'">'+gapCatWinner+'</span> took <span class="num" data-to="'+gapCatWins+'">0</span> days.');
+    }
+
+    // Trailer bright spot — only if they actually win some days there
+    if(tBestWins>3&&trailerBestCat.title!==bigGapCat.title){
+      sentences.push('<span class="'+trailerCls+'">'+trailer+'</span> fights back in '+trailerBestCat.title+' with <span class="num" data-to="'+tBestWins+'">0</span> wins.');
+    }
+
+    // Streak + comeback
+    let streakStr=leader+'\'s longest run: <span class="num" data-to="'+topStreak+'">0</span> consecutive days.';
+    if(bestComeback.droughtLen>=3){
+      const cbSide=bestComeback.side==='c'?'Claude':'OpenAI';
+      const cbCls=bestComeback.side==='c'?'c-hl':'o-hl';
+      streakStr+=' <span class="'+cbCls+'">'+cbSide+'</span> snapped a '+bestComeback.droughtLen+'-day drought on '+fmtDate(bestComeback.date).replace(/^..., /,'')+'.';
+    }
+    sentences.push(streakStr);
+    sentences.push(weekStr);
+
+    // Wrap each word/tag in a span for staggered reveal
+    let wordIdx=0;
+    function wrapWords(html){
+      let out='',inTag=false,buf='';
+      for(let i=0;i<html.length;i++){
+        const ch=html[i];
+        if(ch==='<'){inTag=true;buf+=ch}
+        else if(ch==='>'&&inTag){inTag=false;buf+=ch}
+        else if(ch===' '&&!inTag){
+          if(buf){out+='<span class="word" style="transition-delay:'+(wordIdx*40)+'ms">'+buf+'</span> ';wordIdx++}
+          buf='';
+        }
+        else{buf+=ch}
+      }
+      if(buf){out+='<span class="word" style="transition-delay:'+(wordIdx*40)+'ms">'+buf+'</span>';wordIdx++}
+      return out;
+    }
+    const narrativeHTML=sentences.map(s=>'<span class="sentence">'+wrapWords(s)+'</span>').join(' ');
+
+    // Momentum chart — SVG sparkline of running differential
+    const chartW=800,chartH=60;
+    const minD=Math.min(0,...runDiff),maxD=Math.max(0,...runDiff);
+    const range=Math.max(Math.abs(minD),Math.abs(maxD))||1;
+    const pad=2;
+    function yPos(v){return pad+(chartH-2*pad)*(1-(v+range)/(2*range))}
+    const zeroY=yPos(0);
+    // Build polyline points
+    const pts=runDiff.map(function(v,i){
+      const x=(i/(89))*(chartW);
+      return x.toFixed(1)+','+yPos(v).toFixed(1);
+    }).join(' ');
+    // Fill areas: above zero = Claude, below zero = OpenAI
+    const topFill='0,'+zeroY.toFixed(1)+' '+pts+' '+chartW+','+zeroY.toFixed(1);
+    const botFill=topFill;// same path, clipped differently
+
+    const svgChart='<svg class="momentum-svg" viewBox="0 0 '+chartW+' '+chartH+'" preserveAspectRatio="none">'+
+      '<defs>'+
+        '<clipPath id="clip-above"><rect x="0" y="0" width="'+chartW+'" height="'+zeroY.toFixed(1)+'"/></clipPath>'+
+        '<clipPath id="clip-below"><rect x="0" y="'+zeroY.toFixed(1)+'" width="'+chartW+'" height="'+(chartH-zeroY).toFixed(1)+'"/></clipPath>'+
+      '</defs>'+
+      '<polygon points="'+topFill+'" clip-path="url(#clip-above)" fill="var(--claude)" opacity=".25"/>'+
+      '<polygon points="'+botFill+'" clip-path="url(#clip-below)" fill="var(--openai)" opacity=".25"/>'+
+      '<line x1="0" y1="'+zeroY.toFixed(1)+'" x2="'+chartW+'" y2="'+zeroY.toFixed(1)+'" stroke="var(--muted)" stroke-dasharray="4,3" stroke-width="1" opacity=".4"/>'+
+      '<polyline points="'+pts+'" fill="none" stroke="var(--muted-lt)" stroke-width="1.5" stroke-linejoin="round"/>'+
+    '</svg>';
+
+    // Momentum labels
+    const finalDiff=runDiff[89];
+    const diffLabel=finalDiff>0?'Claude +'+finalDiff:finalDiff<0?'OpenAI +'+Math.abs(finalDiff):'Even';
+
     sg.innerHTML=
-      '<div class="sc '+(cDaysWon>oDaysWon?'cw':'ow')+'"><div class="sl">DAILY WINS</div><div class="sv">'+(cDaysWon>oDaysWon?'Claude':'OpenAI')+'</div><div class="ss">'+Math.max(cDaysWon,oDaysWon)+' of 90 days</div></div>'+
-      '<div class="sc cw"><div class="sl">CLAUDE DAYS</div><div class="sv">'+cDaysWon+'</div><div class="ss">won</div></div>'+
-      '<div class="sc ow"><div class="sl">OPENAI DAYS</div><div class="sv">'+oDaysWon+'</div><div class="ss">won</div></div>'+
-      '<div class="sc tw"><div class="sl">TIED DAYS</div><div class="sv">'+tiedDays+'</div><div class="ss">of 90</div></div>';
+      '<div class="narrative" id="narrative">'+narrativeHTML+'</div>'+
+      '<div class="momentum-wrap">'+
+        '<div class="momentum-header">'+
+          '<span class="momentum-label">Momentum</span>'+
+          '<span class="momentum-diff '+(finalDiff>0?'c-hl':finalDiff<0?'o-hl':'')+'">'+diffLabel+'</span>'+
+        '</div>'+
+        '<div class="momentum-chart">'+svgChart+'</div>'+
+        '<div class="momentum-meta">'+
+          '<span class="ws-time">90 days ago</span>'+
+          '<span class="ws-legend">'+
+            '<span class="ws-lg"><span class="ws-sw" style="background:var(--claude)"></span>Claude leads</span>'+
+            '<span class="ws-lg"><span class="ws-sw" style="background:var(--openai)"></span>OpenAI leads</span>'+
+          '</span>'+
+          '<span class="ws-time">Today</span>'+
+        '</div>'+
+      '</div>';
+
+    // Scroll-triggered reveal + counter animation
+    const narEl=document.getElementById('narrative');
+    const standingsEl=document.getElementById('standings');
+    const observer=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          narEl.classList.add('visible');
+          narEl.querySelectorAll('.num').forEach(function(el){
+            const to=parseInt(el.dataset.to);
+            const dur=800;const start=performance.now();
+            function tick(now){
+              const p=Math.min((now-start)/dur,1);
+              const ease=1-Math.pow(1-p,3);
+              el.textContent=Math.round(ease*to);
+              if(p<1)requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+          });
+          observer.unobserve(standingsEl);
+        }
+      });
+    },{threshold:0.1});
+    observer.observe(standingsEl);
   }
 
   async function init(){

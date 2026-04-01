@@ -147,9 +147,9 @@
   .ctrl-btn.active{color:var(--text);background:var(--surface2)}
   .ctrl-btn+.ctrl-btn{border-left:none}
   .ctrl-sep{width:1px;height:12px;background:var(--border);margin:0 .15rem}
-  .theme-toggle{font-size:.5rem;color:var(--muted);cursor:pointer;border:1px solid var(--border);padding:2px 8px;
-    background:transparent;font-family:inherit;transition:color .15s,background .15s}
-  .theme-toggle:hover{color:var(--text);background:var(--surface2)}
+  .theme-toggle{font-size:.65rem;cursor:pointer;border:none;padding:0;margin:0;
+    background:transparent;line-height:1;vertical-align:middle;opacity:.7;transition:opacity .15s}
+  .theme-toggle:hover{opacity:1}
   /* Light theme */
   html.light{--bg:#f4f4f5;--surface:#fff;--surface2:#ebebed;--border:#d4d4d8;--text:#18181b;--muted:#71717a;--muted-lt:#3f3f46;
     --green:#16a34a;--yellow:#ca8a04;--orange:#ea580c;--red:#dc2626;--blue:#2563eb;
@@ -192,8 +192,6 @@
     /* Controls — larger touch targets */
     .controls{margin:.5rem 0 .2rem;gap:.4rem}
     .ctrl-btn{font-size:.6rem;padding:5px 14px;min-height:32px}
-    .theme-toggle{font-size:.6rem;padding:5px 14px;min-height:32px}
-    .ctrl-sep{height:16px}
 
     /* Scoreboard — single row: [A Claude 99.06%] [O OpenAI 99.96%] [delta] */
     .scoreboard{flex-direction:row;flex-wrap:wrap;align-items:stretch}
@@ -280,8 +278,6 @@
         <button class="ctrl-btn active" data-days="60">60d</button>
         <button class="ctrl-btn" data-days="90">90d</button>
       </div>
-      <div class="ctrl-sep"></div>
-      <button class="theme-toggle" id="theme-toggle">light mode</button>
     </div>
   </header>
 
@@ -316,7 +312,8 @@
     &amp; <a href="https://status.openai.com" target="_blank" rel="noopener">status.openai.com</a></span>
     <span class="ft-row"><a href="https://github.com/jskoiz/thenines.online" target="_blank" rel="noopener">GitHub</a>
     &nbsp;|&nbsp; MIT License
-    &nbsp;|&nbsp; Made by <a href="https://x.com/jskoiz" target="_blank" rel="noopener">@jskoiz</a></span>
+    &nbsp;|&nbsp; Made by <a href="https://x.com/jskoiz" target="_blank" rel="noopener">@jskoiz</a>
+    &nbsp;|&nbsp; <button class="theme-toggle" id="theme-toggle" title="Toggle theme">☀️</button></span>
   </footer>
 
   <div class="drawer-overlay" id="drawer-overlay">
@@ -624,7 +621,7 @@
     // Theme toggle
     document.getElementById('theme-toggle').addEventListener('click',function(){
       const isLight=document.documentElement.classList.toggle('light');
-      this.textContent=isLight?'dark mode':'light mode';
+      this.textContent=isLight?'🌙':'☀️';
     });
   }
   init();

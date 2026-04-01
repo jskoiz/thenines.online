@@ -443,6 +443,18 @@
     const dt=new Date(2026,m,day);const dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dt.getDay()];
     return dn+', '+months[m]+' '+day+', 2026'}
 
+  // Scoreboard — compute uptime from daily status for any window
+  const UP={g:100,y:99.5,o:98,r:95};
+  function calcAvg(days){
+    const skip=90-days;
+    function svcAvg(daily){const d=daily.slice(skip);let s=0;for(let i=0;i<d.length;i++)s+=(UP[d[i]]||100);return s/d.length}
+    const cAvg=RACES.reduce((s,r)=>s+svcAvg(CLAUDE_DAILY[r.c]),0)/RACES.length;
+    const oAvg=RACES.reduce((s,r)=>s+svcAvg(OPENAI_DAILY[r.o]),0)/RACES.length;
+    document.getElementById('c-avg').textContent=cAvg.toFixed(2)+'%';
+    document.getElementById('o-avg').textContent=oAvg.toFixed(2)+'%';
+    document.getElementById('delta').innerHTML=(oAvg>cAvg?'OpenAI':'Claude')+' leads by '+Math.abs(cAvg-oAvg).toFixed(2)+'%';
+  }
+
   function renderBars(data,side){
     const raw=data||'';
     const str=(raw+'g'.repeat(90)).slice(0,90);
@@ -581,17 +593,6 @@
       if(isTouch&&!e.target.closest('.bars .day, .ov-bars .day, .tip'))tip.classList.remove('show');
     });
 
-    // Scoreboard — compute uptime from daily status for any window
-    const UP={g:100,y:99.5,o:98,r:95};
-    function calcAvg(days){
-      const skip=90-days;
-      function svcAvg(daily){const d=daily.slice(skip);let s=0;for(let i=0;i<d.length;i++)s+=(UP[d[i]]||100);return s/d.length}
-      const cAvg=RACES.reduce((s,r)=>s+svcAvg(CLAUDE_DAILY[r.c]),0)/RACES.length;
-      const oAvg=RACES.reduce((s,r)=>s+svcAvg(OPENAI_DAILY[r.o]),0)/RACES.length;
-      document.getElementById('c-avg').textContent=cAvg.toFixed(2)+'%';
-      document.getElementById('o-avg').textContent=oAvg.toFixed(2)+'%';
-      document.getElementById('delta').innerHTML=(oAvg>cAvg?'OpenAI':'Claude')+' leads by '+Math.abs(cAvg-oAvg).toFixed(2)+'%';
-    }
     calcAvg(60);
 
     // Standings

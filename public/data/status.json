@@ -1,25 +1,25 @@
 {
-  "updated": "2026-04-01T23:49:11.952Z",
-  "startDate": "01-02",
+  "updated": "2026-04-02T03:25:41.870Z",
+  "startDate": "01-03",
   "claudeDaily": {
-    "Claude API": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrggrrggyrrrgrrggyrrrgrgggrrryggrg",
-    "claude.ai": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrggrygyyrrryrrggyrrrgrrygrrrgrgrg",
-    "Claude Code": "ggggggggggggggggggggggggggggggrgrrrygggygggyyyrggggyyyyrrgggryggyrrryrrggyrrrgrgggrrryggrg",
-    "platform.claude.com": "gggggygggggyygggggyyggggyyyyrggrgrrrygggggggyyyrggyygygrrrggrrgggrrrgygggyrrrgrrggrrryggrg",
-    "Claude for Government": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrrgygggygrggggggyyrggggg"
+    "Claude API": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrgrrggyrrrgrrggyrrrgrgggrrryggrrg",
+    "claude.ai": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrgrygyyrrryrrggyrrrgrrygrrrgrgrrg",
+    "Claude Code": "ggggggggggggggggggggggggggggggrgrrrygggygggyyyrggggyyyyrrggryggyrrryrrggyrrrgrgggrrryggrrg",
+    "platform.claude.com": "gggggygggggyygggggyyggggyyyyrggrgrrrygggggggyyyrggyygygrrrgrrgggrrrgygggyrrrgrrggrrryggrrg",
+    "Claude for Government": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrrgygggygrggggggyyrgggggg"
   },
   "openaiDaily": {
-    "OpenAI APIs": "gggggggggggggggggggggggggggggggggyyggggyggyyyyogggyygggggyoggggoggyyyyygggrrgyyggyyrggygyg",
-    "ChatGPT": "gggggggggggggggggggggggggggggggggyygoygyyyyyogggyyggyygyogygyoggyyyyyyygggrrgyyggyyrggygyg",
-    "Codex": "ggggggggggggggggggggggggggggggggggggggggggggggyyyyggggggggggggggggyyyyygggrrgyyggyyrggygyg",
-    "Sora": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggogggggggggyyyyygggrrgyyggyyrggygyg",
+    "OpenAI APIs": "gggggggggggggggggggggggggggggggggyyggggyggyyyyogggyygggggyoggggogyyyyygggrrgyyggyyrggygygg",
+    "ChatGPT": "gggggggggggggggggggggggggggggggggyygoygyyyyyogggyyggyygyogygyoggyyyyyygggrrgyyggyyrggygygg",
+    "Codex": "ggggggggggggggggggggggggggggggggggggggggggggggyyyygggggggggggggggyyyyygggrrgyyggyyrggygygg",
+    "Sora": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggoggggggggyyyyygggrrgyyggyyrggygygg",
     "FedRAMP": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"
   },
   "uptime": {
-    "Claude API": 98.49,
-    "claude.ai": 98.42,
-    "Claude Code": 98.76,
-    "platform.claude.com": 98.62,
+    "Claude API": 98.43,
+    "claude.ai": 98.36,
+    "Claude Code": 98.7,
+    "platform.claude.com": 98.56,
     "Claude for Government": 99.7,
     "OpenAI APIs": 99.65,
     "ChatGPT": 99.59,

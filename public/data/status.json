@@ -1,9 +1,9 @@
 {
-  "updated": "2026-04-02T15:15:26.768Z",
+  "updated": "2026-04-02T23:49:42.864Z",
   "startDate": "01-03",
   "claudeDaily": {
     "Claude API": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrgrrggyrrrgrrggyrrrgrgggrrryggrrg",
-    "claude.ai": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrgrygyyrrryrrggyrrrgrrygrrrgrgrrg",
+    "claude.ai": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrgrygyyrrryrrggyrrrgrrygrrrgrgrry",
     "Claude Code": "ggggggggggggggggggggggggggggggrgrrrygggygggyyyrggggyyyyrrggryggyrrryrrggyrrrgrgggrrryggrrg",
     "platform.claude.com": "gggggygggggyygggggyyggggyyyyrggrgrrrygggggggyyyrggyygygrrrgrrgggrrrgygggyrrrgrrggrrryggrrg",
     "Claude for Government": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrrgygggygrggggggyyrgggggg"
@@ -185,7 +185,7 @@
     ]
   },
   "claudeMinutes": {
-    "03-03": 4250,
+    "03-03": 2980,
     "03-04": 1548,
     "03-06": 452,
     "03-07": 1980,
@@ -209,6 +209,7 @@
     "03-29": 231,
     "03-31": 912,
     "04-01": 565,
+    "04-02": 34,
     "01-14": 1300,
     "01-22": 2776,
     "01-29": 5331,

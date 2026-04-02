@@ -53,6 +53,7 @@ let tooltip;
 let dataRows=[];
 let chartIdSeed=0;
 let tlDayData=null;
+let currentDays=DEFAULT_DAYS;
 
 function fmtMins(minutes){
   const hours=Math.min(minutes,1440)/60;
@@ -327,6 +328,7 @@ function bindDayInteractions(){
 }
 
 function applyDays(days){
+  currentDays=days;
   const skip=TOTAL_DAYS-days;
   els.dayButtons.forEach(function(button){
     button.classList.toggle('active',parseInt(button.dataset.days,10)===days);
@@ -336,6 +338,7 @@ function applyDays(days){
     for(let i=0;i<row.children.length;i++)row.children[i].hidden=i<skip;
   });
   calcAvg(days);
+  computeAndRenderStandings(days);
 }
 
 function bindChromeInteractions(){
@@ -413,7 +416,9 @@ function buildCards(){
   });
 }
 
-function buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,catWins){
+function buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,catWins,numDays){
+  var days=numDays||TOTAL_DAYS;
+  var skip=TOTAL_DAYS-days;
   const oLeads=oDaysWon>cDaysWon;
   const leader=oLeads?'OpenAI':'Claude';
   const leaderClass=oLeads?'o-hl':'c-hl';
@@ -431,7 +436,7 @@ function buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailer
   // Incident days count (non-green days)
   var cIncidentDays=0;
   var oIncidentDays=0;
-  for(var i=0;i<TOTAL_DAYS;i++){
+  for(var i=skip;i<TOTAL_DAYS;i++){
     var cWorst='g';
     C_NAMES.forEach(function(n,idx){
       var s=CLAUDE_DAILY[n][i]||'g';
@@ -446,22 +451,25 @@ function buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailer
     if(oWorst!=='g')oIncidentDays++;
   }
 
-  // Total Claude downtime minutes
+  // Total Claude downtime minutes — filter to selected range
+  var rangeDates={};
+  for(var di=skip;di<TOTAL_DAYS;di++)rangeDates[DATES[di]]=true;
   var cTotalMins=0;
-  Object.keys(CLAUDE_MINUTES).forEach(function(k){cTotalMins+=CLAUDE_MINUTES[k];});
+  Object.keys(CLAUDE_MINUTES).forEach(function(k){if(rangeDates[k])cTotalMins+=CLAUDE_MINUTES[k];});
   var cTotalHrs=(cTotalMins/60).toFixed(0);
 
-  // OAI total incident count
+  // OAI total incident count — filter to selected range
   var oTotalIncidents=0;
-  Object.keys(OAI_INCIDENTS).forEach(function(k){oTotalIncidents+=OAI_INCIDENTS[k].length;});
+  var oIncidentDayCount=0;
+  Object.keys(OAI_INCIDENTS).forEach(function(k){if(rangeDates[k]){oTotalIncidents+=OAI_INCIDENTS[k].length;oIncidentDayCount++;}});
 
   // Win rate
-  var cWinRate=((cDaysWon/TOTAL_DAYS)*100).toFixed(0);
-  var oWinRate=((oDaysWon/TOTAL_DAYS)*100).toFixed(0);
+  var cWinRate=((cDaysWon/days)*100).toFixed(0);
+  var oWinRate=((oDaysWon/days)*100).toFixed(0);
 
   // Clean days (both fully operational)
   var cleanDays=0;
-  for(var j=0;j<TOTAL_DAYS;j++){
+  for(var j=skip;j<TOTAL_DAYS;j++){
     var allClean=true;
     C_NAMES.forEach(function(n){if((CLAUDE_DAILY[n][j]||'g')!=='g')allClean=false;});
     O_NAMES.forEach(function(n){if((OPENAI_DAILY[n][j]||'g')!=='g')allClean=false;});
@@ -471,9 +479,9 @@ function buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailer
   // Category win breakdown for the bar
   var catHtml='';
   catWins.forEach(function(cat){
-    var cPct=(cat.cW/TOTAL_DAYS*100).toFixed(0);
-    var oPct=(cat.oW/TOTAL_DAYS*100).toFixed(0);
-    var tPct=(cat.tie/TOTAL_DAYS*100).toFixed(0);
+    var cPct=(cat.cW/days*100).toFixed(0);
+    var oPct=(cat.oW/days*100).toFixed(0);
+    var tPct=(cat.tie/days*100).toFixed(0);
     var catLeader=cat.cW>cat.oW?'Claude':cat.oW>cat.cW?'OpenAI':'Tied';
     catHtml+='<div class="cat-row" data-cat-title="'+cat.title+'" data-cat-cw="'+cat.cW+'" data-cat-ow="'+cat.oW+'" data-cat-tie="'+cat.tie+'" data-cat-cpct="'+cPct+'" data-cat-opct="'+oPct+'" data-cat-tpct="'+tPct+'" data-cat-leader="'+catLeader+'">';
     catHtml+='<div style="display:flex;justify-content:space-between;font-size:.45rem;color:var(--muted-lt);margin-bottom:.15rem"><span>'+cat.title+'</span><span><span class="c-hl">'+cat.cW+'</span> – <span class="o-hl">'+cat.oW+'</span> – '+cat.tie+'</span></div>';
@@ -494,7 +502,7 @@ function buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailer
   var blocks='';
 
   // === ROW 1: Leader | Win Rate/Streak | Last 7 | Comeback | Claude Downtime ===
-  blocks+='<div class="data-block"><div class="db-label">90-Day Leader</div>';
+  blocks+='<div class="data-block"><div class="db-label">'+days+'-Day Leader</div>';
   blocks+='<div class="db-value"><span class="'+leaderClass+'">'+leader+'</span></div>';
   blocks+='<div class="db-detail">'+leaderWins+'W – '+trailerWins+'L – '+tiedDays+'T</div></div>';
 
@@ -517,9 +525,11 @@ function buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailer
   }
   blocks+='</div>';
 
+  var cDaysAffected=0;
+  Object.keys(CLAUDE_MINUTES).forEach(function(k){if(rangeDates[k])cDaysAffected++;});
   blocks+='<div class="data-block"><div class="db-label">Claude Downtime</div>';
   blocks+='<div class="db-value c-hl">'+cTotalHrs+'h</div>';
-  blocks+='<div class="db-detail">'+Object.keys(CLAUDE_MINUTES).length+' days affected</div></div>';
+  blocks+='<div class="db-detail">'+cDaysAffected+' days affected</div></div>';
 
   // === ROW 2: Category Breakdown (span 3) | Incidents/Clean | OpenAI Incidents ===
   blocks+='<div class="data-block span-3"><div class="db-label">Category Breakdown</div>';
@@ -535,12 +545,13 @@ function buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailer
 
   blocks+='<div class="data-block"><div class="db-label">OpenAI Incidents</div>';
   blocks+='<div class="db-value o-hl">'+oTotalIncidents+'</div>';
-  blocks+='<div class="db-detail">'+Object.keys(OAI_INCIDENTS).length+' days affected</div></div>';
+  blocks+='<div class="db-detail">'+oIncidentDayCount+' days affected</div></div>';
 
   return '<div class="data-grid">'+blocks+'</div>';
 }
 
 function buildTimeline(dayWinners,runDiff,cPerDay,oPerDay){
+  var skip=TOTAL_DAYS-dayWinners.length;
   tlDayData={cPerDay:cPerDay,oPerDay:oPerDay,dayWinners:dayWinners};
   var cells='';
   for(var i=0;i<dayWinners.length;i++){
@@ -549,30 +560,29 @@ function buildTimeline(dayWinners,runDiff,cPerDay,oPerDay){
     var winLabel=w==='c'?'Claude':w==='o'?'OpenAI':'Tie';
     var rd=runDiff[i];
     var scoreLabel=rd>0?'Claude +'+rd:rd<0?'OpenAI +'+Math.abs(rd):'Even';
-    cells+='<div class="tl-cell '+cls+'" data-tl-idx="'+i+'" data-tl-date="'+DATES[i]+'" data-tl-winner="'+winLabel+'" data-tl-score="'+scoreLabel+'"></div>';
+    cells+='<div class="tl-cell '+cls+'" data-tl-idx="'+i+'" data-tl-date="'+DATES[skip+i]+'" data-tl-winner="'+winLabel+'" data-tl-score="'+scoreLabel+'"></div>';
   }
-  return '<div class="timeline-strip">'+cells+'</div>';
+  return '<div class="timeline-strip" style="grid-template-columns:repeat('+dayWinners.length+',1fr)">'+cells+'</div>';
 }
 
-function renderStandings(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,runDiff,catWins,cPerDay,oPerDay){
-  const dataBlocks=buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,catWins);
+function renderStandings(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,runDiff,catWins,cPerDay,oPerDay,days){
+  var numDays=days||TOTAL_DAYS;
+  const dataBlocks=buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,catWins,numDays);
   const timeline=buildTimeline(dayWinners,runDiff,cPerDay,oPerDay);
   els.standingsGrid.innerHTML=
     dataBlocks+
     '<div class="timeline-wrap">'+
     '<div class="timeline-header"><span class="tl-label">Daily Winner Timeline</span><span class="tl-legend"><span class="tl-lg"><span class="tl-sw" style="background:var(--claude)"></span>Claude</span><span class="tl-lg"><span class="tl-sw" style="background:var(--openai)"></span>OpenAI</span><span class="tl-lg"><span class="tl-sw" style="background:var(--muted)"></span>Tie</span></span></div>'+
     timeline+
-    '<div class="timeline-meta"><span class="tl-time">90 days ago</span><span class="tl-time">Today</span></div>'+
+    '<div class="timeline-meta"><span class="tl-time">'+numDays+' days ago</span><span class="tl-time">Today</span></div>'+
     '</div>';
 }
 
-function render(){
-  // Convert per-service daily strings into aggregate category outcomes,
-  // then derive the narrative stats that make the comparison readable.
+function computeAndRenderStandings(days){
+  var numDays=days||TOTAL_DAYS;
+  var skip=TOTAL_DAYS-numDays;
   const allClaude=C_NAMES.map(function(name){return CLAUDE_DAILY[name];});
   const allOpenAI=O_NAMES.map(function(name){return OPENAI_DAILY[name];});
-  let cAgg='';
-  let oAgg='';
   const cPerDay=[];
   const oPerDay=[];
   const dayWinners=[];
@@ -584,7 +594,7 @@ function render(){
   let cCurrent=0;
   let oCurrent=0;
 
-  for(let i=0;i<TOTAL_DAYS;i++){
+  for(let i=skip;i<TOTAL_DAYS;i++){
     let cMax='g';
     let oMax='g';
     let cDayScore=0;
@@ -605,8 +615,6 @@ function render(){
       oDayScore+=O_WEIGHTS[index]*(STATUS_SCORE[status]||0);
     });
 
-    cAgg+=cMax;
-    oAgg+=oMax;
     cPerDay.push(cServices);
     oPerDay.push(oServices);
     if(cDayScore>oDayScore){
@@ -632,13 +640,13 @@ function render(){
   const catWins=RACES.map(function(race){
     let cWins=0;
     let oWins=0;
-    for(let i=0;i<TOTAL_DAYS;i++){
+    for(let i=skip;i<TOTAL_DAYS;i++){
       const cScore=STATUS_SCORE[CLAUDE_DAILY[race.c][i]||'g']||0;
       const oScore=STATUS_SCORE[OPENAI_DAILY[race.o][i]||'g']||0;
       if(cScore>oScore)cWins++;
       else if(oScore>cScore)oWins++;
     }
-    return {title:race.title,cW:cWins,oW:oWins,tie:TOTAL_DAYS-cWins-oWins};
+    return {title:race.title,cW:cWins,oW:oWins,tie:numDays-cWins-oWins};
   });
 
   let bigGapCat=catWins[0];
@@ -654,12 +662,12 @@ function render(){
   const bestComeback={side:'',droughtLen:0,date:''};
   let cLosing=0;
   let oLosing=0;
-  for(let i=0;i<TOTAL_DAYS;i++){
+  for(let i=0;i<numDays;i++){
     if(dayWinners[i]==='c'){
       if(oLosing>bestComeback.droughtLen){
         bestComeback.side='c';
         bestComeback.droughtLen=oLosing;
-        bestComeback.date=DATES[i];
+        bestComeback.date=DATES[skip+i];
       }
       oLosing=0;
       cLosing++;
@@ -667,7 +675,7 @@ function render(){
       if(cLosing>bestComeback.droughtLen){
         bestComeback.side='o';
         bestComeback.droughtLen=cLosing;
-        bestComeback.date=DATES[i];
+        bestComeback.date=DATES[skip+i];
       }
       cLosing=0;
       oLosing++;
@@ -679,15 +687,50 @@ function render(){
 
   const runDiff=[];
   let runningDiff=0;
-  for(let i=0;i<TOTAL_DAYS;i++){
+  for(let i=0;i<numDays;i++){
     if(dayWinners[i]==='c')runningDiff++;
     else if(dayWinners[i]==='o')runningDiff--;
     runDiff.push(runningDiff);
   }
 
+  renderStandings(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,runDiff,catWins,cPerDay,oPerDay,numDays);
+}
+
+function render(){
+  // Convert per-service daily strings into aggregate category outcomes for the overview bars.
+  const allClaude=C_NAMES.map(function(name){return CLAUDE_DAILY[name];});
+  const allOpenAI=O_NAMES.map(function(name){return OPENAI_DAILY[name];});
+  let cAgg='';
+  let oAgg='';
+  const cPerDay=[];
+  const oPerDay=[];
+
+  for(let i=0;i<TOTAL_DAYS;i++){
+    let cMax='g';
+    let oMax='g';
+    const cServices=[];
+    const oServices=[];
+
+    C_NAMES.forEach(function(name,index){
+      const status=allClaude[index][i]||'g';
+      cServices.push({name:name,status:status});
+      if((STATUS_PRIORITY[status]||0)>(STATUS_PRIORITY[cMax]||0))cMax=status;
+    });
+    O_NAMES.forEach(function(name,index){
+      const status=allOpenAI[index][i]||'g';
+      oServices.push({name:name,status:status});
+      if((STATUS_PRIORITY[status]||0)>(STATUS_PRIORITY[oMax]||0))oMax=status;
+    });
+
+    cAgg+=cMax;
+    oAgg+=oMax;
+    cPerDay.push(cServices);
+    oPerDay.push(oServices);
+  }
+
   buildOverview(cAgg,cPerDay,oAgg,oPerDay);
   buildCards();
-  renderStandings(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,runDiff,catWins,cPerDay,oPerDay);
+  computeAndRenderStandings(currentDays);
   dataRows=Array.from(document.querySelectorAll('.bars, .ov-bars'));
 }
 

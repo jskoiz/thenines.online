@@ -74,7 +74,7 @@
   .ov-legend .lg .sw{width:6px;height:6px}
 
   /* CARDS */
-  .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+  .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem}
   .uptime-card{background:var(--surface);border:1px solid var(--border);overflow:hidden}
   .uptime-card:hover{border-color:var(--muted)}
   .uptime-card.full{grid-column:1/-1}
@@ -82,15 +82,15 @@
   .card-status .left{display:flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:600}
   .card-status .left .dot{width:6px;height:6px;border-radius:50%}
   .card-status .right{font-size:.55rem;color:var(--muted)}
-  .card-bars{padding:.5rem .7rem .45rem;border-bottom:1px solid var(--border)}
+  .card-bars{padding:.55rem .7rem .5rem;border-bottom:1px solid var(--border)}
   /* Brand label above/below the two bar rows */
-  .brand-tag{font-size:.55rem;font-weight:600;display:flex;align-items:center;gap:.2rem;margin-bottom:.1rem}
-  .brand-tag.c{color:var(--claude)}.brand-tag.o{color:var(--openai);margin-top:.15rem;margin-bottom:0}
-  .bar-row{margin-bottom:.1rem}
+  .brand-tag{font-size:.55rem;font-weight:600;display:flex;align-items:center;gap:.2rem;margin-bottom:.15rem}
+  .brand-tag.c{color:var(--claude)}.brand-tag.o{color:var(--openai);margin-top:.3rem;margin-bottom:0}
+  .bar-row{margin-bottom:.15rem}
   .bars{height:18px}
   .bars .day{border-radius:1px;transition:opacity .12s}
   .bar-timeline{display:flex;justify-content:space-between;margin-top:.2rem;font-size:.4rem;color:var(--muted)}
-  .card-foot{display:flex;justify-content:space-between;padding:.3rem .7rem;font-size:.5rem}
+  .card-foot{display:flex;justify-content:space-between;padding:.4rem .7rem;font-size:.5rem}
   .card-foot a{color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:3px;opacity:.8}
   .card-foot a:hover{color:var(--text);opacity:1}
   .card-foot .sdot{width:4px;height:4px;border-radius:50%}
@@ -214,7 +214,7 @@
   @media(max-width:720px){
     /* Layout */
     .container{padding:1rem .75rem}
-    .cards-grid{grid-template-columns:1fr;gap:.5rem}
+    .cards-grid{grid-template-columns:1fr;gap:.75rem}
     .uptime-card.full{grid-column:auto}
 
     /* Hero — breathe */
@@ -260,7 +260,7 @@
     .card-foot .sdot{width:5px;height:5px}
 
     /* Standings — data blocks */
-    .standings{margin-top:.5rem}
+    .standings{margin-top:.75rem}
     .standings h2{font-size:.6rem;padding:.4rem .6rem;letter-spacing:.06em}
     .sg{padding:0}
     .data-grid{grid-template-columns:repeat(3,1fr)}

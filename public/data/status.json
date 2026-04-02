@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-02T07:40:54.690Z",
+  "updated": "2026-04-02T15:15:26.768Z",
   "startDate": "01-03",
   "claudeDaily": {
     "Claude API": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrgrrggyrrrgrrggyrrrgrgggrrryggrrg",
@@ -9,10 +9,10 @@
     "Claude for Government": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrrgygggygrggggggyyrgggggg"
   },
   "openaiDaily": {
-    "OpenAI APIs": "gggggggggggggggggggggggggggggggggyyggggyggyyyyogggyygggggyoggggogyyyyygggrrgyyggyyrggygygy",
-    "ChatGPT": "gggggggggggggggggggggggggggggggggyygoygyyyyyogggyyggyygyogygyoggyyyyyygggrrgyyggyyrggygygy",
-    "Codex": "ggggggggggggggggggggggggggggggggggggggggggggggyyyygggggggggggggggyyyyygggrrgyyggyyrggygygy",
-    "Sora": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggoggggggggyyyyygggrrgyyggyyrggygygy",
+    "OpenAI APIs": "gggggggggggggggggggggggggggggggggyyggggyggyyyyogggyygggggyoggggogyyyyygggrrgyyggyyrggygygr",
+    "ChatGPT": "gggggggggggggggggggggggggggggggggyygoygyyyyyogggyyggyygyogygyoggyyyyyygggrrgyyggyyrggygygr",
+    "Codex": "ggggggggggggggggggggggggggggggggggggggggggggggyyyygggggggggggggggyyyyygggrrgyyggyyrggygygr",
+    "Sora": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggoggggggggyyyyygggrrgyyggyyrggygygr",
     "FedRAMP": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"
   },
   "uptime": {
@@ -21,14 +21,15 @@
     "Claude Code": 98.7,
     "platform.claude.com": 98.56,
     "Claude for Government": 99.7,
-    "OpenAI APIs": 99.64,
-    "ChatGPT": 99.59,
-    "Codex": 99.74,
-    "Sora": 99.74,
+    "OpenAI APIs": 99.59,
+    "ChatGPT": 99.54,
+    "Codex": 99.69,
+    "Sora": 99.69,
     "FedRAMP": 100
   },
   "oaiIncidents": {
     "04-02": [
+      "ChatGPT Dictation Elevated Error Rate",
       "High error rate for completionsapi-gpt-5-nano"
     ],
     "03-31": [

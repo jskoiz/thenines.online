@@ -1,18 +1,18 @@
 {
-  "updated": "2026-04-02T23:49:42.864Z",
-  "startDate": "01-03",
+  "updated": "2026-04-03T03:27:26.521Z",
+  "startDate": "01-04",
   "claudeDaily": {
-    "Claude API": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrgrrggyrrrgrrggyrrrgrgggrrryggrrg",
-    "claude.ai": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrgrygyyrrryrrggyrrrgrrygrrrgrgrry",
-    "Claude Code": "ggggggggggggggggggggggggggggggrgrrrygggygggyyyrggggyyyyrrggryggyrrryrrggyrrrgrgggrrryggrrg",
-    "platform.claude.com": "gggggygggggyygggggyyggggyyyyrggrgrrrygggggggyyyrggyygygrrrgrrgggrrrgygggyrrrgrrggrrryggrrg",
-    "Claude for Government": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrrgygggygrggggggyyrgggggg"
+    "Claude API": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrrrggyrrrgrrggyrrrgrgggrrryggrrgg",
+    "claude.ai": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrrygyyrrryrrggyrrrgrrygrrrgrgrrgg",
+    "Claude Code": "ggggggggggggggggggggggggggggggrgrrrygggygggyyyrggggyyyyrrgryggyrrryrrggyrrrgrgggrrryggrrgg",
+    "platform.claude.com": "gggggygggggyygggggyyggggyyyyrggrgrrrygggggggyyyrggyygygrrrrrgggrrrgygggyrrrgrrggrrryggrrgg",
+    "Claude for Government": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrrgygggygrggggggyyrggggggg"
   },
   "openaiDaily": {
-    "OpenAI APIs": "gggggggggggggggggggggggggggggggggyyggggyggyyyyogggyygggggyoggggogyyyyygggrrgyyggyyrggygygr",
-    "ChatGPT": "gggggggggggggggggggggggggggggggggyygoygyyyyyogggyyggyygyogygyoggyyyyyygggrrgyyggyyrggygygr",
-    "Codex": "ggggggggggggggggggggggggggggggggggggggggggggggyyyygggggggggggggggyyyyygggrrgyyggyyrggygygr",
-    "Sora": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggoggggggggyyyyygggrrgyyggyyrggygygr",
+    "OpenAI APIs": "gggggggggggggggggggggggggggggggggyyggggyggyyyyogggyygggggyoggggoyyyyygggrrgyyggyyrggygygrg",
+    "ChatGPT": "gggggggggggggggggggggggggggggggggyygoygyyyyyogggyyggyygyogygyoggyyyyygggrrgyyggyyrggygygrg",
+    "Codex": "ggggggggggggggggggggggggggggggggggggggggggggggyyyyggggggggggggggyyyyygggrrgyyggyyrggygygrg",
+    "Sora": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggogggggggyyyyygggrrgyyggyyrggygygrg",
     "FedRAMP": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"
   },
   "uptime": {
@@ -185,7 +185,7 @@
     ]
   },
   "claudeMinutes": {
-    "03-03": 2980,
+    "03-03": 4250,
     "03-04": 1548,
     "03-06": 452,
     "03-07": 1980,

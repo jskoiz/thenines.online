@@ -1,11 +1,11 @@
 {
-  "updated": "2026-04-03T19:05:48.667Z",
+  "updated": "2026-04-03T19:52:40.101Z",
   "startDate": "01-04",
   "claudeDaily": {
-    "Claude API": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrrrggyrrrgrrggyrrrgrgggrrryggrrgo",
-    "claude.ai": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrrygyyrrryrrggyrrrgrrygrrrgrgrrgo",
-    "Claude Code": "ggggggggggggggggggggggggggggggrgrrrygggygggyyyrggggyyyyrrgryggyrrryrrggyrrrgrgggrrryggrrgo",
-    "platform.claude.com": "gggggygggggyygggggyyggggyyyyrggrgrrrygggggggyyyrggyygygrrrrrgggrrrgygggyrrrgrrggrrryggrrgo",
+    "Claude API": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrrrggyrrrgrrggyrrrgrgggrrryggrrgg",
+    "claude.ai": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrrygyyrrryrrggyrrrgrrygrrrgrgrrgg",
+    "Claude Code": "ggggggggggggggggggggggggggggggrgrrrygggygggyyyrggggyyyyrrgryggyrrryrrggyrrrgrgggrrryggrrgg",
+    "platform.claude.com": "gggggygggggyygggggyyggggyyyyrggrgrrrygggggggyyyrggyygygrrrrrgggrrrgygggyrrrgrrggrrryggrrgg",
     "Claude for Government": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrrgygggygrggggggyyrggggggg"
   },
   "openaiDaily": {
@@ -16,10 +16,10 @@
     "FedRAMP": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"
   },
   "uptime": {
-    "Claude API": 98.41,
-    "claude.ai": 98.34,
-    "Claude Code": 98.68,
-    "platform.claude.com": 98.54,
+    "Claude API": 98.43,
+    "claude.ai": 98.36,
+    "Claude Code": 98.7,
+    "platform.claude.com": 98.56,
     "Claude for Government": 99.7,
     "OpenAI APIs": 99.59,
     "ChatGPT": 99.54,
@@ -209,7 +209,7 @@
     "03-29": 231,
     "03-31": 912,
     "04-01": 565,
-    "04-03": 212,
+    "04-03": 272,
     "04-02": 34,
     "01-14": 1300,
     "01-22": 2776,

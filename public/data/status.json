@@ -1,11 +1,11 @@
 {
-  "updated": "2026-04-06T11:12:21.045Z",
+  "updated": "2026-04-06T16:01:03.545Z",
   "startDate": "01-07",
   "claudeDaily": {
     "Claude API": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyrrggyrrrgrrggyrrrgrgggrrryggrrgrggg",
-    "claude.ai": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyrygyyrrryrrggyrrrgrrygrrrgrgrrgrggg",
-    "Claude Code": "ggggggggggggggggggggggggggggggrgrrrygggygggyyyrggggyyyyryggyrrryrrggyrrrgrgggrrryggrrgrggg",
-    "platform.claude.com": "gggggygggggyygggggyyggggyyyyrggrgrrrygggggggyyyrggyygygrrgggrrrgygggyrrrgrrggrrryggrrgrggg",
+    "claude.ai": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyygyyrrryrrggyrrrgrrygrrrgrgrrgrggo",
+    "Claude Code": "ggggggggggggggggggggggggggggggrgrrrygggygggyyyrggggyyyyyyggyrrryrrggyrrrgrgggrrryggrrgrggo",
+    "platform.claude.com": "gggggygggggyygggggyyggggyyyyrggrgrrrygggggggyyyrggyygygrrgggrrrgygggyrrrgrrggrrryggrrgrggo",
     "Claude for Government": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrrgygggygrggggggyyrgggggggggg"
   },
   "openaiDaily": {
@@ -17,9 +17,9 @@
   },
   "uptime": {
     "Claude API": 98.49,
-    "claude.ai": 98.42,
-    "Claude Code": 98.76,
-    "platform.claude.com": 98.67,
+    "claude.ai": 98.45,
+    "Claude Code": 98.78,
+    "platform.claude.com": 98.65,
     "Claude for Government": 99.7,
     "OpenAI APIs": 99.56,
     "ChatGPT": 99.51,
@@ -189,7 +189,7 @@
     ]
   },
   "claudeMinutes": {
-    "03-03": 1182,
+    "03-03": 1037,
     "03-04": 1548,
     "03-06": 452,
     "03-07": 1980,
@@ -214,6 +214,7 @@
     "03-31": 912,
     "04-01": 565,
     "04-03": 272,
+    "04-06": 45,
     "04-02": 34,
     "01-14": 1300,
     "01-22": 2776,

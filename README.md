@@ -13,6 +13,8 @@ The site pulls a 90-day rolling window of per-service status from `status.claude
 - weighted daily winners
 - streaks, ties, and comeback moments
 
+Historical cells are day-bucketed. Today's cell is refreshed from the current component summary so the live page and the latest bar stay aligned.
+
 API and chat products are weighted more heavily than coding products.
 
 ## Methodology

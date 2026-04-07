@@ -4,12 +4,16 @@
 // uptime math, incident attribution, and real-time status alignment.
 
 import { readFileSync } from 'fs';
+import {
+  OPENAI_SERVICES,
+  TRACKED_OPENAI_COMPONENT_NAMES,
+  liveOpenAIGroupStatus,
+} from './openai-groups.js';
 
 const VALID_STATUS_CHARS = new Set(['g', 'y', 'o', 'r', 'b']);
 const DAYS = 90;
 
 const CLAUDE_SERVICES = ['Claude API', 'claude.ai', 'Claude Code', 'platform.claude.com', 'Claude for Government'];
-const OPENAI_SERVICES = ['OpenAI APIs', 'ChatGPT', 'Codex', 'Sora', 'FedRAMP'];
 
 const CLAUDE_COMPONENT_MAP = {
   'claude.ai': 'claude.ai',
@@ -26,6 +30,7 @@ const STATUS_MAP = {
   major_outage: 'r',
   under_maintenance: 'b',
 };
+const PRIORITY = { g: 0, b: 1, y: 2, o: 3, r: 4 };
 
 const UPTIME_SCORES = { g: 100, y: 99.5, o: 98, r: 95, b: 99 };
 
@@ -145,23 +150,21 @@ async function main() {
     }
   }
 
+  // Verify today's grouped OpenAI status matches the live component summary.
+  console.log('\n── Real-time Status Alignment (OpenAI) ──');
+  for (const groupName of OPENAI_SERVICES) {
+    if (data.openaiDaily[groupName]) {
+      const lastChar = data.openaiDaily[groupName].slice(-1);
+      const expected = liveOpenAIGroupStatus(openaiSummary.components || [], groupName, STATUS_MAP, PRIORITY);
+      assert(lastChar === expected,
+        `${groupName} today: data="${lastChar}" api="${expected}"`);
+    }
+  }
+
   // Verify OpenAI component coverage — check that we know about all API components
   console.log('\n── OpenAI Component Coverage ──');
-  const allTrackedSubs = Object.values({
-    'OpenAI APIs': [
-      'Fine-tuning', 'Embeddings', 'Images', 'Batch', 'Audio', 'Moderations',
-      'Compliance API', 'Codex API',
-    ],
-    'ChatGPT': [
-      'Login', 'Conversations', 'Voice mode', 'GPTs', 'Image Generation',
-      'Deep Research', 'Agent', 'Connectors/Apps', 'App', 'ChatGPT Atlas',
-    ],
-    'Codex': ['Codex Web', 'CLI', 'VS Code extension'],
-    'Sora': ['Sora', 'Video viewing', 'Video generation'],
-  }).flat();
-
   const openaiApiComponents = (openaiSummary.components || []).map(c => c.name);
-  const unmapped = openaiApiComponents.filter(name => !allTrackedSubs.includes(name));
+  const unmapped = openaiApiComponents.filter(name => !TRACKED_OPENAI_COMPONENT_NAMES.includes(name));
   if (unmapped.length > 0) {
     console.warn(`  WARN: ${unmapped.length} OpenAI component(s) not in any tracked group: ${unmapped.join(', ')}`);
   }

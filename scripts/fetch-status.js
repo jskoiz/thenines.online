@@ -3,6 +3,12 @@
 // the frontend expects, and writes public/data/status.json.
 
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'fs';
+import {
+  OPENAI_COMPONENT_GROUPS,
+  OPENAI_SERVICES,
+  inferOpenAIIncidentGroups,
+  liveOpenAIGroupStatus,
+} from './openai-groups.js';
 
 // --- Status mapping ---
 const IMPACT_MAP = { none: 'g', minor: 'y', major: 'r', critical: 'r' };
@@ -25,22 +31,7 @@ const CLAUDE_COMPONENT_MAP = {
   'Claude for Government': 'Claude for Government',
 };
 
-const OPENAI_COMPONENT_GROUPS = {
-  'OpenAI APIs': [
-    'Fine-tuning', 'Embeddings', 'Images', 'Batch', 'Audio', 'Moderations',
-    'Compliance API', 'Codex API',
-  ],
-  'ChatGPT': [
-    'Login', 'Conversations', 'Voice mode', 'GPTs', 'Image Generation',
-    'Deep Research', 'Agent', 'Connectors/Apps', 'App', 'ChatGPT Atlas',
-  ],
-  'Codex': ['Codex Web', 'CLI', 'VS Code extension'],
-  'Sora': ['Sora', 'Video viewing', 'Video generation'],
-  'FedRAMP': [],
-};
-
 const CLAUDE_SERVICES = ['Claude API', 'claude.ai', 'Claude Code', 'platform.claude.com', 'Claude for Government'];
-const OPENAI_SERVICES = ['OpenAI APIs', 'ChatGPT', 'Codex', 'Sora', 'FedRAMP'];
 
 // --- Helpers ---
 function dateKey(d) {
@@ -59,16 +50,20 @@ function buildDateRange() {
   return dates;
 }
 
-function worstStatusForDay(incidents, componentName, date) {
+function incidentOverlapsDay(inc, date) {
   const dayStart = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
   const dayEnd = new Date(dayStart);
   dayEnd.setUTCDate(dayEnd.getUTCDate() + 1);
 
+  const created = new Date(inc.created_at);
+  const resolved = inc.resolved_at ? new Date(inc.resolved_at) : new Date();
+  return created < dayEnd && resolved > dayStart;
+}
+
+function worstStatusForDay(incidents, componentName, date) {
   let worst = 'g';
   for (const inc of incidents) {
-    const created = new Date(inc.created_at);
-    const resolved = inc.resolved_at ? new Date(inc.resolved_at) : new Date();
-    if (created < dayEnd && resolved > dayStart) {
+    if (incidentOverlapsDay(inc, date)) {
       const affects = inc.components?.some(c => c.name === componentName) ?? false;
       if (affects || !inc.components?.length) {
         const code = IMPACT_MAP[inc.impact] || 'y';
@@ -98,20 +93,10 @@ function downtimeMinutesForDay(incidents, componentName, date) {
   return Math.round(totalMs / 60000);
 }
 
-function worstGroupStatus(incidents, subComponents, date) {
+function worstOpenAIGroupStatus(incidents, incidentGroups, groupName, date) {
   let worst = 'g';
-  for (const sub of subComponents) {
-    const s = worstStatusForDay(incidents, sub, date);
-    if ((PRIORITY[s] || 0) > (PRIORITY[worst] || 0)) worst = s;
-  }
-  // Also check incidents with no components listed (affects all)
-  const dayStart = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
-  const dayEnd = new Date(dayStart);
-  dayEnd.setUTCDate(dayEnd.getUTCDate() + 1);
   for (const inc of incidents) {
-    const created = new Date(inc.created_at);
-    const resolved = inc.resolved_at ? new Date(inc.resolved_at) : new Date();
-    if (created < dayEnd && resolved > dayStart && (!inc.components || inc.components.length === 0)) {
+    if (incidentOverlapsDay(inc, date) && incidentGroups.get(inc)?.has(groupName)) {
       const code = IMPACT_MAP[inc.impact] || 'y';
       if ((PRIORITY[code] || 0) > (PRIORITY[worst] || 0)) worst = code;
     }
@@ -156,6 +141,7 @@ async function main() {
 
   const claudeIncidents = claudeInc.incidents || [];
   const openaiIncidents = openaiInc.incidents || [];
+  const openaiIncidentGroups = new Map(openaiIncidents.map(inc => [inc, inferOpenAIIncidentGroups(inc)]));
   const dates = buildDateRange();
   const claudeComponentNames = Object.keys(CLAUDE_COMPONENT_MAP);
 
@@ -190,12 +176,20 @@ async function main() {
 
   // --- OpenAI daily status strings ---
   const openaiDaily = {};
-  for (const [groupName, subs] of Object.entries(OPENAI_COMPONENT_GROUPS)) {
+  for (const groupName of Object.keys(OPENAI_COMPONENT_GROUPS)) {
     let s = '';
     for (const date of dates) {
-      s += subs.length > 0 ? worstGroupStatus(openaiIncidents, subs, date) : 'g';
+      s += worstOpenAIGroupStatus(openaiIncidents, openaiIncidentGroups, groupName, date);
     }
     openaiDaily[groupName] = s;
+  }
+
+  // Update last char with real-time group status so "today" matches the live page.
+  for (const groupName of OPENAI_SERVICES) {
+    if (openaiDaily[groupName]) {
+      const current = liveOpenAIGroupStatus(openaiSummary.components || [], groupName, STATUS_MAP, PRIORITY);
+      openaiDaily[groupName] = openaiDaily[groupName].slice(0, -1) + current;
+    }
   }
 
   // --- OpenAI incidents by day ---

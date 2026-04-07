@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-07T02:44:03.110Z",
+  "updated": "2026-04-07T11:14:20.376Z",
   "startDate": "01-08",
   "claudeDaily": {
     "Claude API": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyrrggyrrrgrrggyrrrgrgggrrryggrrgrggyg",
@@ -9,8 +9,8 @@
     "Claude for Government": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrrgygggygrggggggyyrggggggggggg"
   },
   "openaiDaily": {
-    "OpenAI APIs": "gggggggggggggggggggggggggggggggggyyggggyggyyyyogggyygggggyoggyggyggggggggggygrggggggggggrg",
-    "ChatGPT": "gggggggggggggggggggggggggggggggggyygoygyyyyyogggyyggyygyogygyyyyygggrggyyggyggggygygrgggyg",
+    "OpenAI APIs": "gggggggggggggggggggggggggggggggggyyggggyggyyyyogggyygggggyoggyggyggggggggggygrggggggggggro",
+    "ChatGPT": "gggggggggggggggggggggggggggggggggyygoygyyyyyogggyyggyygyogygyyyyygggrggyyggyggggygygrgggyo",
     "Codex": "ggggggggggggggggggggggggggggggggggggggggggggggyyyygggggggggggygggggggggggggggggggggggggggg",
     "Sora": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggoggggygggggggrgggggggrgggggggggggg",
     "FedRAMP": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"
@@ -21,13 +21,16 @@
     "Claude Code": 98.76,
     "platform.claude.com": 98.62,
     "Claude for Government": 99.7,
-    "OpenAI APIs": 99.77,
-    "ChatGPT": 99.68,
+    "OpenAI APIs": 99.75,
+    "ChatGPT": 99.66,
     "Codex": 99.97,
     "Sora": 99.86,
     "FedRAMP": 100
   },
   "oaiIncidents": {
+    "04-07": [
+      "Some users may experience issues accessing the ChatGPT website on VPN"
+    ],
     "04-06": [
       "GET /v1/responses endpoint is currently down and unable to serve requests",
       "Some users may experience empty response from ChatGPT in web"

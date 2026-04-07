@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-07T11:14:20.376Z",
+  "updated": "2026-04-07T12:03:27.901Z",
   "startDate": "01-08",
   "claudeDaily": {
     "Claude API": "gggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyrrggyrrrgrrggyrrrgrgggrrryggrrgrggyg",
@@ -9,8 +9,8 @@
     "Claude for Government": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggrrrgygggygrggggggyyrggggggggggg"
   },
   "openaiDaily": {
-    "OpenAI APIs": "gggggggggggggggggggggggggggggggggyyggggyggyyyyogggyygggggyoggyggyggggggggggygrggggggggggro",
-    "ChatGPT": "gggggggggggggggggggggggggggggggggyygoygyyyyyogggyyggyygyogygyyyyygggrggyyggyggggygygrgggyo",
+    "OpenAI APIs": "gggggggggggggggggggggggggggggggggyyggggyggyyyyogggyygggggyoggyggyggggggggggygrggggggggggrg",
+    "ChatGPT": "gggggggggggggggggggggggggggggggggyygoygyyyyyogggyyggyygyogygyyyyygggrggyyggyggggygygrgggyg",
     "Codex": "ggggggggggggggggggggggggggggggggggggggggggggggyyyygggggggggggygggggggggggggggggggggggggggg",
     "Sora": "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggoggggygggggggrgggggggrgggggggggggg",
     "FedRAMP": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"
@@ -21,8 +21,8 @@
     "Claude Code": 98.76,
     "platform.claude.com": 98.62,
     "Claude for Government": 99.7,
-    "OpenAI APIs": 99.75,
-    "ChatGPT": 99.66,
+    "OpenAI APIs": 99.77,
+    "ChatGPT": 99.68,
     "Codex": 99.97,
     "Sora": 99.86,
     "FedRAMP": 100

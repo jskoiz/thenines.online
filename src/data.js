@@ -4,6 +4,7 @@
 export const SEED_DATA = {
   updated: '2026-03-31T23:59:00Z',
   startDate: '2026-01-01',
+  dates: [],
   claudeDaily: {
     'Claude API': 'ggggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrgggyrrrggyrrrgrooggrrrgrrrg',
     'claude.ai': 'ggggggyyyyyryggggggyyrgggyyyyggrgrrrygggyyggyyyrgyyyoyyyyrrgggyrrrggyrrrgrooggrrrgrrrg',
@@ -54,4 +55,7 @@ export const SEED_DATA = {
     '03-19': 4310, '03-21': 5714, '03-23': 960, '03-25': 31930, '03-26': 5095, '03-27': 16920,
     '03-29': 13885, '03-31': 2198,
   },
+  currentStatus: {},
+  claudeDetails: {},
+  openaiDetails: {},
 };

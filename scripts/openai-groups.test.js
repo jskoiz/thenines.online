@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {
   inferOpenAIIncidentGroups,
   liveOpenAIGroupStatus,
+  openAIComponentGroups,
 } from './openai-groups.js';
 
 const STATUS_MAP = {
@@ -51,4 +52,8 @@ test('computes live grouped status from the current summary components', () => {
   ], 'OpenAI APIs', STATUS_MAP, PRIORITY);
 
   assert.equal(status, 'r');
+});
+
+test('maps current summary-only ChatGPT components into the ChatGPT group', () => {
+  assert.deepEqual(openAIComponentGroups('Feed'), ['ChatGPT']);
 });

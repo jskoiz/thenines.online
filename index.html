@@ -84,7 +84,7 @@
       <button type="button" class="close-btn" id="drawer-close">close</button>
       <h3>Methodology</h3>
       <h4>Data</h4>
-      <p>90-day snapshot from <code>status.claude.com</code> and <code>status.openai.com</code>. Daily histories are encoded in-source for full transparency.</p>
+      <p>90-day snapshot from <code>status.claude.com</code> and <code>status.openai.com</code>. Historical bars mirror each provider’s published daily uptime view; current labels come from their live summary status.</p>
       <h4>Components</h4>
       <ul>
         <li><strong>Claude:</strong> Claude API, claude.ai, Claude Code</li>
@@ -104,9 +104,9 @@
       <p>Equal weighted scores = tie, no winner. Most ties are days where every service on both sides is fully operational (both score 8/8).</p>
       <h4>Limitations</h4>
       <ul>
-        <li>Historical bars are day-bucketed; today's cell is refreshed from current component status</li>
-        <li>Claude incident titles unavailable; only duration is shown</li>
-        <li>OpenAI incident data before Feb 3, 2026 is limited</li>
+        <li>Dates follow the providers’ own daily uptime calendars, which are UTC-based</li>
+        <li>Standings and summary metrics compare the tracked race services, not every provider component</li>
+        <li>OpenAI incident titles are attached per tracked service using official affected-component metadata from the public status feed</li>
       </ul>
       <h4>About</h4>
       <p>Independent project, not affiliated with Anthropic or OpenAI.</p>

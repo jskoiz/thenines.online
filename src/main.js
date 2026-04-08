@@ -2,12 +2,14 @@ import { SEED_DATA } from './data.js';
 
 const TOTAL_DAYS=90;
 const DEFAULT_DAYS=60;
+const LIVE_REFRESH_MS=120000;
 const STATUS_URLS={c:'https://status.claude.com',o:'https://status.openai.com'};
 const STATUS_LABELS={g:'Operational',y:'Degraded',o:'Partial Outage',r:'Major Outage',b:'Maintenance'};
 const STATUS_PRIORITY={r:4,o:3,y:2,b:1,g:0};
 const STATUS_COLORS={g:'var(--green)',y:'var(--yellow)',o:'var(--orange)',r:'var(--red)',b:'var(--blue)'};
 const STATUS_SCORE={g:1,y:0.6,o:0.3,r:0,b:0.8};
 const UPTIME_SCORE={g:100,y:99.5,o:98,r:95,b:99};
+const API_STATUS_MAP={operational:'g',degraded_performance:'y',partial_outage:'o',major_outage:'r',under_maintenance:'b'};
 const SUPPORTS_HOVER=window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
 const THEME_ICONS={
@@ -40,6 +42,21 @@ const RACES=[
 ];
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const DAY_NAMES=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const CLAUDE_LIVE_COMPONENT_MAP={
+  'claude.ai':'claude.ai',
+  'platform.claude.com (formerly console.anthropic.com)':'platform.claude.com',
+  'Claude API (api.anthropic.com)':'Claude API',
+  'Claude Code':'Claude Code',
+  'Claude Cowork':'Claude Cowork',
+  'Claude for Government':'Claude for Government'
+};
+const OPENAI_LIVE_COMPONENT_GROUPS={
+  'OpenAI APIs':['Fine-tuning','Embeddings','Images','Batch','Audio','Moderations','Compliance API','Codex API','Responses','Chat Completions','Realtime','Audit Logs'],
+  'ChatGPT':['Login','Conversations','Voice mode','GPTs','Image Generation','Deep Research','Agent','Connectors/Apps','App','Apps','ChatGPT Atlas','Search','File uploads','Files','Shopping Research','Feed'],
+  'Codex':['Codex Web','CLI','VS Code extension'],
+  'Sora':['Sora','Video viewing','Video generation'],
+  'FedRAMP':[]
+};
 function buildDates(){
   const now=new Date();
   const today=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate()));
@@ -85,6 +102,37 @@ function fmtShortDate(dateString){
   const monthIndex=parseInt(parts[0],10)-1;
   const day=parseInt(parts[1],10);
   return MONTHS[monthIndex]+' '+day+', '+new Date().getFullYear();
+}
+
+function liveOpenAIGroupStatus(components,groupName){
+  const relevant=groupName==='FedRAMP'
+    ? (components||[]).filter(function(component){return /fedramp/i.test(component.name||'');})
+    : (components||[]).filter(function(component){return (OPENAI_LIVE_COMPONENT_GROUPS[groupName]||[]).includes(component.name);});
+  let worst='g';
+  relevant.forEach(function(component){
+    const code=API_STATUS_MAP[component.status]||'g';
+    if((STATUS_PRIORITY[code]||0)>(STATUS_PRIORITY[worst]||0))worst=code;
+  });
+  return worst;
+}
+
+function getDisplayDaily(serviceName,daily){
+  const value=daily||'';
+  const live=CURRENT_STATUS[serviceName];
+  if(!value.length||!live)return value;
+  const last=value[value.length-1]||'g';
+  if((STATUS_PRIORITY[live]||0)>(STATUS_PRIORITY[last]||0)){
+    return value.slice(0,-1)+live;
+  }
+  return value;
+}
+
+function getClaudeDaily(name){
+  return getDisplayDaily(name,CLAUDE_DAILY[name]||'');
+}
+
+function getOpenAIDaily(name){
+  return getDisplayDaily(name,OPENAI_DAILY[name]||'');
 }
 
 function getStatusPage(side){
@@ -137,8 +185,8 @@ function calcAvg(days){
     for(let i=0;i<slice.length;i++)total+=UPTIME_SCORE[slice[i]]||100;
     return total/slice.length;
   }
-  const cAvg=RACES.reduce((sum,race)=>sum+serviceAverage(CLAUDE_DAILY[race.c]),0)/RACES.length;
-  const oAvg=RACES.reduce((sum,race)=>sum+serviceAverage(OPENAI_DAILY[race.o]),0)/RACES.length;
+  const cAvg=RACES.reduce((sum,race)=>sum+serviceAverage(getClaudeDaily(race.c)),0)/RACES.length;
+  const oAvg=RACES.reduce((sum,race)=>sum+serviceAverage(getOpenAIDaily(race.o)),0)/RACES.length;
   els.cAvg.textContent=cAvg.toFixed(2)+'%';
   els.oAvg.textContent=oAvg.toFixed(2)+'%';
   els.delta.textContent=(oAvg>cAvg?'OpenAI':'Claude')+' leads by '+Math.abs(cAvg-oAvg).toFixed(2)+'%';
@@ -150,10 +198,12 @@ function escAttr(value){
 
 function renderBars(data,side,serviceName){
   const padded=(data||'')+'g'.repeat(TOTAL_DAYS);
+  const sourceData=((side==='c'?CLAUDE_DAILY[serviceName]:OPENAI_DAILY[serviceName])||'')+'g'.repeat(TOTAL_DAYS);
   return padded.slice(0,TOTAL_DAYS).split('').map(function(status,index){
     let incidents='';
     let duration='';
     const date=DATES[index];
+    const liveOverride=index===TOTAL_DAYS-1&&status!==(sourceData[index]||'g');
     if(side==='c'){
       const detail=CLAUDE_DETAILS[serviceName]&&CLAUDE_DETAILS[serviceName][date];
       const minutes=((detail&&detail.partialMinutes)||0)+((detail&&detail.majorMinutes)||0);
@@ -163,7 +213,7 @@ function renderBars(data,side,serviceName){
       const detail=OPENAI_DETAILS[serviceName]&&OPENAI_DETAILS[serviceName][date];
       if(detail&&detail.titles&&detail.titles.length)incidents=detail.titles.join('||');
     }
-    return '<div class="day '+status+'" data-side="'+side+'" data-service="'+escAttr(serviceName)+'" data-date="'+date+'" data-status="'+(STATUS_LABELS[status]||'Operational')+'" data-color="'+status+'" data-incidents="'+escAttr(incidents)+'" data-duration="'+escAttr(duration)+'" data-href="'+getStatusPage(side)+'"></div>';
+    return '<div class="day '+status+'" data-side="'+side+'" data-service="'+escAttr(serviceName)+'" data-date="'+date+'" data-status="'+(STATUS_LABELS[status]||'Operational')+'" data-color="'+status+'" data-incidents="'+escAttr(incidents)+'" data-duration="'+escAttr(duration)+'" data-live="'+(liveOverride?'1':'0')+'" data-href="'+getStatusPage(side)+'"></div>';
   }).join('');
 }
 
@@ -225,6 +275,8 @@ function showTip(el){
         html+='<div class="tip-incident"><span style="width:4px;height:4px;border-radius:50%;background:'+STATUS_COLORS[color]+';flex-shrink:0;margin-top:3px"></span>'+item+'</div>';
       });
       html+='</div>';
+    } else if(el.dataset.live==='1'){
+      html+='<div style="font-size:.45rem;color:var(--muted);margin-top:.1rem">Live current status from provider summary.</div>';
     } else if(color==='g'){
       html+='<div style="font-size:.45rem;color:var(--muted);margin-top:.1rem">No incidents recorded.</div>';
     }
@@ -384,13 +436,6 @@ function bindChromeInteractions(){
   });
 }
 
-function pingStatusApis(){
-  void Promise.allSettled([
-    fetch('https://status.claude.com/api/v2/components.json').then(function(response){return response.ok;}),
-    fetch('https://status.openai.com/api/v2/components.json').then(function(response){return response.ok;})
-  ]);
-}
-
 function buildOverview(cAgg,cPerDay,oAgg,oPerDay){
   function overviewBars(agg,perDay,side){
     return agg.split('').map(function(status,index){
@@ -414,8 +459,8 @@ function buildOverview(cAgg,cPerDay,oAgg,oPerDay){
 function buildCards(){
   els.cards.replaceChildren();
   RACES.forEach(function(race,index){
-    const cData=CLAUDE_DAILY[race.c];
-    const oData=OPENAI_DAILY[race.o];
+    const cData=getClaudeDaily(race.c);
+    const oData=getOpenAIDaily(race.o);
     const cUptime=UPTIME[race.c];
     const oUptime=UPTIME[race.o];
     const diff=Math.abs(cUptime-oUptime);
@@ -441,6 +486,8 @@ function buildCards(){
 function buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailerBestCat,bestComeback,cStreak,oStreak,catWins,numDays){
   var days=numDays||TOTAL_DAYS;
   var skip=TOTAL_DAYS-days;
+  const displayedClaude=Object.fromEntries(C_NAMES.map(function(name){return [name,getClaudeDaily(name)];}));
+  const displayedOpenAI=Object.fromEntries(O_NAMES.map(function(name){return [name,getOpenAIDaily(name)];}));
   const oLeads=oDaysWon>cDaysWon;
   const leader=oLeads?'OpenAI':'Claude';
   const leaderClass=oLeads?'o-hl':'c-hl';
@@ -461,13 +508,13 @@ function buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailer
   for(var i=skip;i<TOTAL_DAYS;i++){
     var cWorst='g';
     C_NAMES.forEach(function(n,idx){
-      var s=CLAUDE_DAILY[n][i]||'g';
+      var s=displayedClaude[n][i]||'g';
       if((STATUS_PRIORITY[s]||0)>(STATUS_PRIORITY[cWorst]||0))cWorst=s;
     });
     if(cWorst!=='g')cIncidentDays++;
     var oWorst='g';
     O_NAMES.forEach(function(n,idx){
-      var s=OPENAI_DAILY[n][i]||'g';
+      var s=displayedOpenAI[n][i]||'g';
       if((STATUS_PRIORITY[s]||0)>(STATUS_PRIORITY[oWorst]||0))oWorst=s;
     });
     if(oWorst!=='g')oIncidentDays++;
@@ -493,8 +540,8 @@ function buildDataBlocks(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailer
   var cleanDays=0;
   for(var j=skip;j<TOTAL_DAYS;j++){
     var allClean=true;
-    C_NAMES.forEach(function(n){if((CLAUDE_DAILY[n][j]||'g')!=='g')allClean=false;});
-    O_NAMES.forEach(function(n){if((OPENAI_DAILY[n][j]||'g')!=='g')allClean=false;});
+    C_NAMES.forEach(function(n){if((displayedClaude[n][j]||'g')!=='g')allClean=false;});
+    O_NAMES.forEach(function(n){if((displayedOpenAI[n][j]||'g')!=='g')allClean=false;});
     if(allClean)cleanDays++;
   }
 
@@ -603,8 +650,8 @@ function renderStandings(dayWinners,cDaysWon,oDaysWon,tiedDays,bigGapCat,trailer
 function computeAndRenderStandings(days){
   var numDays=days||TOTAL_DAYS;
   var skip=TOTAL_DAYS-numDays;
-  const allClaude=C_NAMES.map(function(name){return CLAUDE_DAILY[name];});
-  const allOpenAI=O_NAMES.map(function(name){return OPENAI_DAILY[name];});
+  const allClaude=C_NAMES.map(function(name){return getClaudeDaily(name);});
+  const allOpenAI=O_NAMES.map(function(name){return getOpenAIDaily(name);});
   const cPerDay=[];
   const oPerDay=[];
   const dayWinners=[];
@@ -720,8 +767,8 @@ function computeAndRenderStandings(days){
 
 function render(){
   // Convert per-service daily strings into aggregate category outcomes for the overview bars.
-  const allClaude=C_NAMES.map(function(name){return CLAUDE_DAILY[name];});
-  const allOpenAI=O_NAMES.map(function(name){return OPENAI_DAILY[name];});
+  const allClaude=C_NAMES.map(function(name){return getClaudeDaily(name);});
+  const allOpenAI=O_NAMES.map(function(name){return getOpenAIDaily(name);});
   let cAgg='';
   let oAgg='';
   const cPerDay=[];
@@ -783,6 +830,41 @@ function setCachedData(data){
   try{localStorage.setItem(LS_KEY,JSON.stringify(data));}catch(e){}
 }
 
+async function fetchJSON(url){
+  const res=await fetch(url);
+  if(!res.ok)throw new Error(res.status);
+  return res.json();
+}
+
+async function refreshCurrentStatus(shouldRender){
+  try{
+    const [claudeSummary,openaiSummary]=await Promise.all([
+      fetchJSON('https://status.claude.com/api/v2/summary.json'),
+      fetchJSON('https://status.openai.com/api/v2/summary.json')
+    ]);
+    const nextStatus={...CURRENT_STATUS};
+    (claudeSummary.components||[]).forEach(function(component){
+      const serviceName=CLAUDE_LIVE_COMPONENT_MAP[component.name];
+      if(serviceName)nextStatus[serviceName]=API_STATUS_MAP[component.status]||'g';
+    });
+    Object.keys(OPENAI_LIVE_COMPONENT_GROUPS).forEach(function(groupName){
+      nextStatus[groupName]=liveOpenAIGroupStatus(openaiSummary.components||[],groupName);
+    });
+
+    let changed=false;
+    Object.keys(nextStatus).forEach(function(name){
+      if(CURRENT_STATUS[name]!==nextStatus[name])changed=true;
+    });
+    CURRENT_STATUS=nextStatus;
+
+    if(changed&&shouldRender){
+      render();
+      updateTimestamp();
+      applyDays(currentDays);
+    }
+  }catch(e){}
+}
+
 async function loadLiveData(){
   try{
     const res=await fetch('/data/status.json');
@@ -802,8 +884,8 @@ function updateTimestamp(){
   const age=Date.now()-new Date(DATA_UPDATED).getTime();
   const stale=age>60*60*1000;
   const liveDot=document.querySelector('.hero .live');
-  if(liveDot&&stale)liveDot.style.background='var(--yellow)';
-  els.timestamp.textContent='snapshot through '+fmtShortDate(DATES[DATES.length-1]);
+  if(liveDot)liveDot.style.background=stale?'var(--yellow)':'';
+  els.timestamp.textContent='snapshot through '+fmtShortDate(DATES[DATES.length-1])+' UTC';
 }
 
 async function start(){
@@ -814,11 +896,12 @@ async function start(){
   bindDayInteractions();
   bindChromeInteractions();
   await loadLiveData();
+  await refreshCurrentStatus(false);
   render();
   updateTimestamp();
   els.loader.classList.add('hidden');
   applyDays(DEFAULT_DAYS);
-  pingStatusApis();
+  window.setInterval(function(){void refreshCurrentStatus(true);},LIVE_REFRESH_MS);
 }
 
 if(document.readyState==='loading'){

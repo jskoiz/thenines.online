@@ -29,6 +29,7 @@ const TRACKED_OPENAI_SERVICES = ['OpenAI APIs', 'ChatGPT', 'Codex'];
 
 const CLAUDE_COMPONENT_MAP = {
   'claude.ai': 'claude.ai',
+  'Claude Console (platform.claude.com)': 'platform.claude.com',
   'platform.claude.com (formerly console.anthropic.com)': 'platform.claude.com',
   'Claude API (api.anthropic.com)': 'Claude API',
   'Claude Code': 'Claude Code',
@@ -147,8 +148,13 @@ async function main() {
   console.log('\n── OpenAI History Alignment ──');
   for (const serviceName of OPENAI_SERVICES) {
     const providerService = openaiHistory[serviceName];
-    assert(Boolean(providerService), `${serviceName} exists in OpenAI provider history`);
-    if (!providerService) continue;
+    if (!providerService) {
+      assert(data.openaiDaily[serviceName] === 'g'.repeat(days), `${serviceName} uses fallback history when provider omits a history row`);
+      assert(data.uptime[serviceName] === 100, `${serviceName} uses fallback uptime when provider omits a history row`);
+      const expected = liveOpenAIGroupStatus(openaiSummary.components || [], serviceName, STATUS_MAP, PRIORITY);
+      assert(data.currentStatus[serviceName] === expected, `${serviceName} current status matches OpenAI summary`);
+      continue;
+    }
     assert(data.openaiDaily[serviceName] === providerService.statuses, `${serviceName} historical bars match OpenAI`);
     assert(data.uptime[serviceName] === providerService.uptime, `${serviceName} uptime matches OpenAI (${providerService.uptime})`);
     const expected = liveOpenAIGroupStatus(openaiSummary.components || [], serviceName, STATUS_MAP, PRIORITY);

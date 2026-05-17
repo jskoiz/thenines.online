@@ -27,6 +27,7 @@ const UPTIME_SCORES = { g: 100, y: 99.5, o: 98, r: 95, b: 99 };
 
 const CLAUDE_COMPONENT_MAP = {
   'claude.ai': 'claude.ai',
+  'Claude Console (platform.claude.com)': 'platform.claude.com',
   'platform.claude.com (formerly console.anthropic.com)': 'platform.claude.com',
   'Claude API (api.anthropic.com)': 'Claude API',
   'Claude Code': 'Claude Code',

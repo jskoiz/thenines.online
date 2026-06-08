@@ -1,8 +1,7 @@
 {
-  "updated": "2026-06-07T19:48:09.766Z",
-  "startDate": "03-10",
+  "updated": "2026-06-08T11:21:13.894Z",
+  "startDate": "03-11",
   "dates": [
-    "03-10",
     "03-11",
     "03-12",
     "03-13",
@@ -91,7 +90,8 @@
     "06-04",
     "06-05",
     "06-06",
-    "06-07"
+    "06-07",
+    "06-08"
   ],
   "currentStatus": {
     "claude.ai": "g",
@@ -107,26 +107,26 @@
     "FedRAMP": "g"
   },
   "claudeDaily": {
-    "Claude API": "ggooggyoorgogggooryggoogoggyyoyoggyyryygyoggyroggoyrgggygoyoyggogyoogooygoggygoooggyoygoyy",
-    "claude.ai": "gyooggyoorgoyogrorgogoogoggoroyoggryryygyoggorogyryrgggygoyoyggooygogooygoggygoooyyyoygoyy",
-    "Claude Code": "gyooggyoorgogggooryggoogoggoroyoggoyryygyoggyroggoyrgggygoyooggooyoogooygoggyyoooggyoogoyy",
-    "platform.claude.com": "ggygggyooogorggooyyggoogoggogoyoggyyryygyoggyroggygrgggygoyoyggogggogooygoggyggooyyyoyggyy",
-    "Claude Cowork": "ggggggggggggggggggggggggoggoyoyoggoygoygyoggyroggryrgggygoyogggogygogooygoggygoooggygggoyy",
-    "Claude for Government": "ggygggygoggggggggygggggggggggggyggyyggyggoggyryggygrgggggggogggggggggggggggggggggggggggggg"
+    "Claude API": "googgyoorgogggooryggoogoggyyoyoggyyryygyoggyroggoyrgggygoyoyggogyoogooygoggygoooggyoygoyyg",
+    "claude.ai": "yooggyoorgoyogrorgogoogoggoroyoggryryygyoggorogyryrgggygoyoyggooygogooygoggygoooyyyoygoyyg",
+    "Claude Code": "yooggyoorgogggooryggoogoggoroyoggoyryygyoggyroggoyrgggygoyooggooyoogooygoggyyoooggyoogoyyg",
+    "platform.claude.com": "gygggyooogorggooyyggoogoggogoyoggyyryygyoggyroggygrgggygoyoyggogggogooygoggyggooyyyoyggyyg",
+    "Claude Cowork": "gggggggggggggggggggggggoggoyoyoggoygoygyoggyroggryrgggygoyogggogygogooygoggygoooggygggoyyg",
+    "Claude for Government": "gygggygoggggggggygggggggggggggyggyyggyggoggyryggygrgggggggoggggggggggggggggggggggggggggggg"
   },
   "openaiDaily": {
-    "OpenAI APIs": "gygygggggggggyygoggggggygggogygyggyygyggggggyggggyygygggggyoggygygggggygggggggygyggggoyygg",
-    "ChatGPT": "yyyygggogyygggyygggygygogggyoygggggygggggogoggggggoyygggggyyggygrgggggggyggggyyyyggoyogygy",
-    "Codex": "yygggggggggggggggggggggggggggggggggggggggoygyygggyggggggggyyggygyggggggggyygggyyggggyoyggg",
+    "OpenAI APIs": "ygygggggggggyygoggggggygggogygyggyygyggggggyggggyygygggggyoggygygggggygggggggygyggggoyyggg",
+    "ChatGPT": "yyygggogyygggyygggygygogggyoygggggygggggogoggggggoyygggggyyggygrgggggggyggggyyyyggoyogygyy",
+    "Codex": "ygggggggggggggggggggggggggggggggggggggggoygyygggyggggggggyyggygyggggggggyygggyyggggyoygggg",
     "Sora": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
-    "FedRAMP": "ggggggggggggggggggggggggggggggggggggrggggggggggggggggggggggggggggggggggggggggyyggggggggggg"
+    "FedRAMP": "gggggggggggggggggggggggggggggggggggrggggggggggggggggggggggggggggggggggggggggyygggggggggggg"
   },
   "uptime": {
     "claude.ai": 98.8,
     "platform.claude.com": 99.33,
     "Claude API": 99.15,
     "Claude Code": 99,
-    "Claude Cowork": 99.47,
+    "Claude Cowork": 99.48,
     "Claude for Government": 99.92,
     "OpenAI APIs": 99.98,
     "ChatGPT": 99.83,
@@ -135,8 +135,10 @@
     "FedRAMP": 99.96
   },
   "oaiIncidents": {
+    "06-08": [
+      "Disruption in service availabilty for Go users"
+    ],
     "06-07": [
-      "Disruption in service availabilty for Go users",
       "Disruption in service availabilty for Free and Go users"
     ],
     "06-06": [
@@ -318,9 +320,6 @@
       "Elevated conversation errors for ChatGPT",
       "Elevated error rates for Deep Research in Enterprise Workspaces",
       "Codex unresponsive"
-    ],
-    "03-10": [
-      "Deep Research requests are erroring for LATAM users"
     ]
   },
   "claudeMinutes": {
@@ -373,8 +372,8 @@
         "partialMinutes": 86,
         "majorMinutes": 0,
         "events": [
-          "Elevated errors on Sonnet 4.6",
           "Elevated errors on Claude Sonnet 4.6 and on Claude.ai",
+          "Elevated errors on Sonnet 4.6",
           "Elevated errors on Claude Sonnet 4.6"
         ]
       },
@@ -413,9 +412,9 @@
         "partialMinutes": 72,
         "majorMinutes": 17,
         "events": [
+          "Elevated errors on Claude Opus 4.6",
           "Elevated errors on Claude Sonnet 4.6",
-          "Elevated errors across surfaces",
-          "Elevated errors on Claude Opus 4.6"
+          "Elevated errors across surfaces"
         ]
       },
       "03-21": {
@@ -460,8 +459,8 @@
         "partialMinutes": 68,
         "majorMinutes": 0,
         "events": [
-          "Elevated errors on Claude Opus 4.6",
-          "Opus 4.6 and Sonnet 4.6 error rate elevated"
+          "Opus 4.6 and Sonnet 4.6 error rate elevated",
+          "Elevated errors on Claude Opus 4.6"
         ]
       },
       "04-01": {
@@ -469,8 +468,8 @@
         "majorMinutes": 0,
         "events": [
           "Elevated timeouts on requests to Claude Opus 4.6 and Sonnet 4.6",
-          "Elevated errors on requests to Claude Opus 4.6",
-          "Elevated errors and latency on Claude Haiku 4.5"
+          "Elevated errors and latency on Claude Haiku 4.5",
+          "Elevated errors on requests to Claude Opus 4.6"
         ]
       },
       "04-03": {
@@ -563,8 +562,8 @@
         "partialMinutes": 24,
         "majorMinutes": 0,
         "events": [
-          "Elevated errors on Opus 4.6",
           "Elevated errors for uploading files",
+          "Elevated errors on Opus 4.6",
           "Claude Sonnet 4.5 error spike"
         ]
       },
@@ -572,8 +571,8 @@
         "partialMinutes": 0,
         "majorMinutes": 0,
         "events": [
-          "MCP apps unavailable on Claude.ai",
-          "Elevated errors on Claude Opus 4.7"
+          "Elevated errors on Claude Opus 4.7",
+          "MCP apps unavailable on Claude.ai"
         ]
       },
       "04-24": {
@@ -588,8 +587,8 @@
         "partialMinutes": 60,
         "majorMinutes": 0,
         "events": [
-          "Elevated error rates on Claude Opus 4.7",
           "Claude Code v2.1.120 Crashes on Startup",
+          "Elevated error rates on Claude Opus 4.7",
           "Elevated errors on Claude Opus 4.7",
           "Elevated errors on Claude Opus 4.7"
         ]
@@ -647,9 +646,9 @@
         "majorMinutes": 0,
         "events": [
           "Elevated errors on Claude Sonnet 4.6",
-          "Elevated errors on Claude Opus 4.7",
           "Elevated errors across Claude Models",
-          "Elevated Errors on File Operations"
+          "Elevated Errors on File Operations",
+          "Elevated errors on Claude Opus 4.7"
         ]
       },
       "05-09": {
@@ -754,10 +753,10 @@
         "partialMinutes": 0,
         "majorMinutes": 0,
         "events": [
+          "Elevated errors on Claude Sonnet 4.6",
+          "Sonnet 4.5 elevated errors",
           "Opus 4.7 elevated errors",
           "Degraded performance for Claude Sonnet 4.6",
-          "Sonnet 4.5 elevated errors",
-          "Elevated errors on Claude Sonnet 4.6",
           "Elevated errors for Claude Opus 4.7"
         ]
       },
@@ -792,8 +791,8 @@
         "partialMinutes": 0,
         "majorMinutes": 0,
         "events": [
-          "Elevated errors on Claude Opus 4.7",
-          "Degraded performance for multiple models"
+          "Degraded performance for multiple models",
+          "Elevated errors on Claude Opus 4.7"
         ]
       }
     },
@@ -809,8 +808,8 @@
         "partialMinutes": 86,
         "majorMinutes": 0,
         "events": [
-          "Elevated errors on Sonnet 4.6",
           "Elevated errors on Claude Sonnet 4.6 and on Claude.ai",
+          "Elevated errors on Sonnet 4.6",
           "Elevated errors on Claude Sonnet 4.6"
         ]
       },
@@ -844,9 +843,9 @@
         "partialMinutes": 98,
         "majorMinutes": 0,
         "events": [
-          "Increased errors on Opus 4.6",
           "Elevated errors on Claude.ai",
           "Elevated errors on Claude Opus 4.6",
+          "Increased errors on Opus 4.6",
           "Elevated errors on Claude Opus 4.6"
         ]
       },
@@ -854,9 +853,9 @@
         "partialMinutes": 72,
         "majorMinutes": 17,
         "events": [
+          "Elevated errors on Claude Opus 4.6",
           "Elevated errors on Claude Sonnet 4.6",
-          "Elevated errors across surfaces",
-          "Elevated errors on Claude Opus 4.6"
+          "Elevated errors across surfaces"
         ]
       },
       "03-21": {
@@ -918,8 +917,8 @@
         "partialMinutes": 68,
         "majorMinutes": 0,
         "events": [
-          "Elevated errors on Claude Opus 4.6",
           "Opus 4.6 and Sonnet 4.6 error rate elevated",
+          "Elevated errors on Claude Opus 4.6",
           "Unavailable connectors in Claude.ai desktop applications"
         ]
       },
@@ -928,9 +927,9 @@
         "majorMinutes": 0,
         "events": [
           "Elevated timeouts on requests to Claude Opus 4.6 and Sonnet 4.6",
-          "Elevated errors on requests to Claude Opus 4.6",
           "Errors on the Claude.ai desktop application",
-          "Elevated errors and latency on Claude Haiku 4.5"
+          "Elevated errors and latency on Claude Haiku 4.5",
+          "Elevated errors on requests to Claude Opus 4.6"
         ]
       },
       "04-03": {
@@ -1024,8 +1023,8 @@
         "partialMinutes": 24,
         "majorMinutes": 0,
         "events": [
-          "Elevated errors on Opus 4.6",
           "Elevated errors for uploading files",
+          "Elevated errors on Opus 4.6",
           "Claude Sonnet 4.5 error spike"
         ]
       },
@@ -1033,8 +1032,8 @@
         "partialMinutes": 16,
         "majorMinutes": 0,
         "events": [
-          "MCP apps unavailable on Claude.ai",
-          "Elevated errors on Claude Opus 4.7"
+          "Elevated errors on Claude Opus 4.7",
+          "MCP apps unavailable on Claude.ai"
         ]
       },
       "04-24": {
@@ -1049,9 +1048,9 @@
         "partialMinutes": 60,
         "majorMinutes": 0,
         "events": [
-          "Elevated error rates on Claude Opus 4.7",
           "Investigated elevated errors and slower responses on claude.ai",
           "Claude Code v2.1.120 Crashes on Startup",
+          "Elevated error rates on Claude Opus 4.7",
           "Elevated errors on Claude Opus 4.7",
           "Elevated errors on Claude Opus 4.7"
         ]
@@ -1117,9 +1116,9 @@
         "majorMinutes": 0,
         "events": [
           "Elevated errors on Claude Sonnet 4.6",
-          "Elevated errors on Claude Opus 4.7",
           "Elevated errors across Claude Models",
-          "Elevated Errors on File Operations"
+          "Elevated Errors on File Operations",
+          "Elevated errors on Claude Opus 4.7"
         ]
       },
       "05-09": {
@@ -1240,10 +1239,10 @@
         "partialMinutes": 0,
         "majorMinutes": 0,
         "events": [
+          "Elevated errors on Claude Sonnet 4.6",
+          "Sonnet 4.5 elevated errors",
           "Opus 4.7 elevated errors",
           "Degraded performance for Claude Sonnet 4.6",
-          "Sonnet 4.5 elevated errors",
-          "Elevated errors on Claude Sonnet 4.6",
           "Elevated errors for Claude Opus 4.7"
         ]
       },
@@ -1295,8 +1294,8 @@
         "partialMinutes": 86,
         "majorMinutes": 0,
         "events": [
-          "Elevated errors on Sonnet 4.6",
           "Elevated errors on Claude Sonnet 4.6 and on Claude.ai",
+          "Elevated errors on Sonnet 4.6",
           "Elevated errors on Claude Sonnet 4.6"
         ]
       },
@@ -1326,8 +1325,8 @@
         "partialMinutes": 95,
         "majorMinutes": 0,
         "events": [
-          "Elevated errors on Claude.ai",
           "Elevated errors on Claude Opus 4.6",
+          "Elevated errors on Claude.ai",
           "Elevated errors on Claude Opus 4.6",
           "Increased errors on Opus 4.6"
         ]
@@ -1336,9 +1335,9 @@
         "partialMinutes": 72,
         "majorMinutes": 17,
         "events": [
+          "Elevated errors on Claude Opus 4.6",
           "Elevated errors on Claude Sonnet 4.6",
-          "Elevated errors across surfaces",
-          "Elevated errors on Claude Opus 4.6"
+          "Elevated errors across surfaces"
         ]
       },
       "03-21": {
@@ -1384,8 +1383,8 @@
         "partialMinutes": 68,
         "majorMinutes": 0,
         "events": [
-          "Elevated errors on Claude Opus 4.6",
-          "Opus 4.6 and Sonnet 4.6 error rate elevated"
+          "Opus 4.6 and Sonnet 4.6 error rate elevated",
+          "Elevated errors on Claude Opus 4.6"
         ]
       },
       "04-01": {
@@ -1393,8 +1392,8 @@
         "majorMinutes": 0,
         "events": [
           "Elevated timeouts on requests to Claude Opus 4.6 and Sonnet 4.6",
-          "Elevated errors on requests to Claude Opus 4.6",
-          "Elevated errors and latency on Claude Haiku 4.5"
+          "Elevated errors and latency on Claude Haiku 4.5",
+          "Elevated errors on requests to Claude Opus 4.6"
         ]
       },
       "04-03": {
@@ -1408,8 +1407,8 @@
         "partialMinutes": 83,
         "majorMinutes": 0,
         "events": [
-          "Sonnet 4.6 elevated rate of errors",
-          "Elevated errors on Claude.ai"
+          "Elevated errors on Claude.ai",
+          "Sonnet 4.6 elevated rate of errors"
         ]
       },
       "04-07": {
@@ -1496,8 +1495,8 @@
         "partialMinutes": 0,
         "majorMinutes": 0,
         "events": [
-          "MCP apps unavailable on Claude.ai",
-          "Elevated errors on Claude Opus 4.7"
+          "Elevated errors on Claude Opus 4.7",
+          "MCP apps unavailable on Claude.ai"
         ]
       },
       "04-24": {
@@ -1512,8 +1511,8 @@
         "partialMinutes": 60,
         "majorMinutes": 0,
         "events": [
-          "Elevated error rates on Claude Opus 4.7",
           "Claude Code v2.1.120 Crashes on Startup",
+          "Elevated error rates on Claude Opus 4.7",
           "Elevated errors on Claude Opus 4.7",
           "Elevated errors on Claude Opus 4.7"
         ]
@@ -1570,8 +1569,8 @@
         "majorMinutes": 0,
         "events": [
           "Elevated errors on Claude Sonnet 4.6",
-          "Elevated errors on Claude Opus 4.7",
           "Elevated errors across Claude Models",
+          "Elevated errors on Claude Opus 4.7",
           "Claude Code IDE extension unable to load on Windows"
         ]
       },
@@ -1695,10 +1694,10 @@
         "partialMinutes": 0,
         "majorMinutes": 0,
         "events": [
+          "Elevated errors on Claude Sonnet 4.6",
+          "Sonnet 4.5 elevated errors",
           "Opus 4.7 elevated errors",
           "Degraded performance for Claude Sonnet 4.6",
-          "Sonnet 4.5 elevated errors",
-          "Elevated errors on Claude Sonnet 4.6",
           "Elevated errors for Claude Opus 4.7"
         ]
       },
@@ -1734,8 +1733,8 @@
         "partialMinutes": 0,
         "majorMinutes": 0,
         "events": [
-          "Elevated errors on Claude Opus 4.7",
-          "Degraded performance for multiple models"
+          "Degraded performance for multiple models",
+          "Elevated errors on Claude Opus 4.7"
         ]
       }
     },
@@ -1834,8 +1833,8 @@
         "partialMinutes": 94,
         "majorMinutes": 0,
         "events": [
-          "Elevated errors on requests to Claude Opus 4.6",
-          "Elevated errors and latency on Claude Haiku 4.5"
+          "Elevated errors and latency on Claude Haiku 4.5",
+          "Elevated errors on requests to Claude Opus 4.6"
         ]
       },
       "04-03": {
@@ -1849,8 +1848,8 @@
         "partialMinutes": 83,
         "majorMinutes": 0,
         "events": [
-          "Sonnet 4.6 elevated rate of errors",
-          "Elevated errors on Claude.ai"
+          "Elevated errors on Claude.ai",
+          "Sonnet 4.6 elevated rate of errors"
         ]
       },
       "04-08": {
@@ -1946,8 +1945,8 @@
         "partialMinutes": 60,
         "majorMinutes": 0,
         "events": [
-          "Elevated error rates on Claude Opus 4.7",
           "Claude Code v2.1.120 Crashes on Startup",
+          "Elevated error rates on Claude Opus 4.7",
           "Elevated errors on Claude Opus 4.7"
         ]
       },
@@ -2085,10 +2084,10 @@
         "partialMinutes": 0,
         "majorMinutes": 0,
         "events": [
-          "Opus 4.7 elevated errors",
-          "Degraded performance for Claude Sonnet 4.6",
+          "Elevated errors on Claude Sonnet 4.6",
           "Sonnet 4.5 elevated errors",
-          "Elevated errors on Claude Sonnet 4.6"
+          "Opus 4.7 elevated errors",
+          "Degraded performance for Claude Sonnet 4.6"
         ]
       },
       "06-02": {
@@ -2214,8 +2213,8 @@
         "partialMinutes": 0,
         "majorMinutes": 0,
         "events": [
-          "MCP apps unavailable on Claude.ai",
-          "Elevated errors on Claude Opus 4.7"
+          "Elevated errors on Claude Opus 4.7",
+          "MCP apps unavailable on Claude.ai"
         ]
       },
       "04-24": {
@@ -2230,8 +2229,8 @@
         "partialMinutes": 60,
         "majorMinutes": 0,
         "events": [
-          "Elevated error rates on Claude Opus 4.7",
           "Claude Code v2.1.120 Crashes on Startup",
+          "Elevated error rates on Claude Opus 4.7",
           "Elevated errors on Claude Opus 4.7"
         ]
       },
@@ -2283,8 +2282,8 @@
         "majorMinutes": 0,
         "events": [
           "Elevated errors on Claude Sonnet 4.6",
-          "Elevated errors on Claude Opus 4.7",
-          "Elevated errors across Claude Models"
+          "Elevated errors across Claude Models",
+          "Elevated errors on Claude Opus 4.7"
         ]
       },
       "05-12": {
@@ -2375,8 +2374,8 @@
         "partialMinutes": 0,
         "majorMinutes": 0,
         "events": [
-          "Degraded performance for Claude Sonnet 4.6",
           "Elevated errors on Claude Sonnet 4.6",
+          "Degraded performance for Claude Sonnet 4.6",
           "Elevated errors for Claude Opus 4.7"
         ]
       },
@@ -2482,8 +2481,8 @@
         "partialMinutes": 0,
         "majorMinutes": 0,
         "events": [
-          "Elevated error rates on Claude Opus 4.7",
-          "Claude Code v2.1.120 Crashes on Startup"
+          "Claude Code v2.1.120 Crashes on Startup",
+          "Elevated error rates on Claude Opus 4.7"
         ]
       },
       "04-28": {
@@ -2664,9 +2663,13 @@
       }
     },
     "ChatGPT": {
+      "06-08": {
+        "titles": [
+          "Disruption in service availabilty for Go users"
+        ]
+      },
       "06-07": {
         "titles": [
-          "Disruption in service availabilty for Go users",
           "Disruption in service availabilty for Free and Go users"
         ]
       },
@@ -2892,11 +2895,6 @@
           "Elevated login errors",
           "Elevated conversation errors for ChatGPT",
           "Elevated error rates for Deep Research in Enterprise Workspaces"
-        ]
-      },
-      "03-10": {
-        "titles": [
-          "Deep Research requests are erroring for LATAM users"
         ]
       }
     },

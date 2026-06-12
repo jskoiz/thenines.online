@@ -3,6 +3,7 @@
 // and writes the normalized data shape the frontend expects.
 
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'fs';
+import { execFileSync } from 'child_process';
 import {
   OPENAI_SERVICES,
   liveOpenAIGroupStatus,
@@ -61,7 +62,10 @@ async function fetchText(url, retries = 3) {
         headers: { 'User-Agent': 'thenines-action/1.0' },
         signal: AbortSignal.timeout(15000),
       });
-      if (!res.ok) throw new Error(`${url} -> ${res.status}`);
+      if (!res.ok) {
+        if (res.status === 405) return fetchTextWithCurl(url);
+        throw new Error(`${url} -> ${res.status}`);
+      }
       return res.text();
     } catch (err) {
       if (attempt === retries) throw err;
@@ -70,6 +74,24 @@ async function fetchText(url, retries = 3) {
       await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
+}
+
+function fetchTextWithCurl(url) {
+  console.warn(`  Node fetch received 405 for ${url}; retrying with curl.`);
+  return execFileSync('curl', [
+    '--fail',
+    '--silent',
+    '--show-error',
+    '--location',
+    '--max-time',
+    '15',
+    '--user-agent',
+    'thenines-action/1.0',
+    url,
+  ], {
+    encoding: 'utf8',
+    maxBuffer: 5 * 1024 * 1024,
+  });
 }
 
 async function fetchJSON(url, retries = 3) {

@@ -51,7 +51,7 @@ const CLAUDE_LIVE_COMPONENT_MAP={
   'Claude for Government':'Claude for Government'
 };
 const OPENAI_LIVE_COMPONENT_GROUPS={
-  'OpenAI APIs':['Fine-tuning','Embeddings','Images','Batch','Audio','Moderations','Compliance API','Codex API','Responses','Chat Completions','Realtime','Audit Logs'],
+  'OpenAI APIs':['Fine-tuning','Embeddings','Images','Batch','Audio','Moderations','Compliance API','Codex API','Responses','Chat Completions','Realtime','Audit Logs','Ads API'],
   'ChatGPT':['Login','Conversations','Voice mode','GPTs','Image Generation','Deep Research','Agent','Connectors/Apps','App','Apps','ChatGPT Atlas','Search','File uploads','Files','Shopping Research','Feed'],
   'Codex':['Codex Web','CLI','VS Code extension'],
   'Sora':['Sora','Video viewing','Video generation'],

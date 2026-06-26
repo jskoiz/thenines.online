@@ -57,3 +57,7 @@ test('computes live grouped status from the current summary components', () => {
 test('maps current summary-only ChatGPT components into the ChatGPT group', () => {
   assert.deepEqual(openAIComponentGroups('Feed'), ['ChatGPT']);
 });
+
+test('maps current summary-only API components into the OpenAI APIs group', () => {
+  assert.deepEqual(openAIComponentGroups('Ads API'), ['OpenAI APIs']);
+});
